@@ -25,8 +25,8 @@ const Header: React.FC = () => {
 
                 {/* Desktop Menu */}
                 <div className="hidden sm:flex space-x-4">
-                    {links.map((link) => (
-                        <NavLink
+                    {links.map((link, index) => (
+                        <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
                                 isActive ? "bg-blue-800 px-3 py-2 rounded" : "hover:bg-blue-700 px-3 py-2 rounded"
@@ -57,8 +57,8 @@ const Header: React.FC = () => {
                 }`}
             >
                 <div className="md:hidden flex flex-col h-full justify-center items-center">
-                    {links.map((link) => (
-                        <NavLink
+                    {links.map((link, index) => (
+                        <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
                                 isActive ? "block px-4 py-2 bg-blue-800 m-1" : "block px-4 py-2 hover:bg-blue-800 m-1"
