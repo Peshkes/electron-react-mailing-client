@@ -15,9 +15,9 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className="bg-blue-600 text-white fixed w-full z-40">
-            <nav className="container mx-auto px-4 py-3 flex justify-between items-center z-40">
-                <div className="text-2xl font-bold z-40">
+        <header className="bg-cyan-800 text-white w-full">
+            <nav className="mx-auto px-4 py-3 flex justify-between">
+                <div className="text-2xl font-bold">
                     <Link to={'/'} className="text-white">
                         <img src={'../assets/vp.webp'} alt="logo"/>
                     </Link>
