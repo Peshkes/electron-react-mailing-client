@@ -5,7 +5,7 @@ import DashBoard from "../components/DashBoard";
 
 const DashboardPage_old = () => {
     return (
-        <div className="w-full h-full bg-slate-100 flex flex-wrap border-4 border-solid border-blue-500 overflow-hidden">
+        <div className="w-full h-full flex flex-wrap overflow-hidden">
             <LatestMailings/>
             <DashBoard/>
         </div>

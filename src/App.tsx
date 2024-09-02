@@ -12,7 +12,7 @@ const App = () => {
 
     return (
         <div className={'App'}>
-            <div className="flex flex-col justify-start h-screen h-max-screen border-4 border-solid border-red-500 ">
+            <div className="container bg-cyan-800/5 mx-auto flex flex-col justify-start h-screen h-max-screen">
                 <Header/>
                 <DashboardPage/>
                 {/*<Routes>*/}
