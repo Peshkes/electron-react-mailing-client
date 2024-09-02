@@ -1,14 +1,5 @@
-import {
-    ApiResponse,
-    Client,
-    ClientData,
-    Id,
-    PaginationRequestParams,
-    PaginationResponse,
-    PaginationResponseParams,
-    SearchParams,
-    StatusResponse
-} from './types';
+import {ApiResponse, Client, ClientData, Id, PaginationRequestParams, PaginationResponse,
+    SearchParams, StatusResponse} from './types';
 
 const server = 'http://localhost:49152:';
 
