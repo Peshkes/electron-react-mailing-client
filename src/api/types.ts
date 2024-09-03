@@ -5,7 +5,7 @@ export type StatusResponse = {
 export type ApiResponse<T> = T | StatusResponse | StatusResponse & T;
 
 export type Id = {
-    "id": number
+    "id": number;
 }
 
 export type ClientData = {
@@ -17,11 +17,13 @@ export type ClientData = {
     messanger_id?: number | null;
 }
 
-export type Client = ClientData & Id
+export type Client = ClientData & Id & {
+    chat_id: number | null;
+};
 
 export type SearchField = 'phone' | 'name';
 
-export type SearchParams = {
+export type ClientSearchParams = {
     searchString: string;
     fields: Array<SearchField>;
 }
@@ -40,7 +42,39 @@ export type PaginationResponseParams = {
     total: number
 } & PaginationParams
 
-export type PaginationResponse = {
+export type ClientPaginationResponse = {
     data: Client[];
-    pagination: PaginationResponseParams
+    pagination: PaginationResponseParams;
+}
+
+//MESSAGES
+
+export type messageSkeleton = {
+    theme: string;
+    message_text: string;
+    recipient_type_id: number;
+    media_path?: string | null;
+}
+
+export type MessageData = messageSkeleton & {
+    sending_date: number;
+}
+
+export type Message = MessageData & Id;
+
+export type SampleMessageData = MessageData & {
+    sample_name: string;
+}
+
+export type SampleMessage = SampleMessageData & Id;
+
+export type MessagePaginationResponse = {
+    data: Message[];
+    pagination: PaginationResponseParams;
+}
+
+export type MessageSearchObject = {
+    string?: string;
+    date_from?: number;
+    date_to?: number;
 }
