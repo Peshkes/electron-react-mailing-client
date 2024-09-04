@@ -2,7 +2,7 @@ export type StatusResponse = {
     status: string;
 }
 
-export type ApiResponse<T> = T | StatusResponse | StatusResponse & T;
+export type ApiResponse<T> = T | StatusResponse;
 
 export type Id = {
     "id": number;

@@ -79,17 +79,17 @@ const fakeClientTypes: ClientType[] = [
 ];
 // CLIENTS
 
-export async function addClient(clientData: ClientData): Promise<ApiResponse<Client>> {
+export async function addClient(clientData: ClientData): Promise<number> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const newClient = { ...clientData, id: Date.now() } as Client;
             fakeClients.push(newClient);
-            resolve(newClient);
+            resolve(newClient.id);
         }, 1000);
     });
 }
 
-export async function getClientsByType(typeId: number): Promise<ApiResponse<Client[]>> {
+export async function getClientsByType(typeId: number): Promise<Client[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeClients.filter(client => client.type_id === typeId));
@@ -97,7 +97,7 @@ export async function getClientsByType(typeId: number): Promise<ApiResponse<Clie
     });
 }
 
-export async function getClientById(clientId: number): Promise<ApiResponse<Client>> {
+export async function getClientById(clientId: number): Promise<Client> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const client = fakeClients.find(client => client.id === clientId);
@@ -106,7 +106,7 @@ export async function getClientById(clientId: number): Promise<ApiResponse<Clien
     });
 }
 
-export async function deleteClientById(clientId: number): Promise<ApiResponse<Client>> {
+export async function deleteClientById(clientId: number): Promise<Client> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeClients.findIndex(client => client.id === clientId);
@@ -114,41 +114,41 @@ export async function deleteClientById(clientId: number): Promise<ApiResponse<Cl
                 const [deletedClient] = fakeClients.splice(index, 1);
                 resolve(deletedClient);
             } else {
-                resolve({} as Client);
+                throw new Error('Client not found');
             }
         }, 1000);
     });
 }
 
-export async function updateClient(clientId: number, clientData: Client): Promise<ApiResponse<Id>> {
+export async function updateClient(clientId: number, clientData: Client): Promise<Client> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeClients.findIndex(client => client.id === clientId);
             if (index !== -1) {
                 fakeClients[index] = { ...fakeClients[index], ...clientData };
-                resolve({ id: clientId });
+                resolve(fakeClients[index]);
             } else {
-                resolve({ id: clientId });
+                throw new Error('Client not found');
             }
         }, 1000);
     });
 }
 
-export async function updateClientMessenger(clientId: number, messangerId: number): Promise<ApiResponse<Id>> {
+export async function updateClientMessenger(clientId: number, messangerId: number): Promise<StatusResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeClients.findIndex(client => client.id === clientId);
             if (index !== -1) {
                 fakeClients[index].messanger_id = messangerId;
-                resolve({ id: clientId });
+                resolve({ status: 'Messenger updated'});
             } else {
-                resolve({ id: clientId });
+                resolve({ status: 'Messenger not updated'});
             }
         }, 1000);
     });
 }
 
-export async function getAllClients(params: PaginationRequestParams): Promise<ApiResponse<ClientPaginationResponse>> {
+export async function getAllClients(params: PaginationRequestParams): Promise<ClientPaginationResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakePaginationResponse(fakeClients, params.page || 1, params.limit || 10));
@@ -156,7 +156,7 @@ export async function getAllClients(params: PaginationRequestParams): Promise<Ap
     });
 }
 
-export async function searchClients(params: ClientSearchParams): Promise<ApiResponse<Client[]>> {
+export async function searchClients(params: ClientSearchParams): Promise<Client[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const filteredClients = fakeClients.filter(client =>
@@ -168,7 +168,7 @@ export async function searchClients(params: ClientSearchParams): Promise<ApiResp
     });
 }
 
-export async function getClientsWithUnselectedType(): Promise<ApiResponse<Client[]>> {
+export async function getClientsWithUnselectedType(): Promise<Client[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeClients.filter(client => client.type_id === null));
@@ -176,16 +176,15 @@ export async function getClientsWithUnselectedType(): Promise<ApiResponse<Client
     });
 }
 
-export async function getClientsWithTelegramError(): Promise<ApiResponse<Client[]>> {
+export async function getClientsWithTelegramError(): Promise<Client[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
-            // Возвращаем клиентов с фейковой ошибкой
             resolve(fakeClients);
         }, 1000);
     });
 }
 
-export async function getLastClients(count: number): Promise<ApiResponse<Client[]>> {
+export async function getLastClients(count: number): Promise<Client[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeClients.slice(-count));
@@ -195,40 +194,43 @@ export async function getLastClients(count: number): Promise<ApiResponse<Client[
 
 // MESSAGES
 
-export async function addMessage(messageData: MessageData): Promise<ApiResponse<Id>> {
+export async function addMessage(messageData: MessageData): Promise<number> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const newMessage = { ...messageData, id: Date.now() } as Message;
             fakeMessages.push(newMessage);
-            resolve({ id: newMessage.id });
+            resolve(newMessage.id);
         }, 1000);
     });
 }
 
-export async function getMessageById(messageId: number): Promise<ApiResponse<Message>> {
+export async function getMessageById(messageId: number): Promise<Message> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const message = fakeMessages.find(message => message.id === messageId);
-            resolve(message || {} as Message);
+            if (message)
+                resolve(message);
+            else
+                throw new Error('Message not found');
         }, 1000);
     });
 }
 
-export async function updateMessage(messageId: number, messageData: Message): Promise<ApiResponse<Id>> {
+export async function updateMessage(messageId: number, messageData: Message): Promise<Message> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeMessages.findIndex(message => message.id === messageId);
             if (index !== -1) {
                 fakeMessages[index] = { ...fakeMessages[index], ...messageData };
-                resolve({ id: messageId });
+                resolve(fakeMessages[index]);
             } else {
-                resolve({ id: messageId });
+                throw new Error('Message not found');
             }
         }, 1000);
     });
 }
 
-export async function deleteMessageById(messageId: number): Promise<ApiResponse<Message>> {
+export async function deleteMessageById(messageId: number): Promise<Message> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeMessages.findIndex(message => message.id === messageId);
@@ -236,13 +238,13 @@ export async function deleteMessageById(messageId: number): Promise<ApiResponse<
                 const [deletedMessage] = fakeMessages.splice(index, 1);
                 resolve(deletedMessage);
             } else {
-                resolve({} as Message);
+                throw new Error('Message not found');
             }
         }, 1000);
     });
 }
 
-export async function sendDelayedMessage(messageId: number): Promise<ApiResponse<StatusResponse>> {
+export async function sendDelayedMessage(messageId: number): Promise<StatusResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({ status: 'success' });
@@ -250,7 +252,7 @@ export async function sendDelayedMessage(messageId: number): Promise<ApiResponse
     });
 }
 
-export async function sendMessageNow(message: MessageData): Promise<ApiResponse<StatusResponse>> {
+export async function sendMessageNow(message: MessageData): Promise<StatusResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({ status: 'success' });
@@ -258,7 +260,7 @@ export async function sendMessageNow(message: MessageData): Promise<ApiResponse<
     });
 }
 
-export async function getAllMessages(): Promise<ApiResponse<Message[]>> {
+export async function getAllMessages(): Promise<Message[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeMessages);
@@ -266,7 +268,7 @@ export async function getAllMessages(): Promise<ApiResponse<Message[]>> {
     });
 }
 
-export async function getAllMessagesWithPagination(params: PaginationRequestParams): Promise<ApiResponse<MessagePaginationResponse>> {
+export async function getAllMessagesWithPagination(params: PaginationRequestParams): Promise<MessagePaginationResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakePaginationResponse(fakeMessages, params.page || 1, params.limit || 10));
@@ -274,7 +276,7 @@ export async function getAllMessagesWithPagination(params: PaginationRequestPara
     });
 }
 
-export async function getNearestMessages(count: number): Promise<ApiResponse<Message[]>> {
+export async function getNearestMessages(count: number): Promise<Message[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeMessages.slice(0, count)); // Возвращаем первые сообщения в качестве ближайших
@@ -282,7 +284,7 @@ export async function getNearestMessages(count: number): Promise<ApiResponse<Mes
     });
 }
 
-export async function searchMessages(object: MessageSearchObject): Promise<ApiResponse<Message[]>> {
+export async function searchMessages(object: MessageSearchObject): Promise<Message[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const filteredMessages = fakeMessages.filter(message =>
@@ -295,7 +297,7 @@ export async function searchMessages(object: MessageSearchObject): Promise<ApiRe
     });
 }
 
-export async function getMessagesByRecipientType(recipientTypeId: number): Promise<ApiResponse<Message[]>> {
+export async function getMessagesByRecipientType(recipientTypeId: number): Promise<Message[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeMessages.filter(message => message.recipient_type_id === recipientTypeId));
@@ -305,27 +307,30 @@ export async function getMessagesByRecipientType(recipientTypeId: number): Promi
 
 // MESSAGE SAMPLE
 
-export async function addSampleMessage(messageData: SampleMessageData): Promise<ApiResponse<Id>> {
+export async function addSampleMessage(messageData: SampleMessageData): Promise<number> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const newSampleMessage = { ...messageData, id: Date.now() } as SampleMessage;
             fakeSampleMessages.push(newSampleMessage);
-            resolve({ id: newSampleMessage.id });
+            resolve(newSampleMessage.id);
         }, 1000);
     });
 }
 
-export async function getSampleMessageById(messageId: number): Promise<ApiResponse<SampleMessage>> {
+export async function getSampleMessageById(messageId: number): Promise<SampleMessage> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const sampleMessage = fakeSampleMessages.find(message => message.id === messageId);
-            resolve(sampleMessage || {} as SampleMessage);
+            if (sampleMessage) {
+                resolve(sampleMessage);
+            } else
+                throw new Error('Message not found');
         }, 1000);
     });
 }
 
 
-export async function getAllSampleMessages(): Promise<ApiResponse<SampleMessage[]>> {
+export async function getAllSampleMessages(): Promise<SampleMessage[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeSampleMessages);
@@ -333,7 +338,7 @@ export async function getAllSampleMessages(): Promise<ApiResponse<SampleMessage[
     });
 }
 
-export async function updateSampleMessage(messageId: number, messageData: SampleMessageData): Promise<ApiResponse<SampleMessage>> {
+export async function updateSampleMessage(messageId: number, messageData: SampleMessageData): Promise<SampleMessage> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeSampleMessages.findIndex(message => message.id === messageId);
@@ -342,13 +347,13 @@ export async function updateSampleMessage(messageId: number, messageData: Sample
                 fakeSampleMessages[index] = { ...fakeSampleMessages[index], ...messageData };
                 resolve(oldMessage);
             } else {
-                resolve({} as SampleMessage);
+                throw new Error('Message not found');
             }
         }, 1000);
     });
 }
 
-export async function deleteSampleMessageById(messageId: number): Promise<ApiResponse<SampleMessage>> {
+export async function deleteSampleMessageById(messageId: number): Promise<SampleMessage> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeSampleMessages.findIndex(message => message.id === messageId);
@@ -356,13 +361,13 @@ export async function deleteSampleMessageById(messageId: number): Promise<ApiRes
                 const [deletedMessage] = fakeSampleMessages.splice(index, 1);
                 resolve(deletedMessage);
             } else {
-                resolve({} as SampleMessage);
+                throw new Error('Message not found');
             }
         }, 1000);
     });
 }
 
-export async function getMessengerTypes(): Promise<ApiResponse<MessengerType[]>> {
+export async function getMessengerTypes(): Promise<MessengerType[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeMessengers);
@@ -370,8 +375,7 @@ export async function getMessengerTypes(): Promise<ApiResponse<MessengerType[]>>
     });
 }
 
-
-export async function getRecipientTypes(): Promise<ApiResponse<ClientType[]>> {
+export async function getRecipientTypes(): Promise<ClientType[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeClientTypes);
