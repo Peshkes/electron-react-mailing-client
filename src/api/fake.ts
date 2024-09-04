@@ -112,7 +112,12 @@ export async function getClientById(clientId: number): Promise<Client> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const client = fakeClients.find(client => client.id === clientId);
-            resolve(client || {} as Client);
+            if (client) {
+                console.log(client)
+                resolve(client);
+            } else {
+                throw new Error('Client not found');
+            }
         }, 1000);
     });
 }
@@ -131,7 +136,7 @@ export async function deleteClientById(clientId: number): Promise<Client> {
     });
 }
 
-export async function updateClient(clientId: number, clientData: Client): Promise<Client> {
+export async function updateClient(clientId: number, clientData: ClientData): Promise<Client> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeClients.findIndex(client => client.id === clientId);
