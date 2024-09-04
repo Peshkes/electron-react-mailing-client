@@ -2,11 +2,12 @@ import React from 'react';
 
 type Props = {
     color: string
+    onClickFunction: () => void
 }
 
-const Plus = (props: Props) => {
+const Plus = ({color, onClickFunction}: Props) => {
     return (
-        <div>
+        <div onClick={onClickFunction}>
             {/*<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25"*/}
             {/*     viewBox="0 0 448 512">*/}
             {/*    <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" stroke="#ffffff"/>*/}
@@ -15,8 +16,7 @@ const Plus = (props: Props) => {
                  width="20"
                  height="20"
                  viewBox="0 0 512 512"
-                 fill={props.color}>
-
+                 fill={color}>
                 <path
                     d="M256,0C114.84,0,0,114.842,0,256s114.84,256,256,256s256-114.842,256-256S397.16,0,256,0z M256,462.452 c-113.837,0-206.452-92.614-206.452-206.452S142.163,49.548,256,49.548S462.452,142.163,462.452,256S369.837,462.452,256,462.452z " />
                 <polygon

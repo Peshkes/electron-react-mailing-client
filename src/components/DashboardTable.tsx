@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Plus from "../icons/Plus";
+import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
 type Props = {
     title: string
     plus: boolean
+    plusFunction?: () => void | undefined
 }
 
 const DashboardTable = (props: Props) => {
@@ -11,7 +13,7 @@ const DashboardTable = (props: Props) => {
         <div className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
             <div className="w-full py-5  flex justify-between border-b-4 border-solid border-cyan-800/20">
                 <p className="pl-7 text-2xl text-cyan-800">{props.title}</p>
-                {props.plus ? <div className="flex items-center pr-7 cursor-pointer"><Plus color="black"/></div> : <></>}
+                {props.plus ? <div className="flex items-center pr-7 cursor-pointer"><Plus color="black" onClickFunction={props.plusFunction ? props.plusFunction : () => {}}/></div> : <></>}
             </div>
             <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
                 <div className="w-full py-5 px-7 grid grid-cols-2 font-bold sticky top-0 bg-white">

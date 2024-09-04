@@ -1,12 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Plus from "../icons/Plus";
 import ClientsWithUnselectedType from "./ClientsWithUnselectedType";
 import Templates from "./Templates";
 import LatestAddedClients from "./LatestAddedClients";
 import ClientsWIthTelegramError from "./ClientsWIthTelegramError";
 import DashboardTable from "./DashboardTable";
+import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
 const DashBoard = () => {
+    const childWindow = useContext(ChildWindowContext);
+    const handleOpenClient = () => childWindow?.openChildWindow({ type: 'client', id: 0 });
+    const handleOpenSample = () => childWindow?.openChildWindow({ type: 'sample', id: 0 });
+
     return (
         <div className="w-[77%] h-[92%] mx-auto">
             <h2 className="w-full text-3xl py-6 pl-4 pr-4">Дашборд</h2>
@@ -16,12 +21,12 @@ const DashBoard = () => {
                         <DashboardTable title="Клиенты без типа" plus={false}/>
                     </div>
                     <div className="w-[43%]">
-                        <DashboardTable title="Шаблонны" plus={true}/>
+                        <DashboardTable title="Шаблонны" plus={true} plusFunction={handleOpenSample}/>
                     </div>
                 </div>
                 <div className="w-full h-[55%] mt-6 flex justify-between">
                     <div className="w-[55%]">
-                        <DashboardTable title="Последние клиенты" plus={true}/>
+                        <DashboardTable title="Последние клиенты" plus={true} plusFunction={handleOpenClient}/>
                     </div>
                     <div className="w-[43%]">
                         <DashboardTable title="Ошибки в телеграме" plus={false}/>
