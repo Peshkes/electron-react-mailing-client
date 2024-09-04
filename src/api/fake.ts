@@ -250,7 +250,7 @@ export async function sendDelayedMessage(messageId: number): Promise<ApiResponse
     });
 }
 
-export async function sendMessageNow(messageId: number): Promise<ApiResponse<StatusResponse>> {
+export async function sendMessageNow(message: MessageData): Promise<ApiResponse<StatusResponse>> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({ status: 'success' });
