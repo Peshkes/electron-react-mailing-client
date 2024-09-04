@@ -1,6 +1,5 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import Plus from "../icons/Plus";
-import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
 const Templates = () => {
     return (

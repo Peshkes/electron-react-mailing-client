@@ -1,6 +1,5 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import Plus from "../icons/Plus";
-import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
 type Props = {
     title: string

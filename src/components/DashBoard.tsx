@@ -1,9 +1,4 @@
 import React, {useContext} from 'react';
-import Plus from "../icons/Plus";
-import ClientsWithUnselectedType from "./ClientsWithUnselectedType";
-import Templates from "./Templates";
-import LatestAddedClients from "./LatestAddedClients";
-import ClientsWIthTelegramError from "./ClientsWIthTelegramError";
 import DashboardTable from "./DashboardTable";
 import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
