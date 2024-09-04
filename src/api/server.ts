@@ -1,5 +1,20 @@
-import {ApiResponse, Client, ClientData, ClientPaginationResponse, Id, Message, MessageData, MessagePaginationResponse, MessageSearchObject,
-    PaginationRequestParams, ClientSearchParams, StatusResponse, SampleMessageData, SampleMessage, MessengerType, ClientType} from './types';
+import {
+    ApiResponse,
+    Client,
+    ClientData,
+    ClientPaginationResponse,
+    ClientSearchParams,
+    ClientType,
+    Message,
+    MessageData,
+    MessagePaginationResponse,
+    MessageSearchObject,
+    MessengerType,
+    PaginationRequestParams,
+    SampleMessage,
+    SampleMessageData,
+    StatusResponse
+} from './types';
 
 const server = 'http://localhost:49152';
 
