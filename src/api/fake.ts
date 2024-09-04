@@ -321,3 +321,32 @@ export async function getAllSampleMessages(): Promise<ApiResponse<SampleMessage[
         }, 1000);
     });
 }
+
+export async function updateSampleMessage(messageId: number, messageData: SampleMessageData): Promise<ApiResponse<SampleMessage>> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const index = fakeSampleMessages.findIndex(message => message.id === messageId);
+            if (index !== -1) {
+                const oldMessage = { ...fakeSampleMessages[index] };
+                fakeSampleMessages[index] = { ...fakeSampleMessages[index], ...messageData };
+                resolve(oldMessage);
+            } else {
+                resolve({} as SampleMessage);
+            }
+        }, 1000);
+    });
+}
+
+export async function deleteSampleMessageById(messageId: number): Promise<ApiResponse<SampleMessage>> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const index = fakeSampleMessages.findIndex(message => message.id === messageId);
+            if (index !== -1) {
+                const [deletedMessage] = fakeSampleMessages.splice(index, 1);
+                resolve(deletedMessage);
+            } else {
+                resolve({} as SampleMessage);
+            }
+        }, 1000);
+    });
+}

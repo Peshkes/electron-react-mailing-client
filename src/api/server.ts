@@ -154,6 +154,16 @@ export async function getAllSampleMessages(): Promise<ApiResponse<SampleMessage[
     return request(`/message/sample/all`);
 }
 
+// Обновить шаблон по ID
+export async function updateSampleMessage(messageId: number, messageData: SampleMessageData): Promise<ApiResponse<SampleMessage>> {
+    return request(`/message/sample/${messageId}`, 'PUT', messageData);
+}
+
+// Удалить шаблон по ID
+export async function deleteSampleMessageById(messageId: number): Promise<ApiResponse<SampleMessage>> {
+    return request(`/message/sample/${messageId}`, 'DELETE');
+}
+
 
 
 
