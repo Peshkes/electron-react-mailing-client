@@ -102,8 +102,8 @@ export async function sendDelayedMessage(messageId: number): Promise<ApiResponse
 }
 
 // Немедленно отправить сообщение
-export async function sendMessageNow(messageId: number): Promise<ApiResponse<StatusResponse>> {
-    return request(`/message/send-now}`, 'POST');
+export async function sendMessageNow(messageData: MessageData): Promise<ApiResponse<StatusResponse>> {
+    return request(`/message/send-now}`, 'POST', messageData);
 }
 
 // Получить все сообщения
