@@ -8,7 +8,7 @@ import {
     MessageData, MessagePaginationResponse, MessageSearchObject,
     PaginationRequestParams,
     ClientSearchParams,
-    StatusResponse, SampleMessageData, SampleMessage, MessengerType
+    StatusResponse, SampleMessageData, SampleMessage, MessengerType, ClientType
 } from './types';
 
 const server = 'http://localhost:49152:';
@@ -171,11 +171,8 @@ export async function getMessengerTypes(): Promise<ApiResponse<MessengerType[]>>
     return request(`/utility/messenger-types`);
 }
 
-class RecipientType {
-}
-
 // Типы получателей
-export async function getRecipientTypes(): Promise<ApiResponse<RecipientType[]>> {
+export async function getRecipientTypes(): Promise<ApiResponse<ClientType[]>> {
     return request(`/utility/recipient-types`);
 }
 
