@@ -41,7 +41,7 @@ export async function deleteClientById(clientId: number): Promise<Client> {
 }
 
 // Обновить информацию о клиенте
-export async function updateClient(clientId: number, clientData: Client): Promise<Client> {
+export async function updateClient(clientId: number, clientData: ClientData): Promise<Client> {
     return request(`/client/${clientId}`, 'PUT', clientData);
 }
 
