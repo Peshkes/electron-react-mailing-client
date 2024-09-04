@@ -8,7 +8,7 @@ import {
     MessageData, MessagePaginationResponse, MessageSearchObject,
     PaginationRequestParams,
     ClientSearchParams,
-    StatusResponse, SampleMessageData, SampleMessage
+    StatusResponse, SampleMessageData, SampleMessage, MessengerType
 } from './types';
 
 const server = 'http://localhost:49152:';
@@ -162,6 +162,21 @@ export async function updateSampleMessage(messageId: number, messageData: Sample
 // Удалить шаблон по ID
 export async function deleteSampleMessageById(messageId: number): Promise<ApiResponse<SampleMessage>> {
     return request(`/message/sample/${messageId}`, 'DELETE');
+}
+
+// UTILITIES
+
+// Типы мессенджеров
+export async function getMessengerTypes(): Promise<ApiResponse<MessengerType[]>> {
+    return request(`/utility/messenger-types`);
+}
+
+class RecipientType {
+}
+
+// Типы получателей
+export async function getRecipientTypes(): Promise<ApiResponse<RecipientType[]>> {
+    return request(`/utility/recipient-types`);
 }
 
 

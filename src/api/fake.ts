@@ -1,6 +1,8 @@
-import {ApiResponse, Client, ClientData, Id, PaginationRequestParams, ClientPaginationResponse,
+import {
+    ApiResponse, Client, ClientData, Id, PaginationRequestParams, ClientPaginationResponse,
     ClientSearchParams, Message, SampleMessage, MessageData, StatusResponse,
-    MessagePaginationResponse, MessageSearchObject, SampleMessageData} from './types';
+    MessagePaginationResponse, MessageSearchObject, SampleMessageData, MessengerType, ClientType
+} from './types';
 
 const now = Date.now();
 
@@ -66,6 +68,15 @@ const fakePaginationResponse = (data: any[], page: number, limit: number) => ({
     }
 });
 
+const fakeMessengers: MessengerType[] = [
+    {id: 1, messanger_name: 'WhatsApp'},
+    {id: 2, messanger_name: 'Telegram'}
+];
+
+const fakeClientTypes: ClientType[] = [
+    {id: 1, type_name: 'Взрослые'},
+    {id: 2, type_name: 'Семья с детьми'}
+];
 // CLIENTS
 
 export async function addClient(clientData: ClientData): Promise<ApiResponse<Client>> {
@@ -347,6 +358,23 @@ export async function deleteSampleMessageById(messageId: number): Promise<ApiRes
             } else {
                 resolve({} as SampleMessage);
             }
+        }, 1000);
+    });
+}
+
+export async function getMessengerTypes(): Promise<ApiResponse<MessengerType[]>> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(fakeMessengers);
+        }, 1000);
+    });
+}
+
+
+export async function getRecipientTypes(): Promise<ApiResponse<ClientType[]>> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(fakeClientTypes);
         }, 1000);
     });
 }

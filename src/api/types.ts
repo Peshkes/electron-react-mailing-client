@@ -8,6 +8,8 @@ export type Id = {
     "id": number;
 }
 
+// CLIENTS
+
 export type ClientData = {
     phone_number: string;
     name: string;
@@ -15,11 +17,10 @@ export type ClientData = {
     check_in_date: number;
     check_out_date: number;
     messanger_id?: number | null;
+    chat_id?: number | null;
 }
 
-export type Client = ClientData & Id & {
-    chat_id: number | null;
-};
+export type Client = ClientData & Id
 
 export type SearchField = 'phone' | 'name';
 
@@ -52,7 +53,7 @@ export type ClientPaginationResponse = {
 export type messageSkeleton = {
     theme: string;
     message_text: string;
-    recipient_type_id: number;
+    recipient_type_id: number | null;
     media_path?: string | null;
 }
 
@@ -77,4 +78,16 @@ export type MessageSearchObject = {
     string?: string;
     date_from?: number;
     date_to?: number;
+}
+
+// UTILITIES
+
+export type MessengerType = {
+    id: number;
+    messanger_name: string;
+}
+
+export type ClientType = {
+    id: number;
+    type_name: string;
 }
