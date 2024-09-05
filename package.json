@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "build": "webpack --config webpack.config.js --mode development",
-    "dev": "npm run build && npm run start"
+    "dev": "pkill electron || true && npm run build && npm run start"
   },
   "keywords": [],
   "author": "peshkes",
