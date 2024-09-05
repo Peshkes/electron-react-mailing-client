@@ -1,5 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Plus from "../icons/Plus";
+
+import {
+    getAllSampleMessages,
+    getClientsWithTelegramError,
+    getClientsWithUnselectedType,
+    getLastClients,
+} from "../api/fake";
+import {ApiResponse, Client, Message, SampleMessage} from "../api/types";
+
 
 type Props = {
     title: string
@@ -7,149 +16,158 @@ type Props = {
     plusFunction?: () => void | undefined
 }
 
+const initialState: Client[] = [
+    {
+        "id": 1,
+        "phone_number": "+123456789",
+        "name": "Type Unassignedovich",
+        "type_id": null,
+        "check_in_date": 1622518799,
+        "check_out_date": 1622605199,
+        "chat_id": 123456789,
+        "messanger_id": 1
+    }
+];
+
+const initialMessagesState: SampleMessage[] = [
+    {
+        id: 1,
+        sample_name: 'Greeting',
+        theme: 'Welcome',
+        message_text: 'Welcome to our service!',
+        recipient_type_id: 1,
+        media_path: '',
+        sending_date: Date.now()
+    },
+];
+
+const [noTypeClients, setNoTypeClients] = useState(initialState);
+const [tgErrorClients, setTgErrorClients] = useState(initialState);
+const [latestAddedClients, setLatestAddedClients] = useState(initialState);
+const [templateMessages, setTemplateMessages] = useState(initialMessagesState);
+const numberOfShownClients: number = 10;
+
+useEffect(() => {
+
+    getClientsWithUnselectedType()
+        .then((response: ApiResponse<Client[]>) => {
+            if (Array.isArray(response)) {
+                setNoTypeClients(response);
+            } else if ('status' in response) {
+                console.error('Error Status:', response.status);
+            } else {
+                console.error('Unexpected response format');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching messenger types:', error);
+        });
+
+
+    getClientsWithTelegramError()
+        .then((response: ApiResponse<Client[]>) => {
+            if (Array.isArray(response)) {
+                setTgErrorClients(response);
+            } else if ('status' in response) {
+                console.error('Error Status:', response.status);
+            } else {
+                console.error('Unexpected response format');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching messenger types:', error);
+        });
+
+    getLastClients(numberOfShownClients)
+        .then((response: ApiResponse<Client[]>) => {
+            if (Array.isArray(response)) {
+                setLatestAddedClients(response);
+            } else if ('status' in response) {
+                console.error('Error Status:', response.status);
+            } else {
+                console.error('Unexpected response format');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching messenger types:', error);
+        });
+    getAllSampleMessages()
+        .then((response: ApiResponse<SampleMessage[]>) => {
+            if (Array.isArray(response)) {
+                setTemplateMessages(response);
+            } else if ('status' in response) {
+                console.error('Error Status:', response.status);
+            } else {
+                console.error('Unexpected response format');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching messenger types:', error);
+        });
+
+
+}, []);
+
+
+const checkTable = (table: string) => {
+    switch (table) {
+        case "Клиенты без типа":
+            return (
+                tgErrorClients.map((item, index) => (
+                    <div key={index}
+                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                        <div>{item.name}</div>
+                        <div>{item.phone_number}</div>
+                    </div>)
+                ));
+        case "Ошибки в телеграме":
+            return (
+                noTypeClients.map((item, index) => (
+                    <div key={index}
+                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                        <div>{item.name}</div>
+                        <div>{item.phone_number}</div>
+                    </div>)
+                ));
+        case "Последние клиенты":
+            return (
+                latestAddedClients.map((item, index) => (
+                    <div key={index}
+                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                        <div>{item.name}</div>
+                        <div>{item.phone_number}</div>
+                    </div>)
+                ));
+        case "Шаблоны":
+            return (
+                templateMessages.map((item, index) => (
+                    <div key={index}
+                         className="px-7 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                        <div>{item.theme}</div>
+                    </div>)
+                ));
+        default:
+    }
+}
+
+
 const DashboardTable = (props: Props) => {
     return (
-        <div className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
+        <div
+            className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
             <div className="w-full py-5  flex justify-between border-b-4 border-solid border-cyan-800/20">
                 <p className="pl-7 text-2xl text-cyan-800">{props.title}</p>
-                {props.plus ? <div className="flex items-center pr-7 cursor-pointer"><Plus color="black" onClickFunction={props.plusFunction ? props.plusFunction : () => {}}/></div> : <></>}
+                {props.plus ?
+                    <div className="flex items-center pr-7 cursor-pointer"><Plus color="black" onClickFunction={}/></div> : <></>}
             </div>
             <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
                 <div className="w-full py-5 px-7 grid grid-cols-2 font-bold sticky top-0 bg-white">
                     <div>Имя</div>
                     <div>Телефон</div>
                 </div>
-                <div className="w-full">
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-                    <div className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>Иванов Иван Иванович</div>
-                        <div>89159999999</div>
-                    </div>
-
-
+                <div className="w-full"> {checkTable(props.title)}
 
                 </div>
-                {/*<table className="w-full h-full text-left text-cyan-800">*/}
-                {/*    <thead className="sticky top-0 bg-white">*/}
-                {/*    <tr>*/}
-                {/*        <th>Имя</th>*/}
-                {/*        <th>Телефон</th>*/}
-                {/*    </tr>*/}
-                {/*    </thead>*/}
-                {/*    <tbody className="">*/}
-                {/*    <tr className="bg-transparent border-0 rounded-xl text-white">*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    <tr>*/}
-                {/*        <td>Иванов Иван Иванович</td>*/}
-                {/*        <td>89159999999</td>*/}
-                {/*    </tr>*/}
-                {/*    </tbody>*/}
-                {/*</table>*/}
             </div>
         </div>
     );

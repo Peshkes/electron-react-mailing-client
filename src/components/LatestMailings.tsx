@@ -1,8 +1,42 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Plus from "../icons/Plus";
+import {getNearestMessages, getRecipientTypes} from "../api/fake";
+import {ApiResponse, ClientType, Message} from "../api/types";
+import MailingMessage from "./MailingMessage";
 import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
+const numberOfMessagesShown:number = 10;
+const initialState: Message[] = [
+    {
+        "id": 1,
+        "theme": "Free massage at the pool ",
+        "message_text": "string",
+        "recipient_type_id": 1,
+        "media_path": "string",
+        "sending_date": 1622518799,
+    }
+];
 const LatestMailings = () => {
+
+    const [nearestMessages, setNearestMessages] = useState(initialState);
+
+
+    useEffect(() => {
+        getNearestMessages(numberOfMessagesShown)
+            .then((response: ApiResponse<Message[]>) => {
+                if (Array.isArray(response)) {
+                    setNearestMessages(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+    }, []);
+
     const childWindow = useContext(ChildWindowContext);
     const handleOpenChildWindow = () => {
         if (childWindow) {

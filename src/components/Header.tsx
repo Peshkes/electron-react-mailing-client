@@ -25,11 +25,11 @@ const Header: React.FC = () => {
 
                 {/* Desktop Menu */}
                 <div className="hidden sm:flex space-x-4">
-                    {links.map((link, index) => (
+                   {links.map((link, index) => (
                         <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
-                                isActive ? "bg-blue-800 px-3 py-2 rounded" : "hover:bg-blue-700 px-3 py-2 rounded"
+                                isActive ? "bg-blue-800 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
                             }
                         >
                             {link.name}

@@ -1,0 +1,51 @@
+import React, {useEffect, useState} from 'react';
+import {plannedMailings} from "../constants/constants";
+import {getRecipientTypes} from "../api/fake";
+import {ApiResponse, ClientType, Message} from "../api/types";
+
+type Props = {
+    item:Message
+}
+
+const initialState: ClientType[] = [
+    {id: 1, type_name: 'Взрослые'},
+    {id: 2, type_name: 'Семья с детьми'}
+];
+
+
+const MailingMessage = (props: Props) => {
+    const [recipientTypes, setRecipientTypes] = useState(initialState);
+    let type_id = props.item.recipient_type_id;
+
+    useEffect(() => {
+        getRecipientTypes()
+            .then((response: ApiResponse<ClientType[]>) => {
+                if (Array.isArray(response)) {
+                    setRecipientTypes(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+    }, []);
+
+
+    return (
+        <div
+            className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
+            <div className="flex justify-between text-white"><p>Тема: </p><p>{props.item.theme}</p>
+            </div>
+            <div className="pt-1 flex justify-between text-white"><p>Тип: </p>{recipientTypes.map(item => (
+                item.id == type_id ? <p>{item.type_name}</p> : <></>
+            ))}</div>
+            <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>{props.item.media_path}</p></div>
+            <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>{props.item.sending_date}</p></div>
+        </div>
+    );
+};
+
+export default MailingMessage;

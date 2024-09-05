@@ -1,5 +1,4 @@
 import React from 'react';
-import Plus from "../icons/Plus";
 import LatestMailings from "../components/LatestMailings";
 import DashBoard from "../components/DashBoard";
 
