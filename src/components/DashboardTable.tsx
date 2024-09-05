@@ -40,117 +40,116 @@ const initialMessagesState: SampleMessage[] = [
     },
 ];
 
-const [noTypeClients, setNoTypeClients] = useState(initialState);
-const [tgErrorClients, setTgErrorClients] = useState(initialState);
-const [latestAddedClients, setLatestAddedClients] = useState(initialState);
-const [templateMessages, setTemplateMessages] = useState(initialMessagesState);
-const numberOfShownClients: number = 10;
-
-useEffect(() => {
-
-    getClientsWithUnselectedType()
-        .then((response: ApiResponse<Client[]>) => {
-            if (Array.isArray(response)) {
-                setNoTypeClients(response);
-            } else if ('status' in response) {
-                console.error('Error Status:', response.status);
-            } else {
-                console.error('Unexpected response format');
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching messenger types:', error);
-        });
-
-
-    getClientsWithTelegramError()
-        .then((response: ApiResponse<Client[]>) => {
-            if (Array.isArray(response)) {
-                setTgErrorClients(response);
-            } else if ('status' in response) {
-                console.error('Error Status:', response.status);
-            } else {
-                console.error('Unexpected response format');
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching messenger types:', error);
-        });
-
-    getLastClients(numberOfShownClients)
-        .then((response: ApiResponse<Client[]>) => {
-            if (Array.isArray(response)) {
-                setLatestAddedClients(response);
-            } else if ('status' in response) {
-                console.error('Error Status:', response.status);
-            } else {
-                console.error('Unexpected response format');
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching messenger types:', error);
-        });
-    getAllSampleMessages()
-        .then((response: ApiResponse<SampleMessage[]>) => {
-            if (Array.isArray(response)) {
-                setTemplateMessages(response);
-            } else if ('status' in response) {
-                console.error('Error Status:', response.status);
-            } else {
-                console.error('Unexpected response format');
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching messenger types:', error);
-        });
-
-
-}, []);
-
-
-const checkTable = (table: string) => {
-    switch (table) {
-        case "Клиенты без типа":
-            return (
-                tgErrorClients.map((item, index) => (
-                    <div key={index}
-                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>{item.name}</div>
-                        <div>{item.phone_number}</div>
-                    </div>)
-                ));
-        case "Ошибки в телеграме":
-            return (
-                noTypeClients.map((item, index) => (
-                    <div key={index}
-                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>{item.name}</div>
-                        <div>{item.phone_number}</div>
-                    </div>)
-                ));
-        case "Последние клиенты":
-            return (
-                latestAddedClients.map((item, index) => (
-                    <div key={index}
-                         className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>{item.name}</div>
-                        <div>{item.phone_number}</div>
-                    </div>)
-                ));
-        case "Шаблоны":
-            return (
-                templateMessages.map((item, index) => (
-                    <div key={index}
-                         className="px-7 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
-                        <div>{item.theme}</div>
-                    </div>)
-                ));
-        default:
-    }
-}
-
-
 const DashboardTable = (props: Props) => {
+
+    const [noTypeClients, setNoTypeClients] = useState(initialState);
+    const [tgErrorClients, setTgErrorClients] = useState(initialState);
+    const [latestAddedClients, setLatestAddedClients] = useState(initialState);
+    const [templateMessages, setTemplateMessages] = useState(initialMessagesState);
+    const numberOfShownClients: number = 10;
+
+    useEffect(() => {
+
+        getClientsWithUnselectedType()
+            .then((response: ApiResponse<Client[]>) => {
+                if (Array.isArray(response)) {
+                    setNoTypeClients(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+
+
+        getClientsWithTelegramError()
+            .then((response: ApiResponse<Client[]>) => {
+                if (Array.isArray(response)) {
+                    setTgErrorClients(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+
+        getLastClients(numberOfShownClients)
+            .then((response: ApiResponse<Client[]>) => {
+                if (Array.isArray(response)) {
+                    setLatestAddedClients(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+        getAllSampleMessages()
+            .then((response: ApiResponse<SampleMessage[]>) => {
+                if (Array.isArray(response)) {
+                    setTemplateMessages(response);
+                } else if ('status' in response) {
+                    console.error('Error Status:', response.status);
+                } else {
+                    console.error('Unexpected response format');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching messenger types:', error);
+            });
+
+
+    }, []);
+
+    const checkTable = (table: string) => {
+        switch (table) {
+            case "Клиенты без типа":
+                return (
+                    tgErrorClients.map((item, index) => (
+                        <div key={index}
+                             className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                            <div>{item.name}</div>
+                            <div>{item.phone_number}</div>
+                        </div>)
+                    ));
+            case "Ошибки в телеграме":
+                return (
+                    noTypeClients.map((item, index) => (
+                        <div key={index}
+                             className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                            <div>{item.name}</div>
+                            <div>{item.phone_number}</div>
+                        </div>)
+                    ));
+            case "Последние клиенты":
+                return (
+                    latestAddedClients.map((item, index) => (
+                        <div key={index}
+                             className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                            <div>{item.name}</div>
+                            <div>{item.phone_number}</div>
+                        </div>)
+                    ));
+            case "Шаблоны":
+                return (
+                    templateMessages.map((item, index) => (
+                        <div key={index}
+                             className="px-7 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
+                            <div>{item.theme}</div>
+                        </div>)
+                    ));
+            default:
+        }
+    }
+
     return (
         <div
             className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
