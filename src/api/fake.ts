@@ -232,7 +232,7 @@ export async function getMessageById(messageId: number): Promise<Message> {
     });
 }
 
-export async function updateMessage(messageId: number, messageData: Message): Promise<Message> {
+export async function updateMessage(messageId: number, messageData: MessageData): Promise<Message> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const index = fakeMessages.findIndex(message => message.id === messageId);

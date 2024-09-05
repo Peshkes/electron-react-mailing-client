@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {addClient, getClientById, updateClient} from "../../api/fake";
+import {addClient, deleteClientById, getClientById, updateClient} from "../../api/fake";
 import {dateToTimestamp, timestampToDate} from "../../api/parser";
+import FormField from "./FormField";
+import DeleteBlock from "./DeleteBlock";
 
 interface ClientFormEntrailsProps {
     id: number;
@@ -15,25 +17,25 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
     const [checkOutDate, setCheckOutDate] = useState<string>('');
     const [chatId, setChatId] = useState<number | null>(null);
 
+    const isItUpdate = id > 0;
+
     useEffect(() => {
-        if (id > 0) {
-            try {
-                getClientById(id)
-                    .then(data => {
-                        setPhoneNumber(data.phone_number);
-                        setName(data.name);
-                        setTypeId(data.type_id);
-                        if (data.messanger_id)
-                            setMessangerId(data.messanger_id);
-                        setCheckInDate(timestampToDate(data.check_in_date));
-                        setCheckOutDate(timestampToDate(data.check_out_date));
-                        if (data.chat_id)
-                            setChatId(data.chat_id);
-                    });
-            } catch (e) {
-
-            }
-
+        if (isItUpdate) {
+            getClientById(id)
+                .then(data => {
+                    setPhoneNumber(data.phone_number);
+                    setName(data.name);
+                    setTypeId(data.type_id);
+                    if (data.messanger_id)
+                        setMessangerId(data.messanger_id);
+                    setCheckInDate(timestampToDate(data.check_in_date));
+                    setCheckOutDate(timestampToDate(data.check_out_date));
+                    if (data.chat_id)
+                        setChatId(data.chat_id);
+                })
+                .catch(
+                    //TODO Обработка ошибки
+                );
         }
     }, [id]);
 
@@ -49,7 +51,7 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
             chat_id: chatId,
         };
 
-        if (id > 0) {
+        if (isItUpdate) {
             updateClient(id, clientData)
                 .then(client => {
                     //TODO Обработка успешного обновления
@@ -61,87 +63,36 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
         }
     };
 
+    const handleDelete = () => {
+        deleteClientById(id).then(client => {
+            //TODO Обработка успешного удаления
+        })
+    }
+
     return (
-        <form onSubmit={handleSubmit} className="p-4 bg-white border border-cyan-800/20 rounded-lg">
-            <div>
-                <label htmlFor="phone_number" className="block text-gray-700">Phone Number</label>
-                <input
-                    id="phone_number"
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    required
-                />
+        <form onSubmit={handleSubmit} className="p-6 bg-white border border-cyan-800/20 rounded-lg">
+            <FormField id="phone_number" label="Номер телефона" type="text" value={phoneNumber}
+                       onChange={(e) => setPhoneNumber(e.target.value)} required/>
+            <FormField id="name" label="Имя" type="text" value={name}
+                       onChange={(e) => setName(e.target.value)} required/>
+            <FormField id="type_id" label="Тип" type="number" value={typeId || ''}
+                       onChange={(e) => setTypeId(parseInt(e.target.value, 10) || null)}/>
+            <FormField id="messanger_id" label="Мессенджер" type="number" value={messangerId || ''}
+                       onChange={(e) => setMessangerId(parseInt(e.target.value, 10) || null)}/>
+            <FormField id="check_in_date" label="Дата заезда" type="datetime-local" value={checkInDate}
+                       onChange={(e) => setCheckInDate(e.target.value)}/>
+            <FormField id="check_out_date" label="Дата выезда" type="datetime-local" value={checkOutDate}
+                       onChange={(e) => setCheckOutDate(e.target.value)}/>
+            <FormField id="chat_id" label="Chat ID" type="number" value={chatId || ''}
+                       onChange={(e) => setChatId(parseInt(e.target.value, 10) || null)} disabled/>
+            <div className="flex justify-center mt-6">
+                <button type="submit"
+                        className="bg-cyan-600 text-white w-full max-w-xs py-3 rounded-md border
+                    border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    {id > 0 ? 'Обновить клиента' : 'Добавить клиента'}</button>
             </div>
-            <div>
-                <label htmlFor="name" className="block text-gray-700">Name</label>
-                <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="type_id" className="block text-gray-700">Type</label>
-                <input
-                    id="type_id"
-                    type="number"
-                    value={typeId || ''}
-                    onChange={(e) => setTypeId(parseInt(e.target.value, 10) || null)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                />
-            </div>
-            <div>
-                <label htmlFor="messanger_id" className="block text-gray-700">Messenger</label>
-                <input
-                    id="messanger_id"
-                    type="number"
-                    value={messangerId || ''}
-                    onChange={(e) => setMessangerId(parseInt(e.target.value, 10) || null)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                />
-            </div>
-            <div>
-                <label htmlFor="check_in_date" className="block text-gray-700">Check-In Date</label>
-                <input
-                    id="check_in_date"
-                    type="datetime-local"
-                    value={checkInDate}
-                    onChange={(e) => setCheckInDate(e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                />
-            </div>
-            <div>
-                <label htmlFor="check_out_date" className="block text-gray-700">Check-Out Date</label>
-                <input
-                    id="check_out_date"
-                    type="datetime-local"
-                    value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                />
-            </div>
-            <div>
-                <label htmlFor="chat_id" className="block text-gray-700">Chat ID</label>
-                <input
-                    disabled={true}
-                    id="chat_id"
-                    type="number"
-                    value={chatId || ''}
-                    onChange={(e) => setChatId(parseInt(e.target.value, 10) || null)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                />
-            </div>
-            <button
-                type="submit"
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm"
-            >
-                {id ? 'Update Client' : 'Add Client'}
-            </button>
+
+            {isItUpdate && <DeleteBlock onDelete={handleDelete}/>}
         </form>
     );
 };
