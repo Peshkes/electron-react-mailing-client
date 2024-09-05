@@ -5,7 +5,7 @@ import {ApiResponse, ClientType, Message} from "../api/types";
 import MailingMessage from "./MailingMessage";
 import {ChildWindowContext} from "./child-window/ChildWindowProvider";
 
-const numberOfMessagesShown:number = 10;
+const numberOfMessagesShown: number = 10;
 const initialState: Message[] = [
     {
         "id": 1,
@@ -20,19 +20,12 @@ const LatestMailings = () => {
 
     const [nearestMessages, setNearestMessages] = useState(initialState);
 
-
     useEffect(() => {
         getNearestMessages(numberOfMessagesShown)
-            .then((response: ApiResponse<Message[]>) => {
-                if (Array.isArray(response)) {
-                    setNearestMessages(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
+            .then((response: Message[]) => {
+                setNearestMessages(response);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching messenger types:', error);
             });
     }, []);
@@ -40,7 +33,7 @@ const LatestMailings = () => {
     const childWindow = useContext(ChildWindowContext);
     const handleOpenChildWindow = () => {
         if (childWindow) {
-            childWindow.openChildWindow({ type: 'message', id: 0 });
+            childWindow.openChildWindow({type: 'message', id: 0});
         } else
             console.log('childWindow is null');
     };
@@ -51,54 +44,9 @@ const LatestMailings = () => {
                 <div className="flex items-center"><Plus color="white" onClickFunction={handleOpenChildWindow}/></div>
             </div>
             <div className="w-full h-full overflow-auto scroll-smooth scrollbar-none">
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
-                <div
-                    className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
-                    <div className="flex justify-between text-white"><p>Тема: </p><p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <div className="pt-1 flex justify-between text-white"><p>Тип: </p><p>Взрослый</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>Lorem.png</p></div>
-                    <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>01-01-2000 19:00</p></div>
-                </div>
+                {nearestMessages.map((item, index) => (
+                    <MailingMessage item={item}/>
+                ))}
             </div>
         </div>
     );

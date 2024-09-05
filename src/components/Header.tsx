@@ -29,7 +29,7 @@ const Header: React.FC = () => {
                         <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
-                                isActive ? "bg-blue-800 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
+                                isActive ? "bg-white/20 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
                             }
                         >
                             {link.name}

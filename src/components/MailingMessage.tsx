@@ -4,7 +4,7 @@ import {getRecipientTypes} from "../api/fake";
 import {ApiResponse, ClientType, Message} from "../api/types";
 
 type Props = {
-    item:Message
+    item: Message
 }
 
 const initialState: ClientType[] = [
@@ -19,14 +19,8 @@ const MailingMessage = (props: Props) => {
 
     useEffect(() => {
         getRecipientTypes()
-            .then((response: ApiResponse<ClientType[]>) => {
-                if (Array.isArray(response)) {
-                    setRecipientTypes(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
+            .then((response: ClientType[]) => {
+                setRecipientTypes(response);
             })
             .catch((error) => {
                 console.error('Error fetching messenger types:', error);

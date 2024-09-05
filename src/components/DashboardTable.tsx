@@ -12,6 +12,7 @@ import {ApiResponse, Client, Message, SampleMessage} from "../api/types";
 
 type Props = {
     title: string
+    plus: boolean
     plusFunction?: () => void | undefined
 }
 
@@ -51,61 +52,37 @@ const DashboardTable = (props: Props) => {
     useEffect(() => {
 
         getClientsWithUnselectedType()
-            .then((response: ApiResponse<Client[]>) => {
-                if (Array.isArray(response)) {
-                    setNoTypeClients(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
+            .then((response: Client[]) => {
+                setNoTypeClients(response);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching messenger types:', error);
             });
 
 
         getClientsWithTelegramError()
-            .then((response: ApiResponse<Client[]>) => {
-                if (Array.isArray(response)) {
-                    setTgErrorClients(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
+            .then((response: Client[]) => {
+                setTgErrorClients(response);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching messenger types:', error);
             });
 
         getLastClients(numberOfShownClients)
-            .then((response: ApiResponse<Client[]>) => {
-                if (Array.isArray(response)) {
-                    setLatestAddedClients(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
+            .then((response: Client[]) => {
+                setLatestAddedClients(response);
             })
-            .catch((error) => {
-                console.error('Error fetching messenger types:', error);
-            });
-        getAllSampleMessages()
-            .then((response: ApiResponse<SampleMessage[]>) => {
-                if (Array.isArray(response)) {
-                    setTemplateMessages(response);
-                } else if ('status' in response) {
-                    console.error('Error Status:', response.status);
-                } else {
-                    console.error('Unexpected response format');
-                }
-            })
-            .catch((error) => {
+            .catch(error => {
                 console.error('Error fetching messenger types:', error);
             });
 
+        getAllSampleMessages()
+            .then((response: SampleMessage[]) => {
+                setTemplateMessages(response);
+            })
+            .catch(error => {
+                console.error('Error fetching messenger types:', error);
+            });
 
     }, []);
 
@@ -155,14 +132,22 @@ const DashboardTable = (props: Props) => {
             className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
             <div className="w-full py-5  flex justify-between border-b-4 border-solid border-cyan-800/20">
                 <p className="pl-7 text-2xl text-cyan-800">{props.title}</p>
-                {props.plusFunction &&
-                    <div className="flex items-center pr-7 cursor-pointer"><Plus color="black" onClickFunction={props.plusFunction}/></div>}
+                {
+                    props.plusFunction &&
+                    <div className="flex items-center pr-7 cursor-pointer">
+                        <Plus color="black" onClickFunction={props.plusFunction}/>
+                    </div>}
             </div>
             <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
-                <div className="w-full py-5 px-7 grid grid-cols-2 font-bold sticky top-0 bg-white">
-                    <div>Имя</div>
-                    <div>Телефон</div>
-                </div>
+                {props.title == "Шаблоны" ?
+                    <div className="w-full py-5 px-7 sticky top-0 bg-white">
+
+                    </div> :
+                    <div className="w-full py-5 px-7 grid grid-cols-2 font-bold sticky top-0 bg-white">
+                        <div>Имя</div>
+                        <div>Телефон</div>
+                    </div>
+                }
                 <div className="w-full"> {checkTable(props.title)}
 
                 </div>

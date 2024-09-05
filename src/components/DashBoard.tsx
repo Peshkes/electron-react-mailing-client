@@ -1,6 +1,10 @@
 import React, {useContext} from 'react';
-import DashboardTable from "./DashboardTable";
 import {ChildWindowContext} from "./child-window/ChildWindowProvider";
+import TableWrapper from "./TableWrapper";
+import NoTypeClients from "./tables/NoTypeClients";
+import TemplateMessages from "./tables/TemplateMessages";
+import LatestAddedClients from "./tables/LatestAddedClients";
+import TgErrorClients from "./tables/TgErrorClients";
 
 const DashBoard = () => {
     const childWindow = useContext(ChildWindowContext);
@@ -13,18 +17,18 @@ const DashBoard = () => {
             <div className="w-full h-full flex flex-col justify-start mx-auto pb-8 px-4">
                 <div className="w-full h-[30%] flex justify-between">
                     <div className="w-[55%]">
-                        <DashboardTable title="Клиенты без типа"/>
+                        <TableWrapper title="Клиенты без типа" table={<NoTypeClients/>}/>
                     </div>
                     <div className="w-[43%]">
-                        <DashboardTable title="Шаблонны" plusFunction={handleOpenSample}/>
+                        <TableWrapper title="Шаблоны" plusFunction={handleOpenSample}  table={<TemplateMessages/>}/>
                     </div>
                 </div>
                 <div className="w-full h-[55%] mt-6 flex justify-between">
                     <div className="w-[55%]">
-                        <DashboardTable title="Последние клиенты" plusFunction={handleOpenClient}/>
+                        <TableWrapper title="Последние клиенты" plusFunction={handleOpenClient}  table={<LatestAddedClients/>}/>
                     </div>
                     <div className="w-[43%]">
-                        <DashboardTable title="Ошибки в телеграме"/>
+                        <TableWrapper title="Ошибки в телеграме"  table={<TgErrorClients/>}/>
                     </div>
                 </div>
             </div>
