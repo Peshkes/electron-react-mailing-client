@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
     color: string
-         onClickFunction: () => void
+    onClickFunction: () => void
 }
 
 const Plus = ({color, onClickFunction}: Props) => {
