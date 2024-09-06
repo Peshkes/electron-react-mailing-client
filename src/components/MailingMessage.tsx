@@ -33,8 +33,8 @@ const MailingMessage = (props: Props) => {
             className="w-full px-3 py-3 my-4 mx-auto h-auto bg-white/20 border-0 rounded-2xl shadow-xl shadow-slate-700 cursor-pointer  hover:shadow-none">
             <div className="flex justify-between text-white"><p>Тема: </p><p>{props.item.theme}</p>
             </div>
-            <div className="pt-1 flex justify-between text-white"><p>Тип: </p>{recipientTypes.map(item => (
-                item.id == type_id ? <p>{item.type_name}</p> : <></>
+            <div className="pt-1 flex justify-between text-white"><p>Тип: </p>{recipientTypes.map((item,index) => (
+                item.id == type_id ? <p key={index}>{item.type_name}</p> : <></>
             ))}</div>
             <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>{props.item.media_path}</p></div>
             <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>{props.item.sending_date}</p></div>

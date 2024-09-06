@@ -3,7 +3,6 @@ import Plus from "../icons/Plus";
 
 type Props = {
    title:String
-
     plusFunction?: () => void | undefined
 }
 

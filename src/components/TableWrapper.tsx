@@ -2,21 +2,22 @@ import React, {ReactNode} from 'react';
 import DashboardTableHeader from "./DashboardTableHeader";
 
 
+
 type Props = {
     title: string
     plusFunction?: () => void | undefined
-    table: ReactNode
+    children: ReactNode
 }
 
 
-const TableWrapper = (props: Props) => {
+const TableWrapper = ({title, plusFunction, children}: Props) => {
 
     return (
         <div
             className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
-            <DashboardTableHeader title={props.title} plusFunction={props.plusFunction}/>
+            <DashboardTableHeader title={title} plusFunction={plusFunction}/>
             <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
-                {props.title == "Шаблоны" ?
+                {title == "Шаблоны" ?
                     <div className="w-full py-5 px-7 sticky top-0 bg-white">
 
                     </div> :
@@ -25,12 +26,14 @@ const TableWrapper = (props: Props) => {
                         <div>Телефон</div>
                     </div>
                 }
-                <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
-                    {props.table}
-                </div>
+                {children}
             </div>
         </div>
     );
 };
 
 export default TableWrapper;
+
+
+
+

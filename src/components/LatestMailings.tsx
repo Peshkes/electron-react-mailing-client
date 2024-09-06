@@ -41,11 +41,11 @@ const LatestMailings = () => {
         <div className="w-[23%] h-full bg-cyan-800 flex flex-col justify-start px-4 py-3">
             <div className="w-full flex justify-between">
                 <h2 className="text-center text-white mb-2 text-2xl">Ближайшие рассылки</h2>
-                <div className="flex items-center"><Plus color="white" onClickFunction={handleOpenChildWindow}/></div>
+                <div className="flex items-center cursor-pointer"><Plus color="white" onClickFunction={handleOpenChildWindow}/></div>
             </div>
             <div className="w-full h-full overflow-auto scroll-smooth scrollbar-none">
                 {nearestMessages.map((item, index) => (
-                    <MailingMessage item={item}/>
+                    <MailingMessage key={index} item={item}/>
                 ))}
             </div>
         </div>
