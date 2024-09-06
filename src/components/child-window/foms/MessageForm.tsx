@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import FormField from './FormField';
-import DeleteBlock from './DeleteBlock';
+import FormField from '../form-entries/FormField';
+import DeleteBlock from '../form-entries/DeleteBlock';
 import {
     addMessage,
     addSampleMessage,
@@ -8,9 +8,9 @@ import {
     deleteSampleMessageById, getMessageById, getSampleMessageById,
     updateMessage,
     updateSampleMessage
-} from "../../api/fake";
-import {dateToTimestamp, timestampToDate} from "../../api/parser";
-import {SampleMessageData} from "../../api/types";
+} from "../../../api/fake";
+import {dateToTimestamp, timestampToDate} from "../../../api/parser";
+import {SampleMessageData} from "../../../api/types";
 
 type Props = {
     id: number;

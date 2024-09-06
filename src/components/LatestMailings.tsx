@@ -3,7 +3,7 @@ import Plus from "../icons/Plus";
 import {getNearestMessages, getRecipientTypes} from "../api/fake";
 import {ApiResponse, ClientType, Message} from "../api/types";
 import MailingMessage from "./MailingMessage";
-import {ChildWindowContext} from "./child-window/ChildWindowProvider";
+import {ChildWindowContext} from "./context-providers/ChildWindowProvider";
 
 const numberOfMessagesShown: number = 10;
 const initialState: Message[] = [

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ChildWindowContext} from "./child-window/ChildWindowProvider";
+import {ChildWindowContext} from "./context-providers/ChildWindowProvider";
 import TableWrapper from "./TableWrapper";
 import TemplateMessages from "./tables/TemplateMessages";
 import Clients from "./tables/Clients";
