@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Plus from "../icons/Plus";
-import {getNearestMessages, getRecipientTypes} from "../api/fake";
-import {ApiResponse, ClientType, Message} from "../api/types";
+import {getNearestMessages} from "../api/fake";
+import {Message} from "../api/types";
 import MailingMessage from "./MailingMessage";
 import {ChildWindowContext} from "./context-providers/ChildWindowProvider";
 
