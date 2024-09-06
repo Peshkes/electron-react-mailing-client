@@ -1,5 +1,6 @@
-import ChildWindow, { ChildWindowFunctionProps } from "./ChildWindow";
+import ChildWindow, { ChildWindowFunctionProps } from "../child-window/ChildWindow";
 import React, { FC, ReactNode } from "react";
+import WrapperBackgroundModal from "../WrapperBackgroundModal";
 
 type ChildWindowState = {
     type: 'client' | 'message' | 'sample' | null;
@@ -9,6 +10,7 @@ type ChildWindowState = {
 
 type ChildWindowContextProps = {
     openChildWindow: (props: ChildWindowFunctionProps) => void;
+    closeChildWindow: () => void;
 }
 
 const ChildWindowContext = React.createContext<ChildWindowContextProps | undefined>(undefined);
@@ -33,14 +35,12 @@ const ChildWindowProvider: FC<ChildWindowProviderProps> = ({ children }) => {
     };
 
     return (
-        <ChildWindowContext.Provider value={{ openChildWindow }}>
+        <ChildWindowContext.Provider value={{ openChildWindow, closeChildWindow }}>
             {children}
             {childWindow.isOpen && childWindow.type && childWindow.id !== null && (
-                <ChildWindow
-                    type={childWindow.type}
-                    id={childWindow.id}
-                    closeFunction={closeChildWindow}
-                />
+                <WrapperBackgroundModal closeFunction={closeChildWindow}>
+                    <ChildWindow type={childWindow.type} id={childWindow.id}/>
+                </WrapperBackgroundModal>
             )}
         </ChildWindowContext.Provider>
     );
