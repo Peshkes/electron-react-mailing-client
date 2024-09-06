@@ -15,9 +15,9 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className="bg-blue-600 text-white fixed w-full z-40">
-            <nav className="container mx-auto px-4 py-3 flex justify-between items-center z-40">
-                <div className="text-2xl font-bold z-40">
+        <header className="bg-cyan-800 text-white w-full">
+            <nav className="mx-auto px-4 py-3 flex justify-between">
+                <div className="text-2xl font-bold">
                     <Link to={'/'} className="text-white">
                         <img src={'../assets/vp.webp'} alt="logo"/>
                     </Link>
@@ -25,11 +25,11 @@ const Header: React.FC = () => {
 
                 {/* Desktop Menu */}
                 <div className="hidden sm:flex space-x-4">
-                    {links.map((link) => (
-                        <NavLink
+                   {links.map((link, index) => (
+                        <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
-                                isActive ? "bg-blue-800 px-3 py-2 rounded" : "hover:bg-blue-700 px-3 py-2 rounded"
+                                isActive ? "bg-white/20 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
                             }
                         >
                             {link.name}
@@ -57,8 +57,8 @@ const Header: React.FC = () => {
                 }`}
             >
                 <div className="md:hidden flex flex-col h-full justify-center items-center">
-                    {links.map((link) => (
-                        <NavLink
+                    {links.map((link, index) => (
+                        <NavLink key={index}
                             to={link.href}
                             className={({isActive}) =>
                                 isActive ? "block px-4 py-2 bg-blue-800 m-1" : "block px-4 py-2 hover:bg-blue-800 m-1"

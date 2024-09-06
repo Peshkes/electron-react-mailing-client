@@ -1,26 +1,27 @@
 import React from 'react';
 import Header from "./components/Header";
 import {Route, Routes} from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
+
 import ClientsPage from "./pages/ClientsPage";
-import ClientPage from "./pages/ClientPage";
 import MessagesPage from "./pages/MessagesPage";
-import MessagePage from "./pages/MessagePage";
+import DashboardPage from "./pages/DashboardPage";
+import {ChildWindowProvider} from "./components/context-providers/ChildWindowProvider";
+import {TypesProvider} from "./components/context-providers/TypesProvider";
+
 
 const App = () => {
-
     return (
-        <div className={'App'}>
+        <div className={'App bg-cyan-800/5 h-screen h-max-screen flex flex-col'}>
             <Header/>
-            <div className="flex justify-center items-center h-screen">
-                <Routes>
-                    <Route path={"/"} element={<DashboardPage/>}/>
-                    <Route path={"/clients"} element={<ClientsPage/>}/>
-                    <Route path={"/client/:id"} element={<ClientPage/>}/>
-                    <Route path={"/messages"} element={<MessagesPage/>}/>
-                    <Route path={"/message/:id"} element={<MessagePage/>}/>
-                </Routes>
-            </div>
+            <TypesProvider>
+                <ChildWindowProvider>
+                    <Routes>
+                        <Route path={"/"} element={<DashboardPage/>}/>
+                        <Route path={"/clients"} element={<ClientsPage/>}/>
+                        <Route path={"/messages"} element={<MessagesPage/>}/>
+                    </Routes>
+                </ChildWindowProvider>
+            </TypesProvider>
         </div>
     );
 };

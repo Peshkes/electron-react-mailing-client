@@ -1,12 +1,14 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-const __dirname = new URL('.', import.meta.url).pathname;
+//const __dirname = new URL('.', import.meta.url).pathname;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1250,
+        height: 800,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
