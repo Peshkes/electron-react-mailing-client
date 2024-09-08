@@ -11,7 +11,7 @@ import {TypesProvider} from "./components/context-providers/TypesProvider";
 
 const App = () => {
     return (
-        <div className={'App bg-cyan-800/5 h-screen h-max-screen flex flex-col'}>
+        <div className={'App bg-cyan-800/5 h-screen h-max-screen flex flex-wrap overflow-hidde'}>
             <Header/>
             <TypesProvider>
                 <ChildWindowProvider>

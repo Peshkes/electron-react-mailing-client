@@ -5,7 +5,7 @@ import TemplateMessages from "./tables/TemplateMessages";
 import Clients from "./tables/Clients";
 import {getClientsWithTelegramError, getClientsWithUnselectedType, getLastClients} from "../api/fake";
 
-const DashBoard = () => {
+const DashBoardComponent = () => {
     const childWindow = useContext(ChildWindowContext);
     const handleOpenClient = () => childWindow?.openChildWindow({type: 'client', id: 0});
     const handleOpenSample = () => childWindow?.openChildWindow({type: 'sample', id: 0});
@@ -45,4 +45,4 @@ const DashBoard = () => {
     );
 };
 
-export default DashBoard;
+export default DashBoardComponent;

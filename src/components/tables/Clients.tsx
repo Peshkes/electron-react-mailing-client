@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Client} from "../../api/types";
 
 type Props = {
-    functionToCall: (numberOfShownClients?:number) => Promise<Client[]>
+    functionToCall: (numberOfShownClients?: number) => Promise<Client[]>
 }
 
 const initialState: Client[] = [
@@ -21,22 +21,33 @@ const openClient = () => {
     return undefined;
 }
 
+
 const Clients = (props: Props) => {
     const [clients, setClients] = useState(initialState);
 
 
-
-    useEffect(() => {
-        props.functionToCall()
-            .then((response: Client[]) => {
+    // useEffect(() => {
+    //     props.functionToCall()
+    //         .then((response: Client[]) => {
+    //             console.log("function called")
+    //             if(JSON.stringify(response) != JSON.stringify(clients))
+    //                 setClients(response);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching messenger types:', error);
+    //         });
+    // }, [clients]);
+    props.functionToCall()
+        .then((response: Client[]) => {
+           if(JSON.stringify(response) != JSON.stringify(clients))
                 setClients(response);
-            })
-            .catch(error => {
-                console.error('Error fetching messenger types:', error);
-            });
-    }, []);
-    console.log(clients)
+            console.log("function called")
+        })
+        .catch(error => {
+            console.error('Error fetching messenger types:', error);
+        });
 
+    //console.log(clients)
 
     return (
         clients.map((item, index) => (
