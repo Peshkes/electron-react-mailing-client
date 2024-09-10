@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MessagesPage = () => {
+const ClientPage = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const MessagesPage = () => {
     );
 };
 
-export default MessagesPage;
+export default ClientPage;

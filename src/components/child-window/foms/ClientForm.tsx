@@ -58,6 +58,31 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({ id }) => {
         }
     }, [id]);
 
+
+   const handleUpdateClient = (id:number, clientData:ClientData) => {
+       updateClient(id, clientData)
+           .then(client => {
+               handleOpenModal('Клиент ' + client.name + ' был обновлен успешно',
+                   () => updateClient(id, client as ClientData)
+                       .then(_ => handleOpenModal('Обновление клиента отменено'))
+                       .catch(error => handleOpenModal('Отмена обновления клиента не удалась: ' + error, undefined, closeAllWindows))
+               );
+           })
+           .catch(error => handleOpenModal('Обновление клиента не удалось: ' + error, undefined, closeAllWindows));
+   }
+
+    const handleAddClient = (clientData:ClientData) => {
+        addClient(clientData as ClientData)
+            .then(id => handleOpenModal('Клиент ' + clientData.name + ' был добавлен успешно',
+                () => deleteClientById(id)
+                    .then(_ => handleOpenModal('Добавление клиента отменено'))
+                    .catch(error => handleOpenModal('Отмена добавления клиента не удалась: ' + error, undefined, closeAllWindows)))
+            )
+            .then(_ => resetForm())
+            .catch(error => handleOpenModal('Добавление клиента не удалось: ' + error, undefined, closeAllWindows));
+    }
+
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const clientData = {
@@ -71,24 +96,9 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({ id }) => {
         };
 
         if (isItUpdate) {
-            updateClient(id, clientData)
-                .then(client => {
-                    handleOpenModal('Клиент ' + client.name + ' был обновлен успешно',
-                        () => updateClient(id, client as ClientData)
-                            .then(_ => handleOpenModal('Обновление клиента отменено'))
-                            .catch(error => handleOpenModal('Отмена обновления клиента не удалась: ' + error, undefined, closeAllWindows))
-                    );
-                })
-                .catch(error => handleOpenModal('Обновление клиента не удалось: ' + error, undefined, closeAllWindows));
+            handleUpdateClient(id as number, clientData as ClientData);
         } else {
-            addClient(clientData)
-                .then(id => handleOpenModal('Клиент ' + clientData.name + ' был добавлен успешно',
-                    () => deleteClientById(id)
-                        .then(_ => handleOpenModal('Добавление клиента отменено'))
-                        .catch(error => handleOpenModal('Отмена добавления клиента не удалась: ' + error, undefined, closeAllWindows)))
-                )
-                .then(_ => resetForm())
-                .catch(error => handleOpenModal('Добавление клиента не удалось: ' + error, undefined, closeAllWindows));
+            handleAddClient(clientData as ClientData);
         }
     };
 
@@ -98,7 +108,7 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({ id }) => {
                 () => addClient(client as ClientData)
                     .then(_ => handleOpenModal('Клиент добавлен вновь'))
                     .catch(error => handleOpenModal('Клиент не добавлен: ' + error, undefined, closeAllWindows))))
-            .catch(error => handleOpenModal('Клиент не удалось удалить: ' + error, undefined, closeAllWindows));
+            .catch(error => handleOpenModal('Клиента не удалось удалить: ' + error, undefined, closeAllWindows));
     }
 
     return (

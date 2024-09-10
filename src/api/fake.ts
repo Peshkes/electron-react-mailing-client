@@ -352,7 +352,7 @@ export async function addSampleMessage(messageData: SampleMessageData): Promise<
     return new Promise((resolve) => {
         setTimeout(() => {
             const newSampleMessage = { ...messageData, id: Date.now() } as SampleMessage;
-            fakeSampleMessages.push(newSampleMessage);
+            fakeSampleMessages.unshift(newSampleMessage);
             resolve(newSampleMessage.id);
         }, 1000);
     });

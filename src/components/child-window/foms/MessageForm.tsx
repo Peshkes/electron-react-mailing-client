@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import FormField from '../form-entries/FormField';
 import DeleteBlock from '../form-entries/DeleteBlock';
 import {
@@ -10,7 +10,9 @@ import {
     updateSampleMessage
 } from "../../../api/fake";
 import {dateToTimestamp, timestampToDate} from "../../../api/parser";
-import {SampleMessageData} from "../../../api/types";
+import {MessageData, SampleMessageData} from "../../../api/types";
+import useModal from "../../modal-window/useModal";
+import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 
 type Props = {
     id: number;
@@ -25,7 +27,12 @@ const MessageForm = ({id, type}: Props) => {
     const [sampleName, setSampleName] = useState('');
     const [recipientTypeId, setRecipientTypeId] = useState<number | ''>('');
 
+    const {handleOpenModal, ModalComponent} = useModal();
+    const childWindow = useContext(ChildWindowContext);
+    const closeAllWindows = () => childWindow?.closeChildWindow();
+
     const isItUpdate = id > 0;
+
 
     useEffect(() => {
         if (isItUpdate) {
@@ -50,6 +57,79 @@ const MessageForm = ({id, type}: Props) => {
         }
     }, [id, type]);
 
+
+    const handleUpdateSampleMessage = (id: number, data: SampleMessageData) => {
+        updateSampleMessage(id, data).then(
+            message => {
+                handleOpenModal('Шаблон' + data.theme + ' ,было успешно обновлено',
+                    () => updateSampleMessage(id, data as SampleMessageData)
+                        .then(_ => handleOpenModal('Обновление шаблона отменено'))
+                        .catch(error => handleOpenModal('Отмена обновления шаблона не удалась: ' + error, undefined, closeAllWindows))
+                );
+            })
+            .catch(error => handleOpenModal('Обновление шаблона не удалась: ' + error, undefined, closeAllWindows))
+    }
+
+    const handleUpdateMessage = (id: number, data: MessageData) => {
+        updateMessage(id, data).then(
+            message => {
+                handleOpenModal('Сообщение' + data.theme + ' ,было успешно обновлено',
+                    () => updateMessage(id, data as MessageData)
+                        .then(_ => handleOpenModal('Обновление сообщения отменено'))
+                        .catch(error => handleOpenModal('Отмена обновления сообщения не удалась: ' + error, undefined, closeAllWindows))
+                );
+            })
+            .catch(error => handleOpenModal('Обновление сообщения не удалась: ' + error, undefined, closeAllWindows))
+    }
+    const handleAddSampleMessage = (data: SampleMessageData) => {
+        addSampleMessage(data)
+            .then(id => {
+                handleOpenModal('Шаблон сообщение' + data.theme + ' ,был обновлен успешно',
+                    () => deleteSampleMessageById(id)
+                        .then(_ => handleOpenModal('Добавление шаблона отменено'))
+                        .catch(error => handleOpenModal('Отмена добавления шаблона не удалась: ' + error, undefined, closeAllWindows))
+                );
+            })
+            .catch(error => handleOpenModal('Добавление шаблона не удалась: ' + error, undefined, closeAllWindows))
+    }
+    const handleAddMessage = (data: MessageData) => {
+        addMessage(data)
+            .then(id => {
+                handleOpenModal('Сообщение' + data.theme + ' ,было обновлено успешно',
+                    () => deleteMessageById(id)
+                        .then(_ => handleOpenModal('Добавление сообщения отменено'))
+                        .catch(error => handleOpenModal('Отмена добавления сообщения не удалась: ' + error, undefined, closeAllWindows))
+                );
+            })
+            .catch(error => handleOpenModal('Добавление сообщения не удалась: ' + error, undefined, closeAllWindows))
+    }
+
+    const handleDeleteSampleMessageById = (id: number) => {
+        deleteSampleMessageById(id)
+            .then(data => {
+                handleOpenModal('Шаблон' + data.theme + ' ,было удален успешно',
+                    () => addSampleMessage(data as SampleMessageData)
+                        .then(_ => handleOpenModal('Шаблон не был удален'))
+                        .catch(error => handleOpenModal('Шаблон не добавлен: ' + error, undefined, closeAllWindows))
+                );
+            })
+            .catch(error => handleOpenModal('Шаблон не удалось удалить: ' + error, undefined, closeAllWindows)
+            )
+    }
+
+    const handleDeleteMessageById = (id: number) => {
+        deleteMessageById(id).then(data => {
+            handleOpenModal('Сообщение' + data.theme + ' ,было удален успешно',
+                () => addMessage(data as MessageData)
+                    .then(_ => handleOpenModal('Сообщение не было удалено'))
+                    .catch(error => handleOpenModal('Сообщение не добавлено: ' + error, undefined, closeAllWindows))
+            );
+        })
+            .catch(error => handleOpenModal('Сообщение не удалось удалить: ' + error, undefined, closeAllWindows)
+            );
+    }
+
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const data = {
@@ -63,41 +143,29 @@ const MessageForm = ({id, type}: Props) => {
 
         if (isItUpdate) {
             if (type === 'sample') {
-                    updateSampleMessage(id, data as SampleMessageData).then(
-                        // TODO: Обработка успешного обновления
-                    )
-                } else {
-                    updateMessage(id, data).then(
-                        // TODO: Обработка успешного обновления
-                    )
-                }
+                handleUpdateSampleMessage(id, data as SampleMessageData);
             } else {
-                if (type === 'sample') {
-                    if (data.sample_name) {
-                        addSampleMessage(data as SampleMessageData).then(
-                            // TODO: Обработка успешного добавления
-                        )
-                    }
-                } else {
-                    addMessage(data).then(
-                        // TODO: Обработка успешного добавления
-                    )
-                }
+                handleUpdateMessage(id, data as MessageData);
+            }
+        } else {
+            if (type === 'sample') {
+                // if (data.sample_name) {
+                handleAddSampleMessage(data as SampleMessageData);
+            } else {
+                handleAddMessage(data as MessageData);
+                // }
             }
         }
-        ;
+    }
 
-        const handleDelete = () => {
-            type === 'message' ?
-                deleteMessageById(id).then(
-                    // TODO: Обработка успешного удаления
-                )
-                : deleteSampleMessageById(id).then(
-                    // TODO: Обработка успешного удаления
-                );
-        };
+    const handleDelete = () => {
+        type === 'sample' ?
+            handleDeleteSampleMessageById(id as number) :
+            handleDeleteMessageById(id as number);
+    };
 
-        return (
+    return (
+        <>
             <form onSubmit={handleSubmit} className="p-6 bg-white border border-cyan-800/20 rounded-lg">
                 {type === 'sample' && (
                     <FormField
@@ -161,7 +229,9 @@ const MessageForm = ({id, type}: Props) => {
 
                 {isItUpdate && <DeleteBlock onDelete={handleDelete}/>}
             </form>
-        );
-    };
+            {ModalComponent}
+        </>
+    );
+};
 
-    export default MessageForm;
+export default MessageForm;

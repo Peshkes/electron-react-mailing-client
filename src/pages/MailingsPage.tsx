@@ -1,14 +1,14 @@
 import React from 'react';
 import LatestMailings from "../components/LatestMailings";
-import ClientsComponent from "../components/ClientsComponent";
+import MailingsComponent from "../components/MailingsComponent";
 
-const ClientsPage = () => {
+const MailingsPage = () => {
     return (
         <div className="w-full h-full flex flex-wrap overflow-hidden">
             <LatestMailings/>
-            <ClientsComponent/>
+            <MailingsComponent/>
         </div>
     );
 };
 
-export default ClientsPage;
+export default MailingsPage;

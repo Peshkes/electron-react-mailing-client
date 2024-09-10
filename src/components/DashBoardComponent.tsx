@@ -13,7 +13,7 @@ const DashBoardComponent = () => {
     const numberOfShownClients: number = 10;
 
     return (
-        <div className="w-[77%] h-[92%] mx-auto">
+        <div className="w-[77%] h-[92%] mx-auto ">
             <h2 className="w-full text-3xl py-6 pl-4 pr-4">Дашборд</h2>
             <div className="w-full h-full flex flex-col justify-start mx-auto pb-8 px-4">
                 <div className="w-full h-[30%] flex justify-between">
