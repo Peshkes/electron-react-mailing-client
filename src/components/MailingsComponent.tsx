@@ -30,9 +30,9 @@ const MailingsComponent = () => {
     }, []);
 
     return (
-        <div className="w-[77%] h-[92%] mx-auto text-cyan-800">
-            <h2 className="w-full h-[8%] text-3xl py-6 pl-4 pr-4">Рассылки</h2>
-            <div className="w-full h-[75%] flex flex-col justify-start mx-auto pb-8 px-4">
+        <div className="w-[77%] h-full mx-auto flex flex-col justify-start text-cyan-800">
+            <h2 className="w-full text-3xl py-6 pl-4 pr-4">Рассылки</h2>
+            <div className="w-full h-[70%] flex flex-col justify-start mx-auto pb-4 px-4">
                 <div className="w-full px-7 py-4 mb-4 bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
                     <input type="text" placeholder="Поиск" className="w-full"/>
                 </div>
@@ -57,11 +57,22 @@ const MailingsComponent = () => {
                     <div className="text-center"><Pagination/></div>
                 </div>
             </div>
-            <div className="w-[30%] px-7 pt-1">
-                <div className="flex flex-col align-start pt-1 bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
-                    <h3>Типы</h3>
-                    <input type="checkbox" name="Adult"/>
-                    <input type="checkbox" name="С детьми"/>
+            <div className="w-full h-[25%] mx-auto pb-8 px-4 flex justify-between ">
+                <div className="w-[25%] px-7 pt-1 flex flex-col bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
+                    <h3 className="font-bold py-5 ">Типы</h3>
+                    <div>
+                        <div className="pt-1 ">
+                            <input type="radio" name="typeSelect" id="adult" value="1" />
+                            <label className="px-7" htmlFor="adult">Взрослые</label>
+                        </div>
+                        <div className="pt-1 ">
+                            <input type="radio" name="typeSelect" id="adult" value="2" />
+                            <label className="px-7" htmlFor="child">С детьми</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="w-[73%] px-7 pt-1 flex flex-col bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
+
                 </div>
             </div>
         </div>
