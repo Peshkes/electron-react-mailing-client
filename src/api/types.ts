@@ -39,7 +39,7 @@ export type PaginationRequestParams = {
 } & PaginationParams
 
 export type PaginationResponseParams = {
-    totalPages: string;
+    totalPages: number;
     total: number
 } & PaginationParams
 

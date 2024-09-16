@@ -20,15 +20,23 @@ const LatestMailings = () => {
 
     const [nearestMessages, setNearestMessages] = useState(initialState);
 
-    useEffect(() => {
-        getNearestMessages(numberOfMessagesShown)
-            .then((response: Message[]) => {
-                setNearestMessages(response);
-            })
-            .catch(error => {
-                console.error('Error fetching messenger types:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     getNearestMessages(numberOfMessagesShown)
+    //         .then((response: Message[]) => {
+    //             setNearestMessages(response);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching messenger types:', error);
+    //         });
+    // }, []);
+
+    getNearestMessages(numberOfMessagesShown)
+        .then((response: Message[]) => {
+            setNearestMessages(response);
+        })
+        .catch(error => {
+            console.error('Error fetching messenger types:', error);
+        });
 
     const childWindow = useContext(ChildWindowContext);
     const handleOpenChildWindow = () => {

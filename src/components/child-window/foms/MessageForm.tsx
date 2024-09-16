@@ -64,8 +64,7 @@ const MessageForm = ({id, type}: Props) => {
                 handleOpenModal('Шаблон' + data.theme + ' ,было успешно обновлено',
                     () => updateSampleMessage(id, data as SampleMessageData)
                         .then(_ => handleOpenModal('Обновление шаблона отменено'))
-                        .catch(error => handleOpenModal('Отмена обновления шаблона не удалась: ' + error, undefined, closeAllWindows))
-                );
+                        .catch(error => handleOpenModal('Отмена обновления шаблона не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
             })
             .catch(error => handleOpenModal('Обновление шаблона не удалась: ' + error, undefined, closeAllWindows))
     }
@@ -76,8 +75,7 @@ const MessageForm = ({id, type}: Props) => {
                 handleOpenModal('Сообщение' + data.theme + ' ,было успешно обновлено',
                     () => updateMessage(id, data as MessageData)
                         .then(_ => handleOpenModal('Обновление сообщения отменено'))
-                        .catch(error => handleOpenModal('Отмена обновления сообщения не удалась: ' + error, undefined, closeAllWindows))
-                );
+                        .catch(error => handleOpenModal('Отмена обновления сообщения не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
             })
             .catch(error => handleOpenModal('Обновление сообщения не удалась: ' + error, undefined, closeAllWindows))
     }
@@ -87,8 +85,7 @@ const MessageForm = ({id, type}: Props) => {
                 handleOpenModal('Шаблон сообщение' + data.theme + ' ,был обновлен успешно',
                     () => deleteSampleMessageById(id)
                         .then(_ => handleOpenModal('Добавление шаблона отменено'))
-                        .catch(error => handleOpenModal('Отмена добавления шаблона не удалась: ' + error, undefined, closeAllWindows))
-                );
+                        .catch(error => handleOpenModal('Отмена добавления шаблона не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
             })
             .catch(error => handleOpenModal('Добавление шаблона не удалась: ' + error, undefined, closeAllWindows))
     }
@@ -98,8 +95,7 @@ const MessageForm = ({id, type}: Props) => {
                 handleOpenModal('Сообщение' + data.theme + ' ,было обновлено успешно',
                     () => deleteMessageById(id)
                         .then(_ => handleOpenModal('Добавление сообщения отменено'))
-                        .catch(error => handleOpenModal('Отмена добавления сообщения не удалась: ' + error, undefined, closeAllWindows))
-                );
+                        .catch(error => handleOpenModal('Отмена добавления сообщения не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
             })
             .catch(error => handleOpenModal('Добавление сообщения не удалась: ' + error, undefined, closeAllWindows))
     }
@@ -110,8 +106,7 @@ const MessageForm = ({id, type}: Props) => {
                 handleOpenModal('Шаблон' + data.theme + ' ,было удален успешно',
                     () => addSampleMessage(data as SampleMessageData)
                         .then(_ => handleOpenModal('Шаблон не был удален'))
-                        .catch(error => handleOpenModal('Шаблон не добавлен: ' + error, undefined, closeAllWindows))
-                );
+                        .catch(error => handleOpenModal('Шаблон не добавлен: ' + error, undefined, closeAllWindows)), closeAllWindows);
             })
             .catch(error => handleOpenModal('Шаблон не удалось удалить: ' + error, undefined, closeAllWindows)
             )
@@ -122,8 +117,7 @@ const MessageForm = ({id, type}: Props) => {
             handleOpenModal('Сообщение' + data.theme + ' ,было удален успешно',
                 () => addMessage(data as MessageData)
                     .then(_ => handleOpenModal('Сообщение не было удалено'))
-                    .catch(error => handleOpenModal('Сообщение не добавлено: ' + error, undefined, closeAllWindows))
-            );
+                    .catch(error => handleOpenModal('Сообщение не добавлено: ' + error, undefined, closeAllWindows)), closeAllWindows);
         })
             .catch(error => handleOpenModal('Сообщение не удалось удалить: ' + error, undefined, closeAllWindows)
             );
