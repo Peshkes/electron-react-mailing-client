@@ -1,60 +1,31 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
+import {useQuery} from "react-query";
+import {getAllMessagesWithPagination} from "../../api/fake";
 
 type Props = {
     functionToCall: (numberOfShownClients?: number) => Promise<Client[]>
 }
 
-const initialState: Client[] = [
-    {
-        "id": 1,
-        "phone_number": "+123456789",
-        "name": "Type Unassignedovich",
-        "type_id": null,
-        "check_in_date": 1622518799,
-        "check_out_date": 1622605199,
-        "chat_id": 123456789,
-        "messanger_id": 1
-    }
-];
-
-
-
 const Clients = (props: Props) => {
-    const [clients, setClients] = useState(initialState);
+    const { data, isLoading, isError } = useQuery(
+        [ 'clients',`${props.functionToCall}`],
+        () => props.functionToCall(),
+        {
+            keepPreviousData: true,
+        }
+    );
 
     const childWindow = useContext(ChildWindowContext);
     const handleOpenClient = (id:number) => childWindow?.openChildWindow({type: 'client', id: id});
 
-    // const openClient = () => {
-    //   return handleOpenClient();
-    // }
-
-    // useEffect(() => {
-    //     props.functionToCall()
-    //         .then((response: Client[]) => {
-    //             console.log("function called")
-    //             if(JSON.stringify(response) != JSON.stringify(clients))
-    //                 setClients(response);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching messenger types:', error);
-    //         });
-    // }, [clients]);
-    props.functionToCall()
-        .then((response: Client[]) => {
-           if(JSON.stringify(response) != JSON.stringify(clients))
-                setClients(response);
-        })
-        .catch(error => {
-            console.error('Error fetching messenger types:', error);
-        });
-
-    //console.log(clients)
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error</div>;
+    if (!data) return <div>No data</div>;
 
     return (
-        clients.map((item, index) => (
+        data.map((item, index) => (
             <div key={index} tabIndex={item.id} onClick={(e) => handleOpenClient(e.currentTarget.tabIndex)}
                  className="px-7 grid grid-cols-2 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white ">
                 <div >{item.name}</div>

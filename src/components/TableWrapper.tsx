@@ -16,11 +16,8 @@ const TableWrapper = ({title, plusFunction, children}: Props) => {
         <div
             className="w-full h-full flex flex-col justify-start bg-white border-4 border-solid border-cyan-800/20 rounded-2xl">
             <DashboardTableHeader title={title} plusFunction={plusFunction}/>
-            <div className="w-full pb-5 overflow-auto scroll-smooth scrollbar-none text-cyan-800">
-                {title == "Шаблоны" ?
-                    <div className="w-full py-5 px-7 sticky top-0 bg-white">
-
-                    </div> :
+            <div className="h-full w-full pb-5 overflow-y-scroll scroll-smooth scrollbar-none text-cyan-800">
+                {title === "Шаблоны" ||
                     <div className="w-full py-5 px-7 grid grid-cols-2 font-bold sticky top-0 bg-white">
                         <div>Имя</div>
                         <div>Телефон</div>

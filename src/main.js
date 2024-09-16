@@ -8,14 +8,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 1250,
-        height: 800,
+        height: 900,
+        resizable: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
     });
 
     mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
