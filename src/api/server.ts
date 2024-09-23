@@ -1,20 +1,6 @@
-import {
-    ApiResponse,
-    Client,
-    ClientData,
-    ClientPaginationResponse,
-    ClientSearchParams,
-    ClientType,
-    Message,
-    MessageData,
-    MessagePaginationResponse,
-    MessageSearchObject,
-    MessengerType,
-    PaginationRequestParams,
-    SampleMessage,
-    SampleMessageData,
-    StatusResponse
-} from './types';
+import {ApiResponse, Client, ClientData, ClientPaginationResponse, ClientsComplexObjectRequest,
+    ClientSearchParams, ClientType, Message, MessageData, MessagePaginationResponse, MessagesComplexObjectRequest,
+    MessageSearchObject, MessengerType, PaginationRequestParams, SampleMessage, SampleMessageData, StatusResponse} from './types';
 
 const server = 'http://localhost:49152';
 
@@ -79,6 +65,11 @@ export async function getLastClients(count: number): Promise<Client[]> {
     return request(`/client/all/last/${count}`);
 }
 
+// Получить клиентов по всем фильтрам
+export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<Client[]> {
+    return request('/client/all/full_filtered', 'GET', complexObject);
+}
+
 //MESSAGES
 
 // Добавить новое сообщение
@@ -120,6 +111,11 @@ export async function getAllMessages(): Promise<Message[]> {
 export async function getAllMessagesWithPagination(params: PaginationRequestParams): Promise<MessagePaginationResponse> {
     const query = new URLSearchParams(params as any).toString();
     return request(`/message/all/paginated?${query}`);
+}
+
+// Получить все сообщения со всеми фильтрациями
+export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<Message[]> {
+    return request(`/message/all/full_filtered`, 'GET', complexObject);
 }
 
 // Получить ближайшие сообщения

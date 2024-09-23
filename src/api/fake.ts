@@ -1,12 +1,12 @@
 import {
     Client,
     ClientData,
-    ClientPaginationResponse,
+    ClientPaginationResponse, ClientsComplexObjectRequest,
     ClientSearchParams,
     ClientType,
     Message,
     MessageData,
-    MessagePaginationResponse,
+    MessagePaginationResponse, MessagesComplexObjectRequest,
     MessageSearchObject,
     MessengerType,
     PaginationRequestParams,
@@ -415,6 +415,27 @@ export async function getLastClients(count: number): Promise<Client[]> {
     });
 }
 
+export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<Client[]> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            let filteredClients = [...fakeClients];
+
+            if (complexObject.type_id) filteredClients = filteredClients.filter(client => client.type_id === complexObject.type_id);
+            if (complexObject.tg_error !== undefined && complexObject.tg_error !== null) filteredClients = filteredClients.filter(client => client.messanger_id === 2 && client.chat_id === null);
+            if (complexObject.search_type && complexObject.search_string) {
+                filteredClients = filteredClients.filter(client =>
+                    String(client[complexObject.search_type as keyof Client ]).toLowerCase().includes(complexObject.search_string!.toLowerCase())
+                );
+            }
+
+            const start = (complexObject.page - 1) * complexObject.limit;
+            const paginatedClients = filteredClients.slice(start, start + complexObject.limit);
+
+            resolve(paginatedClients);
+        }, 1000);
+    });
+}
+
 // MESSAGES
 
 export async function addMessage(messageData: MessageData): Promise<number> {
@@ -524,6 +545,36 @@ export async function getMessagesByRecipientType(recipientTypeId: number): Promi
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(fakeMessages.filter(message => message.recipient_type_id === recipientTypeId));
+        }, 1000);
+    });
+}
+
+export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<Message[]> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            let filteredMessages = [...fakeMessages];
+
+            if (complexObject.type_id !== undefined) {
+                filteredMessages = filteredMessages.filter(message => message.recipient_type_id === complexObject.type_id);
+            }
+            if (complexObject.date_from !== undefined) {
+                filteredMessages = filteredMessages.filter(message => message.sending_date >= complexObject.date_from!);
+            }
+
+            if (complexObject.date_to !== undefined) {
+                filteredMessages = filteredMessages.filter(message => message.sending_date <= complexObject.date_to!);
+            }
+
+            if (complexObject.search_string) {
+                filteredMessages = filteredMessages.filter(message =>
+                    message.message_text.toLowerCase().includes(complexObject.search_string!.toLowerCase())
+                );
+            }
+
+            const start = (complexObject.page - 1) * complexObject.limit;
+            const paginatedMessages = filteredMessages.slice(start, start + complexObject.limit);
+
+            resolve(paginatedMessages);
         }, 1000);
     });
 }

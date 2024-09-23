@@ -48,6 +48,13 @@ export type ClientPaginationResponse = {
     pagination: PaginationResponseParams;
 }
 
+export type ClientsComplexObjectRequest = {
+    type_id?: number;
+    search_type?: string;
+    search_string?: string;
+    tg_error?: boolean;
+} & PaginationParams
+
 //MESSAGES
 
 export type messageSkeleton = {
@@ -79,6 +86,13 @@ export type MessageSearchObject = {
     date_from?: number;
     date_to?: number;
 }
+
+export type MessagesComplexObjectRequest = {
+    type_id?: number;
+    date_from?: number;
+    date_to?: number;
+    search_string?: string;
+} & PaginationParams
 
 // UTILITIES
 
