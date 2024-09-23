@@ -1,8 +1,8 @@
 import React from 'react';
-import LatestMailings from "../components/LatestMailings";
-import DashBoardComponent from "../components/DashBoardComponent";
+import LatestMailings from "../components/latest-mailings/LatestMailings";
+import DashBoardComponent from "../components/dashboard/DashBoardComponent";
 
-const DashboardPage_old = () => {
+const DashboardPage = () => {
     return (
         <div className="w-full h-full flex flex-wrap overflow-hidden">
             <LatestMailings/>
@@ -11,4 +11,4 @@ const DashboardPage_old = () => {
     );
 };
 
-export default DashboardPage_old;
+export default DashboardPage;

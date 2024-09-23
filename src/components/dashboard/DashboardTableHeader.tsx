@@ -1,5 +1,5 @@
-import React, {ReactNode} from 'react';
-import Plus from "../icons/Plus";
+import React from 'react';
+import Plus from "../../icons/Plus";
 
 type Props = {
    title:String
@@ -13,7 +13,7 @@ const DashboardTableHeader = (props:Props) => {
             {
                 props.plusFunction &&
                 <div className="flex items-center pr-7 cursor-pointer">
-                    <Plus color="black" onClickFunction={props.plusFunction}/>
+                    <Plus color={"#155e75"} onClickFunction={props.plusFunction}/>
                 </div>}
         </div>
     );

@@ -1,11 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import FormField from '../form-entries/FormField';
 import DeleteBlock from '../form-entries/DeleteBlock';
 import {
     addMessage,
     addSampleMessage,
     deleteMessageById,
-    deleteSampleMessageById, getMessageById, getSampleMessageById,
+    deleteSampleMessageById,
+    getMessageById,
+    getSampleMessageById,
     updateMessage,
     updateSampleMessage
 } from "../../../api/fake";
@@ -13,13 +15,15 @@ import {dateToTimestamp, timestampToDate} from "../../../api/parser";
 import {MessageData, SampleMessageData} from "../../../api/types";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 
-type Props = {
+
+type  MessageFormEntrailsProps = {
     id: number;
     type: 'message' | 'sample';
 };
 
-const MessageForm = ({id, type}: Props) => {
+const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
     const [theme, setTheme] = useState('');
     const [messageText, setMessageText] = useState('');
     const [mediaPath, setMediaPath] = useState('');
@@ -30,75 +34,110 @@ const MessageForm = ({id, type}: Props) => {
     const {handleOpenModal, ModalComponent} = useModal();
     const childWindow = useContext(ChildWindowContext);
     const closeAllWindows = () => childWindow?.closeChildWindow();
-
+    const queryClient = useQueryClient();
     const isItUpdate = id > 0;
 
-
-    useEffect(() => {
-        if (isItUpdate) {
-            if (type === 'sample') {
-                getSampleMessageById(id).then(data => {
-                    setTheme(data.theme);
-                    setMessageText(data.message_text);
-                    setRecipientTypeId(data.recipient_type_id || '');
-                    if (data.media_path) setMediaPath(data.media_path);
-                    setSendingDate(timestampToDate(data.sending_date));
-                    setSampleName(data.sample_name);
-                })
-            } else {
-                getMessageById(id).then(data => {
-                    setTheme(data.theme);
-                    setMessageText(data.message_text);
-                    setRecipientTypeId(data.recipient_type_id || '');
-                    if (data.media_path) setMediaPath(data.media_path);
-                    setSendingDate(timestampToDate(data.sending_date));
-                })
-            }
+    const {data: messageData, isLoading: isMessageLoading} = useQuery(
+        ['message', 'sample', id],
+        type === 'message' ? () => getMessageById(id) : () => getSampleMessageById(id),
+        {
+            enabled: id > 0,
+            onSuccess:
+                type === 'message' ?
+                    (data: MessageData) => {
+                        setTheme(data.theme);
+                        setMessageText(data.message_text);
+                        if (data.recipient_type_id) setRecipientTypeId(data.recipient_type_id);
+                        if (data.media_path) setMediaPath(data.media_path);
+                        if (data.sending_date) setSendingDate(timestampToDate(data.sending_date));
+                        if (data.media_path) setMediaPath(data.media_path);
+                    } :
+                    (data: SampleMessageData) => {
+                        setTheme(data.theme);
+                        setMessageText(data.message_text);
+                        if (data.recipient_type_id) setRecipientTypeId(data.recipient_type_id);
+                        if (data.media_path) setMediaPath(data.media_path);
+                        if (data.sending_date) setSendingDate(timestampToDate(data.sending_date));
+                        setSampleName(data.sample_name);
+                    },
+            onError: (error: Error) => handleOpenModal('Получение клиента не удалось: ' + error.message, undefined, closeAllWindows)
         }
-    }, [id, type]);
+    );
+
+    const useAddMessageMutation = () => {
+        if (type === 'message') {
+            return useMutation(
+                async (messageData: MessageData | SampleMessageData) => {
+                    const id = await addMessage(messageData);
+                    // Опционально: получить полный объект клиента после добавления
+                    return await getMessageById(id);
+                },
+                {
+                    onSuccess: () => {
+                        handleOpenModal('Рассылка добавлена успешно', closeAllWindows);
+                        queryClient.invalidateQueries('messages');
+                        resetForm(type);
+                    },
+                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
+                }
+            );
+        } else {
+            return useMutation(
+                async (messageData: MessageData | SampleMessageData) => {
+                    const id = await addSampleMessage(messageData as SampleMessageData);
+                    // Опционально: получить полный объект клиента после добавления
+                    return await getSampleMessageById(id);
+                },
+                {
+                    onSuccess: () => {
+                        handleOpenModal('Шаблон рассылки добавлен успешно', closeAllWindows);
+                        queryClient.invalidateQueries('samples');
+                        resetForm(type);
+                    },
+                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
+                }
+            );
+        }
+
+    };
+
+    const useUpdateMessageMutation = (id: number) => {
+        if (type === 'message') {
+            return useMutation(
+                async (messageData: MessageData | SampleMessageData) => {
+                    return await updateMessage(id, messageData);
+                },
+                {
+                    onSuccess: () => {
+                        handleOpenModal('Рассылка обновлена успешно', closeAllWindows);
+                        queryClient.invalidateQueries('messages');
+                        resetForm(type);
+                    },
+                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
+                }
+            );
+        } else {
+            return useMutation(
+                async (messageData: MessageData | SampleMessageData) => {
+                    return await updateSampleMessage(id, messageData as SampleMessageData);
+                },
+                {
+                    onSuccess: () => {
+                        handleOpenModal('Шаблон рассылки обновлен успешно', closeAllWindows);
+                        queryClient.invalidateQueries('samples');
+                        resetForm(type);
+                    },
+                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
+                }
+            );
+        }
+
+    };
 
 
-    const handleUpdateSampleMessage = (id: number, data: SampleMessageData) => {
-        updateSampleMessage(id, data).then(
-            message => {
-                handleOpenModal('Шаблон' + data.theme + ' ,было успешно обновлено',
-                    () => updateSampleMessage(id, data as SampleMessageData)
-                        .then(_ => handleOpenModal('Обновление шаблона отменено'))
-                        .catch(error => handleOpenModal('Отмена обновления шаблона не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
-            })
-            .catch(error => handleOpenModal('Обновление шаблона не удалась: ' + error, undefined, closeAllWindows))
-    }
+    const addMessageMutation = useAddMessageMutation();
+    const updateMessageMutation = useUpdateMessageMutation(id);
 
-    const handleUpdateMessage = (id: number, data: MessageData) => {
-        updateMessage(id, data).then(
-            message => {
-                handleOpenModal('Сообщение' + data.theme + ' ,было успешно обновлено',
-                    () => updateMessage(id, data as MessageData)
-                        .then(_ => handleOpenModal('Обновление сообщения отменено'))
-                        .catch(error => handleOpenModal('Отмена обновления сообщения не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
-            })
-            .catch(error => handleOpenModal('Обновление сообщения не удалась: ' + error, undefined, closeAllWindows))
-    }
-    const handleAddSampleMessage = (data: SampleMessageData) => {
-        addSampleMessage(data)
-            .then(id => {
-                handleOpenModal('Шаблон сообщение' + data.theme + ' ,был обновлен успешно',
-                    () => deleteSampleMessageById(id)
-                        .then(_ => handleOpenModal('Добавление шаблона отменено'))
-                        .catch(error => handleOpenModal('Отмена добавления шаблона не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
-            })
-            .catch(error => handleOpenModal('Добавление шаблона не удалась: ' + error, undefined, closeAllWindows))
-    }
-    const handleAddMessage = (data: MessageData) => {
-        addMessage(data)
-            .then(id => {
-                handleOpenModal('Сообщение' + data.theme + ' ,было обновлено успешно',
-                    () => deleteMessageById(id)
-                        .then(_ => handleOpenModal('Добавление сообщения отменено'))
-                        .catch(error => handleOpenModal('Отмена добавления сообщения не удалась: ' + error, undefined, closeAllWindows)), closeAllWindows);
-            })
-            .catch(error => handleOpenModal('Добавление сообщения не удалась: ' + error, undefined, closeAllWindows))
-    }
 
     const handleDeleteSampleMessageById = (id: number) => {
         deleteSampleMessageById(id)
@@ -126,30 +165,32 @@ const MessageForm = ({id, type}: Props) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const data = {
-            theme,
-            message_text: messageText,
-            media_path: mediaPath,
-            sending_date: dateToTimestamp(sendingDate),
-            recipient_type_id: recipientTypeId ? recipientTypeId : null,
-            ...(type === 'sample' && {sample_name: sampleName}),
-        };
-
-        if (isItUpdate) {
-            if (type === 'sample') {
-                handleUpdateSampleMessage(id, data as SampleMessageData);
-            } else {
-                handleUpdateMessage(id, data as MessageData);
-            }
+        let data: MessageData | SampleMessageData;
+        if (type === 'message') {
+            data = {
+                theme: theme,
+                message_text: messageText,
+                recipient_type_id: recipientTypeId ? recipientTypeId : null,
+                media_path: mediaPath ? mediaPath : null,
+                sending_date: dateToTimestamp(sendingDate)
+            } as MessageData;
         } else {
-            if (type === 'sample') {
-                // if (data.sample_name) {
-                handleAddSampleMessage(data as SampleMessageData);
-            } else {
-                handleAddMessage(data as MessageData);
-                // }
-            }
+            data = {
+                theme: theme,
+                message_text: messageText,
+                recipient_type_id: recipientTypeId ? recipientTypeId : null,
+                media_path: mediaPath ? mediaPath : null,
+                sending_date: dateToTimestamp(sendingDate),
+                sample_name: sampleName,
+            } as SampleMessageData;
         }
+
+        if (id > 0) {
+            updateMessageMutation.mutate(data);
+        } else {
+            addMessageMutation.mutate(data);
+        }
+
     }
 
     const handleDelete = () => {
@@ -157,6 +198,16 @@ const MessageForm = ({id, type}: Props) => {
             handleDeleteSampleMessageById(id as number) :
             handleDeleteMessageById(id as number);
     };
+    const resetForm = (type: string) => {
+        setTheme('');
+        setMessageText('');
+        if (type === 'sample') setSampleName('');
+        setMediaPath('');
+        setSendingDate('');
+        setRecipientTypeId('');
+    };
+
+    if (isMessageLoading) return <div>Загрузка...</div>;
 
     return (
         <>

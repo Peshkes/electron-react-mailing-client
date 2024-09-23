@@ -14,7 +14,6 @@ import {
     SampleMessageData,
     StatusResponse
 } from './types';
-import {makeLogger} from "ts-loader/dist/logger";
 
 const now = Date.now();
 
@@ -356,6 +355,18 @@ export async function updateClient(clientId: number, clientData: ClientData): Pr
         }, 1000);
     });
 }
+export async function updateClientType(clientType: number, clientId: number): Promise<StatusResponse> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            if (clientId !== -1) {
+                fakeClients[clientId].type_id = clientType;
+                resolve({ status: 'Client type updated'});
+            } else {
+                throw new Error('Client not found');
+            }
+        }, 1000);
+    });
+}
 
 export async function updateClientMessenger(clientId: number, messangerId: number): Promise<StatusResponse> {
     return new Promise((resolve) => {
@@ -442,7 +453,7 @@ export async function addMessage(messageData: MessageData): Promise<number> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const newMessage = { ...messageData, id: nextFakeMessageId() } as Message;
-            fakeMessages.push(newMessage);
+            fakeMessages.unshift(newMessage);
             resolve(newMessage.id);
         }, 1000);
     });

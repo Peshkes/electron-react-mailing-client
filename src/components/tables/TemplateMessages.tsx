@@ -1,12 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {SampleMessage} from "../../api/types";
+import React, {useContext} from 'react';
 import {getAllSampleMessages} from "../../api/fake";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
 
 const TemplateMessages = () => {
     const { data, isLoading, isError } = useQuery(
-        ['getSamples'],
+        ['samples','getSamples'],
         () => getAllSampleMessages(),
         {
             keepPreviousData: true,

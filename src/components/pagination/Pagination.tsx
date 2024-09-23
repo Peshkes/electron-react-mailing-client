@@ -25,7 +25,7 @@ const Pagination = ({ currentPage, totalPages, handleSetPage }: Props) => {
     };
 
     const pages = generatePages();
-    console.log(pages);
+
 
     const handleNext = () => currentPage < totalPages && handleSetPage(currentPage + 1);
     const handlePrevious = () => currentPage > 1 && handleSetPage(currentPage - 1);

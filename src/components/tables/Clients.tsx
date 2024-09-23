@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
-import {getAllMessagesWithPagination} from "../../api/fake";
+
 
 type Props = {
     functionToCall: (numberOfShownClients?: number) => Promise<Client[]>

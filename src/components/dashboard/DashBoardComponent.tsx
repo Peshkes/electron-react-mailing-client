@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
-import {ChildWindowContext} from "./context-providers/ChildWindowProvider";
+import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import TableWrapper from "./TableWrapper";
-import TemplateMessages from "./tables/TemplateMessages";
-import Clients from "./tables/Clients";
-import {getClientsWithTelegramError, getClientsWithUnselectedType, getLastClients} from "../api/fake";
+import TemplateMessages from "../tables/TemplateMessages";
+import Clients from "../tables/Clients";
+import {getClientsWithTelegramError, getClientsWithUnselectedType, getLastClients} from "../../api/fake";
 
 const DashBoardComponent = () => {
     const childWindow = useContext(ChildWindowContext);
@@ -28,7 +28,7 @@ const DashBoardComponent = () => {
                         </TableWrapper>
                     </div>
                 </div>
-                <div className="w-full h-[62%] flex">
+                <div className="w-full h-[52.5%] flex">
                     <div className="w-[55%] mr-4">
                         <TableWrapper title="Последние клиенты" plusFunction={handleOpenClient}>
                             <Clients functionToCall={() => getLastClients(numberOfShownClients)}/>

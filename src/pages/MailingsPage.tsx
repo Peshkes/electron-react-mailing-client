@@ -1,5 +1,5 @@
 import React from 'react';
-import LatestMailings from "../components/LatestMailings";
+import LatestMailings from "../components/latest-mailings/LatestMailings";
 import MailingsComponent from "../components/mailings/MailingsComponent";
 
 const MailingsPage = () => {
