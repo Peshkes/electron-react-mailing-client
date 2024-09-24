@@ -1,9 +1,8 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext} from 'react';
 
 import Pagination from "../pagination/Pagination";
 import {useQuery} from "react-query";
-import {getAllMessagesWithPagination, sendDelayedMessage} from "../../api/fake";
-import {PaginationRequestParams} from "../../api/types";
+import {sendDelayedMessage} from "../../api/fake";
 import {timestampToDateFormatted} from "../../api/parser";
 import Sending_plane from "../../icons/Sending_plane";
 
@@ -12,9 +11,9 @@ import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";
 
 const AllMailingsTable = () => {
-    const {page, setPage, fetchMailings} = useMailingsFilter();
+    const {page, setPage, fetchMailings, type_id, date_to, date_from} = useMailingsFilter();
     const {data, isLoading, isError} = useQuery(
-        ['messages', 'fetchMailings', page],
+        ['messages', 'fetchMailings', page, type_id, date_to, date_from],
         () => fetchMailings(),
         {
             keepPreviousData: true,

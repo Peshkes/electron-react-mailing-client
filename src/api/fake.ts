@@ -564,7 +564,6 @@ export async function getAllFilteredMessages(complexObject: MessagesComplexObjec
     return new Promise((resolve) => {
         setTimeout(() => {
             let filteredMessages = [...fakeMessages];
-            console.log(complexObject);
 
             if (complexObject.type_id !== undefined) {
                 filteredMessages = filteredMessages.filter(message => message.recipient_type_id === complexObject.type_id);

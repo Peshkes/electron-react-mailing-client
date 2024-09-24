@@ -3,12 +3,10 @@ import RadioButton from "../../common-components/RadioButton";
 import MailingFilter from "./MailingFilter";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";
-import {useQuery, useQueryClient} from "react-query";
 
 const TypeMailingFilter = () => {
     const clientTypes = useContext(TypesContext).clientTypes;
     const {type_id, setTypeId} = useMailingsFilter();
-    const queryClient = useQueryClient();
 
     const handleSetTypeId = (type_id: number) => {
         setTypeId(type_id);
