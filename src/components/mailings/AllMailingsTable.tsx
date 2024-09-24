@@ -18,6 +18,7 @@ const initialPage: PaginationRequestParams = {
 }
 
 const AllMailingsTable = () => {
+
     const tableRef = useRef<HTMLDivElement>(null);
     const [page, setPage] = useState(initialPage);
     const {data, isLoading, isError} = useQuery(
