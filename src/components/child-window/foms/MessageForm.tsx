@@ -16,6 +16,8 @@ import {MessageData, SampleMessageData} from "../../../api/types";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
+import FormSelectField, {Option} from "../form-entries/FormSelectField";
+import {TypesContext} from "../../context-providers/TypesProvider";
 
 
 type  MessageFormEntrailsProps = {
@@ -24,6 +26,7 @@ type  MessageFormEntrailsProps = {
 };
 
 const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
+    const {clientTypes} = useContext(TypesContext);
     const [theme, setTheme] = useState('');
     const [messageText, setMessageText] = useState('');
     const [mediaPath, setMediaPath] = useState('');
@@ -193,6 +196,15 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
 
     }
 
+    const handleFileSelect = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const result = await window.electron.openFile();
+        if (result.length > 0) {
+            setMediaPath(result[0]);
+        }
+    };
+
+
     const handleDelete = () => {
         type === 'sample' ?
             handleDeleteSampleMessageById(id as number) :
@@ -211,7 +223,7 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="p-6 bg-white border border-cyan-800/20 rounded-lg">
+            <form onSubmit={handleSubmit} className={`p-6 bg-white border border-cyan-800/20 rounded-lg`}>
                 {type === 'sample' && (
                     <FormField
                         id="sample_name"
@@ -230,13 +242,13 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     onChange={(e) => setTheme(e.target.value)}
                     required
                 />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center mb-4">
-                    <label htmlFor="message_text" className="text-cyan-800 font-semibold">Текст сообщения</label>
+                <div className="flex items-center mb-4">
+                    <label htmlFor="message_text" className="text-cyan-800 font-semibold mr-10">Текст сообщения</label>
                     <textarea
                         id="message_text"
                         value={messageText}
                         onChange={(e) => setMessageText(e.target.value)}
-                        className="w-full border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
+                        className="flex-grow border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
                         rows={4}
                         required
                     />
@@ -247,7 +259,13 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     type="text"
                     value={mediaPath}
                     onChange={(e) => setMediaPath(e.target.value)}
-                />
+                >
+                    <button
+                        className="bg-cyan-600 text-white w-full px-2 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                        onClick={handleFileSelect}
+                    >Файл
+                    </button>
+                </FormField>
                 <FormField
                     id="sending_date"
                     label="Дата отправки"
@@ -263,6 +281,10 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     onChange={(e) => setRecipientTypeId(parseInt(e.target.value, 10) || '')}
                     required
                 />
+                <FormSelectField id="recipient_type_id" label="Тип получателя" value={recipientTypeId || ''}
+                                 onChange={(e) => setRecipientTypeId(+e.target.value || "")}
+                                 options={clientTypes.map(item => ({value: item.id, label: item.type_name}))}
+                                 startOption={{value: '', label: 'Все'}}/>
                 <div className="flex justify-center mt-6">
                     <button
                         type="submit"

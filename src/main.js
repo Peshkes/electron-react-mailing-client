@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -17,6 +17,16 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
 };
+
+ipcMain.handle('dialog:openFile', async () => {
+    const result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'Images and Videos', extensions: ['jpg', 'png', 'mp4', 'mov'] },
+        ],
+    });
+    return result.filePaths;
+});
 
 app.whenReady().then(() => {
     createWindow();
