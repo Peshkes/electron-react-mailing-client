@@ -3,25 +3,24 @@ import {updateClientType} from "../../api/fake";
 import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
+import {useQueryClient} from "react-query";
 
 
 type Props = {
     item: Client
 }
 
-
 const ClientWIthUnselectedType = (props: Props) => {
     const childWindow = useContext(ChildWindowContext);
     const clientTypes = useContext(TypesContext).clientTypes;
+    const queryClient = useQueryClient();
     const handleOpenClient = (id: number) => childWindow?.openChildWindow({type: 'client', id: id});
-
-
-    const handleSelectClientType = (type: string, id: number) => {
-        let index: number = -1;
-        clientTypes.map(item => (
-            item.type_name == type ? index = item.id : index = -1
-        ));
-        return updateClientType(index, id);
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        updateClientType(+e.target.value, props.item.id)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+            .finally(() => queryClient.invalidateQueries('getClientsWithUnselectedType')
+        );
     }
 
     return (
@@ -34,11 +33,10 @@ const ClientWIthUnselectedType = (props: Props) => {
                 <p>Тип: </p>
                 <select id="selector" name="type_selector" defaultValue="Выберите тип"
                         className="text-cyan-800 text-center border-0 rounded-2xl" required
-                    onChange={(e) => handleSelectClientType(e.currentTarget.value, e.currentTarget.parentElement? e.currentTarget.parentElement.tabIndex: -1)}
+                        onChange={handleChange}
                         onClick={(e) => e.stopPropagation()}>)
                     <option value="Выберите тип" disabled>Выберите тип</option>
-                    <option value="взрослые">Взрослые</option>
-                    <option value="семья с детьми">Семья с детьми</option>
+                    {clientTypes && clientTypes.map(item => <option value={item.id}>{item.type_name}</option>)}
                 </select>
             </div>
         </div>

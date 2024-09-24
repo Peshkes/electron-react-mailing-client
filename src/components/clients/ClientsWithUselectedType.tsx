@@ -10,7 +10,7 @@ import ClientWIthUnselectedType from "./ClientWIthUnselectedType";
 const LatestMailings = () => {
 
     const { data, isLoading, isError } = useQuery(
-        ['clientsWithUnselectedType','setClientsWithUnselectedType'],
+        ['getClientsWithUnselectedType'],
         () => getClientsWithUnselectedType(),
         {
            keepPreviousData: true,

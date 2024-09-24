@@ -11,9 +11,9 @@ import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";
 
 const AllMailingsTable = () => {
-    const {page, setPage, fetchMailings, type_id, date_to, date_from} = useMailingsFilter();
+    const {page, setPage, fetchMailings, type_id, date_to, date_from, search_string} = useMailingsFilter();
     const {data, isLoading, isError} = useQuery(
-        ['messages', 'fetchMailings', page, type_id, date_to, date_from],
+        ['messages', 'fetchMailings', page, type_id, date_to, date_from, search_string],
         () => fetchMailings(),
         {
             keepPreviousData: true,
