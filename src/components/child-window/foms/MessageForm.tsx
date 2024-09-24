@@ -7,7 +7,7 @@ import {
     deleteMessageById,
     deleteSampleMessageById,
     getMessageById,
-    getSampleMessageById,
+    getSampleMessageById, sendMessageNow,
     updateMessage,
     updateSampleMessage
 } from "../../../api/fake";
@@ -18,6 +18,8 @@ import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import FormSelectField, {Option} from "../form-entries/FormSelectField";
 import {TypesContext} from "../../context-providers/TypesProvider";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 
 type  MessageFormEntrailsProps = {
@@ -33,6 +35,7 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
     const [sendingDate, setSendingDate] = useState('');
     const [sampleName, setSampleName] = useState('');
     const [recipientTypeId, setRecipientTypeId] = useState<number | ''>('');
+    const [isImmediateSend, setIsImmediateSend] = useState(false);
 
     const {handleOpenModal, ModalComponent} = useModal();
     const childWindow = useContext(ChildWindowContext);
@@ -165,10 +168,31 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
             );
     }
 
+    const handleSetNow = () => {
+        setIsImmediateSend(!isImmediateSend);
+        const now = new Date();
+        const localNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        setSendingDate(localNow);
+    };
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         let data: MessageData | SampleMessageData;
+
+        if (type === 'message' && isImmediateSend) {
+            data = {
+                theme: theme,
+                message_text: messageText,
+                recipient_type_id: recipientTypeId ? recipientTypeId : null,
+                media_path: mediaPath ? mediaPath : null,
+            } as MessageData;
+            sendMessageNow(data)
+                .then(() => handleOpenModal('Сообщение отправлено', undefined, closeAllWindows))
+                .catch(error => handleOpenModal('Сообщение не отправлено: ' + error, undefined, closeAllWindows));
+            return;
+        }
+
         if (type === 'message') {
             data = {
                 theme: theme,
@@ -270,17 +294,16 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     id="sending_date"
                     label="Дата отправки"
                     type="datetime-local"
+                    disabled={isImmediateSend}
                     value={sendingDate}
                     onChange={(e) => setSendingDate(e.target.value)}
-                />
-                <FormField
-                    id="recipient_type_id"
-                    label="Тип получателя"
-                    type="number"
-                    value={recipientTypeId || ''}
-                    onChange={(e) => setRecipientTypeId(parseInt(e.target.value, 10) || '')}
-                    required
-                />
+                >
+                    <button
+                        type="button" onClick={handleSetNow}
+                        className="bg-cyan-600 text-white w-full px-2 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        {isImmediateSend ? 'Потом' : 'Сразу'}
+                    </button>
+                </FormField>
                 <FormSelectField id="recipient_type_id" label="Тип получателя" value={recipientTypeId || ''}
                                  onChange={(e) => setRecipientTypeId(+e.target.value || "")}
                                  options={clientTypes.map(item => ({value: item.id, label: item.type_name}))}
