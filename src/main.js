@@ -7,8 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        // width: 1250,
-        width: 1400,
+        width: 1250,
         height: 900,
         resizable: false,
         webPreferences: {
@@ -17,7 +16,6 @@ const createWindow = () => {
     });
 
     mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
-    mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {

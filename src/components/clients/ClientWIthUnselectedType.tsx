@@ -5,7 +5,6 @@ import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useQueryClient} from "react-query";
 
-
 type Props = {
     item: Client
 }
@@ -17,8 +16,6 @@ const ClientWIthUnselectedType = (props: Props) => {
     const handleOpenClient = (id: number) => childWindow?.openChildWindow({type: 'client', id: id});
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         updateClientType(+e.target.value, props.item.id)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
             .finally(() => queryClient.invalidateQueries('getClientsWithUnselectedType')
         );
     }
