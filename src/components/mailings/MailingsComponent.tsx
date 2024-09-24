@@ -90,12 +90,12 @@ const MailingsComponent = () => {
                                     onChange={(e) => handleSetClientType(e.currentTarget.value)}
                                     checked={checkedAdults}/>
                                 <span
-                                    className="absolute bg-cyan-800 w-4 h-4 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                                    className="absolute bg-cyan-800 w-3 h-3 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 "></span>
                             </label>
                             <label className="px-7 cursor-pointer" htmlFor="adult">Взрослые</label>
                         </div>
                         <div className="pt-1">
-                            <label className="relative cursor-pointer" htmlFor="adult">
+                            <label className="relative cursor-pointer" htmlFor="child">
                                 <input
                                     type="radio"
                                     name="typeSelect"
@@ -105,7 +105,7 @@ const MailingsComponent = () => {
                                     onChange={(e) => handleSetClientType(e.currentTarget.value)}
                                     checked={checkedChildren}/>
                                 <span
-                                    className="absolute bg-cyan-800 w-4 h-4 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                                    className="absolute bg-cyan-800 w-3 h-3 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
                             </label>
                             <label className="px-7 cursor-pointer" htmlFor="child">Семья с детьми</label>
                         </div>
@@ -133,6 +133,7 @@ const MailingsComponent = () => {
                                 setSearchValue(e.currentTarget.value);
                                 handleSearch();
                             }}
+                            // onKeyUp={}
                         />
                     </div>
                     <div
