@@ -1,16 +1,24 @@
 import { ClientType, MessengerType } from "../../api/types";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { getMessengerTypes, getRecipientTypes } from "../../api/fake";
 import useModal from "../modal-window/useModal";
 
 type TypesContextProps = {
     messengerTypes: MessengerType[];
     clientTypes: ClientType[];
+    getClientTypeById: (id: number) => ClientType | undefined;
+    getMessengerTypeById: (id: number) => MessengerType | undefined;
+    getClientTypeByName: (name: string) => ClientType | undefined;
+    getMessengerTypeByName: (name: string) => MessengerType | undefined;
 }
 
 const TypesContext = React.createContext<TypesContextProps>({
     messengerTypes: [],
-    clientTypes: []
+    clientTypes: [],
+    getClientTypeById: () => undefined,
+    getMessengerTypeById: () => undefined,
+    getClientTypeByName: () => undefined,
+    getMessengerTypeByName: () => undefined
 });
 
 type TypesProviderProps = {
@@ -48,9 +56,18 @@ const TypesProvider: React.FC<TypesProviderProps> = ({ children }) => {
         fetchTypes();
     }, []);
 
+    const value = useMemo(() => ({
+        messengerTypes,
+        clientTypes,
+        getClientTypeById: (id: number) => clientTypes.find(type => type.id === id),
+        getMessengerTypeById: (id: number) => messengerTypes.find(type => type.id === id),
+        getClientTypeByName: (name: string) => clientTypes.find(type => type.type_name === name),
+        getMessengerTypeByName: (name: string) => messengerTypes.find(type => type.messanger_name === name),
+    }), [messengerTypes, clientTypes]);
+
     return (
         <>
-            <TypesContext.Provider value={{ messengerTypes, clientTypes}}>
+            <TypesContext.Provider value={value}>
                 {children}
             </TypesContext.Provider>
             {ModalComponent}

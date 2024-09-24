@@ -9,30 +9,20 @@ import Sending_plane from "../../icons/Sending_plane";
 
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
-
-
-const initialPage: PaginationRequestParams = {
-    type: 1,
-    page: 1,
-    limit: 15
-}
+import {useMailingsFilter} from "../../stores/useMailingsFilter";
 
 const AllMailingsTable = () => {
-
-    const tableRef = useRef<HTMLDivElement>(null);
-    const [page, setPage] = useState(initialPage);
+    const {page, setPage, fetchMailings} = useMailingsFilter();
     const {data, isLoading, isError} = useQuery(
-        ['messages', 'getAllMessagesWithPagination', page],
-        () => getAllMessagesWithPagination(page),
+        ['messages', 'fetchMailings', page],
+        () => fetchMailings(),
         {
             keepPreviousData: true,
         }
     );
+
     const childWindow = useContext(ChildWindowContext);
-    const clientTypes = useContext(TypesContext).clientTypes;
-    const handleSetPage = (newPage: number) => {
-        setPage(prevState => ({...prevState, page: newPage}));
-    };
+    const {clientTypes} = useContext(TypesContext);
 
     if (isLoading) return <div className="flex justify-center items-center w-full h-full">Загрузка...</div>;
     if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
@@ -53,9 +43,9 @@ const AllMailingsTable = () => {
                     <div>Тип</div>
                     <div>Дата</div>
                 </div>
-                <div ref={tableRef} className="overflow-auto">
-                    {data.data.slice(0, page.limit).map((item, index) => (
-                        <div className="w-full flex">
+                <div className="overflow-auto">
+                    {data.data.map((item, index) => (
+                        <div className="w-full flex" key={index + item.id}>
                             <div
                                 key={index}
                                 tabIndex={item.id}
@@ -83,7 +73,7 @@ const AllMailingsTable = () => {
                     <Pagination
                         currentPage={data.pagination.page}
                         totalPages={data.pagination.totalPages}
-                        handleSetPage={handleSetPage}
+                        handleSetPage={setPage}
                     />
                 </div>
             )}

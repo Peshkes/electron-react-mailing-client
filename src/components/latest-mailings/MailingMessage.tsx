@@ -8,9 +8,6 @@ type Props = {
     item: Message
 }
 
-
-
-
 const MailingMessage = (props: Props) => {
     let type_id = props.item.recipient_type_id;
     const childWindow = useContext(ChildWindowContext);
@@ -24,7 +21,7 @@ const MailingMessage = (props: Props) => {
             <div className="flex justify-between text-white"><p>Тема: </p><p>{props.item.theme}</p>
             </div>
             <div className="pt-1 flex justify-between text-white"><p>Тип: </p>{clientTypes.map((item, index) => (
-                item.id == type_id ? <p key={index}>{item.type_name}</p> : <></>
+                item.id == type_id && <p key={item.type_name}>{item.type_name}</p>
             ))}</div>
             <div className="pt-1 flex justify-between text-white"><p>Медиа: </p><p>{props.item.media_path}</p></div>
             <div className="pt-1 flex justify-between text-white"><p>Дата: </p><p>{timestampToDateFormatted(props.item.sending_date)}</p></div>

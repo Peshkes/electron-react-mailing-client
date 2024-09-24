@@ -560,10 +560,11 @@ export async function getMessagesByRecipientType(recipientTypeId: number): Promi
     });
 }
 
-export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<Message[]> {
+export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<MessagePaginationResponse> {
     return new Promise((resolve) => {
         setTimeout(() => {
             let filteredMessages = [...fakeMessages];
+            console.log(complexObject);
 
             if (complexObject.type_id !== undefined) {
                 filteredMessages = filteredMessages.filter(message => message.recipient_type_id === complexObject.type_id);
@@ -582,10 +583,7 @@ export async function getAllFilteredMessages(complexObject: MessagesComplexObjec
                 );
             }
 
-            const start = (complexObject.page - 1) * complexObject.limit;
-            const paginatedMessages = filteredMessages.slice(start, start + complexObject.limit);
-
-            resolve(paginatedMessages);
+            resolve(fakePaginationResponse(filteredMessages, complexObject.page || 1, complexObject.limit || 10));
         }, 1000);
     });
 }
