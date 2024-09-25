@@ -70,28 +70,28 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
         }
     );
 
+    const sendMessageMutation = useMutation(
+        async (messageData: MessageData | SampleMessageData) => {
+            const id = await addMessage(messageData);
+            return await getMessageById(id);
+        },
+        {
+            onSuccess: () => {
+                handleOpenModal('Рассылка добавлена успешно', undefined, closeAllWindows);
+                queryClient.invalidateQueries('messages');
+                resetForm(type);
+            },
+            onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
+        }
+    );
+
     const useAddMessageMutation = () => {
         if (type === 'message') {
-            return useMutation(
-                async (messageData: MessageData | SampleMessageData) => {
-                    const id = await addMessage(messageData);
-                    // Опционально: получить полный объект клиента после добавления
-                    return await getMessageById(id);
-                },
-                {
-                    onSuccess: () => {
-                        handleOpenModal('Рассылка добавлена успешно', closeAllWindows);
-                        queryClient.invalidateQueries('messages');
-                        resetForm(type);
-                    },
-                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
-                }
-            );
+            return sendMessageMutation;
         } else {
             return useMutation(
                 async (messageData: MessageData | SampleMessageData) => {
                     const id = await addSampleMessage(messageData as SampleMessageData);
-                    // Опционально: получить полный объект клиента после добавления
                     return await getSampleMessageById(id);
                 },
                 {
@@ -140,6 +140,17 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
 
     };
 
+    const handleSentMessageFromSample = () => {
+        const data = {
+            theme: theme,
+            message_text: messageText,
+            recipient_type_id: recipientTypeId ? recipientTypeId : null,
+            media_path: mediaPath ? mediaPath : null,
+            sending_date: dateToTimestamp(sendingDate)
+        } as MessageData;
+
+
+    }
 
     const addMessageMutation = useAddMessageMutation();
     const updateMessageMutation = useUpdateMessageMutation(id);
@@ -217,7 +228,18 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
         } else {
             addMessageMutation.mutate(data);
         }
+    }
 
+    const handleSentMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        const data = {
+            theme: theme,
+            message_text: messageText,
+            recipient_type_id: recipientTypeId ? recipientTypeId : null,
+            media_path: mediaPath ? mediaPath : null,
+            sending_date: dateToTimestamp(sendingDate)
+        } as MessageData;
+        sendMessageMutation.mutate(data);
     }
 
     const handleFileSelect = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -228,12 +250,12 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
         }
     };
 
-
     const handleDelete = () => {
         type === 'sample' ?
             handleDeleteSampleMessageById(id as number) :
             handleDeleteMessageById(id as number);
     };
+
     const resetForm = (type: string) => {
         setTheme('');
         setMessageText('');
@@ -308,15 +330,19 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                                  onChange={(e) => setRecipientTypeId(+e.target.value || "")}
                                  options={clientTypes.map(item => ({value: item.id, label: item.type_name}))}
                                  startOption={{value: '', label: 'Все'}}/>
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 gap-4">
                     <button
                         type="submit"
                         className="bg-cyan-600 text-white w-full max-w-xs py-3 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     >
                         {id > 0 ? 'Обновить' : 'Добавить'} {type === 'message' ? 'сообщение' : 'образец'}
                     </button>
+                    {type === 'sample' && id > 0 &&
+                        <button className="bg-cyan-600 text-white w-full max-w-xs py-3 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                onClick={handleSentMessage}>
+                        Добавить рассылку
+                    </button>}
                 </div>
-
                 {isItUpdate && <DeleteBlock onDelete={handleDelete}/>}
             </form>
             {ModalComponent}

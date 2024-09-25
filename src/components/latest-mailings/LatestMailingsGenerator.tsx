@@ -22,7 +22,7 @@ const LatestMailingsGenerator = () => {
     return (
         <>
             {data ? data.map((item, index) => (
-                <MailingMessage key={index} item={item}/>
+                <MailingMessage key={item.id} item={item}/>
             )) : isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : <div>No data</div>}
         </>
     );

@@ -20,7 +20,7 @@ const ClientsWithUnselectedTypeGenerator = () => {
     return (
         <>
             {data ? data.map((item, index) => (
-                <ClientWIthUnselectedType key={index} item={item}/>
+                <ClientWIthUnselectedType key={item.id} item={item}/>
             )) : isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : <div>No data</div>}
         </>
     );
