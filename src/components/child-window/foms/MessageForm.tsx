@@ -1,6 +1,16 @@
 import React, {useContext, useState} from "react";
 import FormField from "../form-entries/FormField";
-import {addMessage, addSampleMessage, deleteMessageById, deleteSampleMessageById, getMessageById, getSampleMessageById, sendMessageNow, updateMessage, updateSampleMessage} from "../../../api/fake";
+import {
+    addMessage,
+    addSampleMessage,
+    deleteMessageById,
+    deleteSampleMessageById,
+    getMessageById,
+    getSampleMessageById,
+    sendMessageNow,
+    updateMessage,
+    updateSampleMessage
+} from "../../../api/fake";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -9,7 +19,7 @@ import {TypesContext} from "../../context-providers/TypesProvider";
 import FormSelectField from "../form-entries/FormSelectField";
 import DeleteBlock from "../form-entries/DeleteBlock";
 import Loader from "../../Loader";
-import {Message, SampleMessage, SampleMessageData} from "../../../api/types";
+import {Message, SampleMessage} from "../../../api/types";
 
 type CombineMessage = Message | SampleMessage;
 
@@ -71,9 +81,9 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             return isSample ? await addSampleMessage(messageData) : await addMessage(messageData);
         },
         isSample ? 'Шаблон добавлен успешно' : 'Сообщение добавлено успешно',
-        (data: any) => isSample ? addSampleMessage(data) : addMessage(data)
-            .then(_ => handleOpenModal(isSample ? 'Шаблон не был удален' : 'Сообщение не было удалено'))
-            .catch(error => handleOpenModal('Ошибка добавления: ' + error, undefined, closeAllWindows))
+        (data: any) => isSample ? deleteSampleMessageById(data) : deleteMessageById(data)
+            .then(_ => handleOpenModal(isSample ? 'Шаблон не был добавлен' : 'Сообщение не было добавлено'))
+            .catch(error => handleOpenModal('Ошибка удаления: ' + error, undefined, closeAllWindows))
     );
 
     const useUpdateMessageMutation = createMessageMutation(
@@ -147,8 +157,6 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             setMediaPath(result[0]);
         }
     }
-
-    const handleDelete = () => useDeleteMessageMutation.mutate(id);
 
     const isLoading = isLoadingData || useSendMessageMutation.isLoading || useAddMessageMutation.isLoading || useUpdateMessageMutation.isLoading || useDeleteMessageMutation.isLoading;
 
@@ -229,7 +237,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                             Добавить рассылку
                         </button>}
                 </div>
-                {isItUpdate && <DeleteBlock onDelete={handleDelete}/>}
+                {isItUpdate && <DeleteBlock onDelete={() => useDeleteMessageMutation.mutate(id)}/>}
                 {isLoading && <Loader withBackground={true}/>}
             </form>
             {ModalComponent}

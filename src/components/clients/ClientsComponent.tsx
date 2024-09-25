@@ -25,7 +25,9 @@ const MailingsComponent = () => {
                 </div>
             </div>
             <ClientsFilterBlock/>
-            <AllClientsTable/>
+            <div className="w-full h-full flex flex-col justify-between bg-white border-4 border-solid border-cyan-800/20 rounded-2xl overflow-hidden relative">
+                <AllClientsTable/>
+            </div>
         </div>
     );
 };

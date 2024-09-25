@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext} from 'react';
 import {timestampToDateFormatted} from "../../api/parser";
 import Pagination from "../pagination/Pagination";
 import {useQuery} from "react-query";
@@ -6,11 +6,13 @@ import {useQuery} from "react-query";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useClientFilter} from "../../stores/useClientFilter";
+import Loader from "../Loader";
+
 
 const AllClientsTable = () => {
     const {page, setPage, fetchClients, type_id, search_type, search_string, tg_error} = useClientFilter();
-    const tableRef = useRef<HTMLDivElement>(null);
-    // const [page, setPage] = useState(initialPage);
+
+
     const {data, isLoading, isError} = useQuery(
         ['clients', 'fetchClients', page, type_id, search_type, search_string, tg_error],
         () => fetchClients(),
@@ -21,14 +23,13 @@ const AllClientsTable = () => {
     const childWindow = useContext(ChildWindowContext);
     const {clientTypes} = useContext(TypesContext);
 
-    if (isLoading) return <div className="flex justify-center items-center w-full h-full">Загрузка...</div>;
+    if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
     if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
     if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
 
     const handleOpenMessage = (id: number) => childWindow?.openChildWindow({type: 'client', id: id});
     return (
-        <div
-            className="w-full h-full flex flex-col justify-between bg-white border-4 border-solid border-cyan-800/20 rounded-2xl overflow-hidden">
+        <>
             <div>
                 <div className="w-full py-5 px-7 grid grid-cols-5 font-bold sticky top-0 bg-white">
                     <div>ФИО</div>
@@ -37,11 +38,11 @@ const AllClientsTable = () => {
                     <div>Дата отъезда</div>
                     <div>Тип</div>
                 </div>
-                <div ref={tableRef} className="overflow-auto">
+                <div className="overflow-auto">
                     {data.data.map((item, index) => (
                         <div className="w-full ">
                             <div
-                                key={index}
+                                key={item.id + index}
                                 tabIndex={item.id}
                                 className="w-full px-7 grid grid-cols-5 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white"
                                 onClick={(e) => handleOpenMessage(e.currentTarget.tabIndex)}>
@@ -56,7 +57,6 @@ const AllClientsTable = () => {
                                     ))}
                                 </div>
                             </div>
-
                         </div>
                     ))}
                 </div>
@@ -72,7 +72,7 @@ const AllClientsTable = () => {
                     </div>
                 )
             }
-        </div>
+        </>
     )
         ;
 };

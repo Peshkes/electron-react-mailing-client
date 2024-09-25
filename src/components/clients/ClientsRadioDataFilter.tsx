@@ -1,14 +1,17 @@
 import React from 'react';
-import RadioButton from "../../common-components/RadioButton";
+
 
 import {useClientFilter} from "../../stores/useClientFilter";
 import RadioDataFilter from "./RadioDataFilter";
+import RadioButton from "../common-components/RadioButton";
 
 type Props = {
     header: string
 }
 const ClientsRadioDataFilter = ({header}:Props) => {
-    const obj = ["Имени","Телефону"];
+    const obj = [
+        {name:"Имени", value:"name"},
+        {name:"Телефону", value:"phone_number"}];
 
     const {search_type, setSearchType} = useClientFilter();
 
@@ -17,8 +20,8 @@ const ClientsRadioDataFilter = ({header}:Props) => {
     }
     return (
         <RadioDataFilter header={header}>
-            {obj.map((item,index)  => (
-                <RadioButton name={'client_data_filter'}  onChange={() => handleSetSearchType(item)} value={item} checked={search_type === item} key={index+1}/>
+            {obj.map(item  => (
+                <RadioButton name={'client_data_filter'}  onChange={() => handleSetSearchType(item.value)} value={item.name} checked={search_type === item.value} key={item.value}/>
             ))}
         </RadioDataFilter>
 

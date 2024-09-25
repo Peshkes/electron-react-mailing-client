@@ -527,7 +527,7 @@ export async function getAllFilteredClients(complexObject: ClientsComplexObjectR
 
             if (complexObject.type_id !== undefined) filteredClients = filteredClients.filter(client => client.type_id === complexObject.type_id);
             if (complexObject.tg_error) filteredClients = filteredClients.filter(client => client.messanger_id === 2 && client.chat_id === null);
-            if (complexObject.search_type && complexObject.search_string) {
+            if (complexObject.search_type && complexObject.search_string && complexObject.search_string !== '') {
                 filteredClients = filteredClients.filter(client =>
                     String(client[complexObject.search_type as keyof Client]).toLowerCase().includes(complexObject.search_string!.toLowerCase())
                 );
@@ -667,7 +667,7 @@ export async function getAllFilteredMessages(complexObject: MessagesComplexObjec
                 filteredMessages = filteredMessages.filter(message => message.sending_date <= complexObject.date_to!);
             }
 
-            if (complexObject.search_string) {
+            if (complexObject.search_string && complexObject.search_string !== '') {
                 filteredMessages = filteredMessages.filter(message =>
                     message.message_text.toLowerCase().includes(complexObject.search_string!.toLowerCase())
                 );

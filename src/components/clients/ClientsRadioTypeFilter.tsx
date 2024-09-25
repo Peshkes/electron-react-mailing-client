@@ -1,8 +1,9 @@
 import React, {useContext} from 'react';
 import RadioTypeFilter from "./RadioTypeFilter";
-import RadioButton from "../../common-components/RadioButton";
+
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useClientFilter} from "../../stores/useClientFilter";
+import RadioButton from "../common-components/RadioButton";
 
 type Props = {
     header: string

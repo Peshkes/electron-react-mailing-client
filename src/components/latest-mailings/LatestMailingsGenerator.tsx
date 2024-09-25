@@ -1,7 +1,7 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useQuery} from "react-query";
 import {getNearestMessages} from "../../api/fake";
-import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
+
 import MailingMessage from "./MailingMessage";
 import Loader from "../Loader";
 
