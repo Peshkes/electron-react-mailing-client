@@ -18,7 +18,7 @@ const LatestMailings = () => {
     };
 
     return (
-        <div className="w-[25%] h-full bg-cyan-800 flex flex-col justify-start px-4 py-4">
+        <div className="w-[25%] h-full bg-cyan-800 flex flex-col justify-start px-4 py-4 relative">
             <div className="w-full flex justify-between">
                 <h2 className="text-center text-white mb-2 text-2xl">Ближайшие рассылки</h2>
                 <div className="flex items-center cursor-pointer"><Plus color="white" onClickFunction={handleOpenChildWindow}/></div>

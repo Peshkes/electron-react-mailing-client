@@ -3,6 +3,7 @@ import {useQuery} from "react-query";
 import {getNearestMessages} from "../../api/fake";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import MailingMessage from "./MailingMessage";
+import Loader from "../Loader";
 
 const numberOfMessagesShown: number = 10;
 
@@ -16,14 +17,14 @@ const LatestMailingsGenerator = () => {
         }
     );
 
-    if (isLoading) return <div className="flex justify-center items-center w-full h-full">Загрузка...</div>;
+    if (isLoading) return <Loader spinnerColor={'border-t-white'}/>;
     if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
     if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
     return (
         <>
-            {data ? data.map((item, index) => (
-                <MailingMessage key={index} item={item}/>
-            )) : isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : <div>No data</div>}
+            {data.map((item) => (
+                <MailingMessage key={item.id} item={item}/>
+            ))}
         </>
     );
 };

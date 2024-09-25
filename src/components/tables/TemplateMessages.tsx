@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {getAllSampleMessages} from "../../api/fake";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
+import Loader from "../Loader";
 
 const TemplateMessages = () => {
     const { data, isLoading, isError } = useQuery(
@@ -15,7 +16,7 @@ const TemplateMessages = () => {
 
     const handleOpenSample = (id:number) => childWindow?.openChildWindow({type: 'sample', id: id});
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
     if (isError) return <div>Error</div>;
     if (!data) return <div>No data</div>;
 

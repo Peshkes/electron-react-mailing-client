@@ -215,1333 +215,160 @@ const fakeClients: Client[] = [
 ];
 
 
-const nextClientId = () => {
-    return fakeClients[0].id + 1
-}
+
+const nextClientId =() => {return fakeClients[0].id + 1}
 
 const fakeMessages: Message[] = [
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 2,
-        theme: 'Reminder',
-        message_text: 'This is a reminder message.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        theme: 'Update',
-        message_text: 'We have an update for you.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now()},
-    {
-        id: 5,
-        theme: 'Info',
-        message_text: 'Here is some information for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        theme: 'Warning',
-        message_text: 'Please be aware of this warning.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        theme: 'Newsletter',
-        message_text: 'Check out our latest newsletter.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        theme: 'Offer',
-        message_text: 'We have a special offer for you.',
-        recipient_type_id: 2,
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        theme: 'Invitation',
-        message_text: 'You are invited to our event.',
-        recipient_type_id: 3,
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        theme: 'Feedback',
-        message_text: 'We would love your feedback.',
-        recipient_type_id: 1,
-        sending_date: Date.now()
-    },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 1, theme: 'Hello', message_text: 'Hello World!', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 2, theme: 'Reminder', message_text: 'This is a reminder message.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 3, theme: 'Update', message_text: 'We have an update for you.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 4, theme: 'Alert', message_text: 'This is an alert message.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 5, theme: 'Info', message_text: 'Here is some information for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 6, theme: 'Warning', message_text: 'Please be aware of this warning.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 7, theme: 'Newsletter', message_text: 'Check out our latest newsletter.', recipient_type_id: 1, sending_date: Date.now() },
+    { id: 8, theme: 'Offer', message_text: 'We have a special offer for you.', recipient_type_id: 2, sending_date: Date.now() },
+    { id: 9, theme: 'Invitation', message_text: 'You are invited to our event.', recipient_type_id: null, sending_date: Date.now() },
+    { id: 10, theme: 'Feedback', message_text: 'We would love your feedback.', recipient_type_id: 1, sending_date: Date.now() },
 ];
 
 
-const nextFakeMessageId = () => {
-    return fakeMessages[0].id + 1
-}
+const nextFakeMessageId =() => {return fakeMessages[0].id + 1}
 // Sample Messages (continued)
 const fakeSampleMessages: SampleMessage[] = [
-    {
-        id: 1,
-        sample_name: 'Greeting',
-        theme: 'Welcome',
-        message_text: 'Welcome to our service!',
-        recipient_type_id: 1,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 2,
-        sample_name: 'Follow-Up',
-        theme: 'Check-In',
-        message_text: 'Just checking in to see how you are doing.',
-        recipient_type_id: 2,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 3,
-        sample_name: 'Announcement',
-        theme: 'New Feature',
-        message_text: 'We have just launched a new feature.',
-        recipient_type_id: 3,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 4,
-        sample_name: 'Reminder',
-        theme: 'Appointment',
-        message_text: 'This is a reminder for your appointment.',
-        recipient_type_id: 1,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 5,
-        sample_name: 'Survey',
-        theme: 'Feedback Request',
-        message_text: 'Please fill out this survey.',
-        recipient_type_id: 2,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 6,
-        sample_name: 'Notification',
-        theme: 'Event Reminder',
-        message_text: 'Don\'t forget about the upcoming event.',
-        recipient_type_id: 3,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 7,
-        sample_name: 'Offer',
-        theme: 'Special Deal',
-        message_text: 'Check out our special deal!',
-        recipient_type_id: 1,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 8,
-        sample_name: 'Update',
-        theme: 'Service Update',
-        message_text: 'We have updated our service.',
-        recipient_type_id: 2,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 9,
-        sample_name: 'Welcome',
-        theme: 'New User',
-        message_text: 'Welcome our new users!',
-        recipient_type_id: 3,
-        media_path: '',
-        sending_date: Date.now()
-    },
-    {
-        id: 10,
-        sample_name: 'Reminder',
-        theme: 'Subscription',
-        message_text: 'Your subscription is about to expire.',
-        recipient_type_id: 1,
-        media_path: '',
-        sending_date: Date.now()
-    }
+    { id: 1, sample_name: 'Greeting', theme: 'Welcome', message_text: 'Welcome to our service!', recipient_type_id: 1, media_path: '', sending_date: Date.now() },
+    { id: 2, sample_name: 'Follow-Up', theme: 'Check-In', message_text: 'Just checking in to see how you are doing.', recipient_type_id: 2, media_path: '', sending_date: Date.now() },
+    { id: 3, sample_name: 'Announcement', theme: 'New Feature', message_text: 'We have just launched a new feature.', recipient_type_id: 3, media_path: '', sending_date: Date.now() },
+    { id: 4, sample_name: 'Reminder', theme: 'Appointment', message_text: 'This is a reminder for your appointment.', recipient_type_id: 1, media_path: '', sending_date: Date.now() },
+    { id: 5, sample_name: 'Survey', theme: 'Feedback Request', message_text: 'Please fill out this survey.', recipient_type_id: 2, media_path: '', sending_date: Date.now() },
+    { id: 6, sample_name: 'Notification', theme: 'Event Reminder', message_text: 'Don\'t forget about the upcoming event.', recipient_type_id: 3, media_path: '', sending_date: Date.now() },
+    { id: 7, sample_name: 'Offer', theme: 'Special Deal', message_text: 'Check out our special deal!', recipient_type_id: 1, media_path: '', sending_date: Date.now() },
+    { id: 8, sample_name: 'Update', theme: 'Service Update', message_text: 'We have updated our service.', recipient_type_id: 2, media_path: '', sending_date: Date.now() },
+    { id: 9, sample_name: 'Welcome', theme: 'New User', message_text: 'Welcome our new users!', recipient_type_id: 3, media_path: '', sending_date: Date.now() },
+    { id: 10, sample_name: 'Reminder', theme: 'Subscription', message_text: 'Your subscription is about to expire.', recipient_type_id: 1, media_path: '', sending_date: Date.now() }
 ];
-const nextFakeSampleMessageId = () => {
-    return fakeSampleMessages[0].id + 1
-}
+const nextFakeSampleMessageId =() => {return fakeSampleMessages[0].id + 1}
 const fakePaginationResponse = (data: any[], page: number, limit: number) => ({
-    data: data.slice((page - 1) * limit, page * limit - 1),
+    data: data.slice((page - 1) * limit, page * limit-1),
     pagination: {
         page,
         limit,
@@ -1565,7 +392,7 @@ const fakeClientTypes: ClientType[] = [
 export async function addClient(clientData: ClientData): Promise<number> {
     return new Promise((resolve) => {
         setTimeout(() => {
-            const newClient = {...clientData, id: nextClientId()} as Client;
+            const newClient = { ...clientData, id: nextClientId() } as Client;
             fakeClients.unshift(newClient);
             resolve(newClient.id);
         }, 1000);
@@ -1612,7 +439,7 @@ export async function updateClient(clientId: number, clientData: ClientData): Pr
         setTimeout(() => {
             const index = fakeClients.findIndex(client => client.id === clientId);
             if (index !== -1) {
-                fakeClients[index] = {...fakeClients[index], ...clientData};
+                fakeClients[index] = { ...fakeClients[index], ...clientData };
                 resolve(fakeClients[index]);
             } else {
                 throw new Error('Client not found');
@@ -1627,7 +454,7 @@ export async function updateClientType(clientType: number, clientId: number): Pr
             if (clientId !== -1) {
                 const client = fakeClients.find(client => client.id === clientId)
                 if (client) client.type_id = clientType;
-                resolve({status: 'Client type updated'});
+                resolve({ status: 'Client type updated'});
             } else {
                 throw new Error('Client not found');
             }
@@ -1641,9 +468,9 @@ export async function updateClientMessenger(clientId: number, messangerId: numbe
             const index = fakeClients.findIndex(client => client.id === clientId);
             if (index !== -1) {
                 fakeClients[index].messanger_id = messangerId;
-                resolve({status: 'Messenger updated'});
+                resolve({ status: 'Messenger updated'});
             } else {
-                resolve({status: 'Messenger not updated'});
+                resolve({ status: 'Messenger not updated'});
             }
         }, 1000);
     });

@@ -1,8 +1,9 @@
 import React from 'react';
 
-type Option = {
+export type Option = {
     value: string | number;
     label: string;
+    isDisabled?: boolean;
 }
 
 type FormSelectFieldProps = {
@@ -11,11 +12,12 @@ type FormSelectFieldProps = {
     value: string | number | undefined ;
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     options: Option[];
+    startOption?: Option;
     disabled?: boolean;
     required?: boolean;
 }
 
-const FormSelectField = ({ id, label, value, onChange, options, disabled = false, required = false }: FormSelectFieldProps) => (
+const FormSelectField = ({ id, label, value, onChange, options, startOption, disabled = false, required = false }: FormSelectFieldProps) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center mb-4">
         <label htmlFor={id} className={"text-cyan-800 font-semibold"}>{label}</label>
         <select
@@ -26,9 +28,10 @@ const FormSelectField = ({ id, label, value, onChange, options, disabled = false
             disabled={disabled}
             required={required}
         >
-            <option value="" disabled={required && !value}>Select an option</option>
+            {startOption ? <option value={startOption.value}>{startOption.label}</option> :
+                <option value="" disabled={required && !value}>Выбери вариант</option>}
             {options.map(option => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={option.value} disabled={option.isDisabled}>
                     {option.label}
                 </option>
             ))}

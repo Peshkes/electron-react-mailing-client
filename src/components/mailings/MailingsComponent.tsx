@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import AllMailingsTable from "./AllMailingsTable";
 import Plus from "../../icons/Plus";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
@@ -21,8 +21,11 @@ const MailingsComponent = () => {
                     <Plus color={"#155e75"} onClickFunction={handleOpenChildWindow}/>
                 </div>
             </div>
-            <MailingFilterBlock/>
-            <AllMailingsTable/>
+            <MailingsFilterBlock/>
+            <div
+                className="w-full h-full flex flex-col justify-between bg-white border-4 border-solid border-cyan-800/20 rounded-2xl overflow-hidden relative">
+                <AllMailingsTable/>
+            </div>
         </div>
     );
 };

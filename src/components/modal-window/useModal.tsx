@@ -6,7 +6,7 @@ import WrapperBackgroundModal from "../WrapperBackgroundModal";
 interface ModalWindowProps {
     text: string;
     onCancel?: () => void;
-    onGetBack?: () => void;
+    onGetBack?: (data?: any) => void;
     onOk?: () => void;
 }
 
@@ -15,7 +15,7 @@ const useModal = () => {
 
     const closeModal = () => setModalWindow(null);
 
-    const handleOpenModal = (text: string, onGetBack?: () => void, onCancel: () => void = closeModal, onOk?: () => void) => {
+    const handleOpenModal = (text: string, onGetBack?: (data: any) => void, onCancel: () => void = closeModal, onOk?: () => void) => {
         setModalWindow({text, onCancel, onGetBack, onOk});
     };
 

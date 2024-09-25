@@ -4,7 +4,7 @@ import WrapperBackgroundModal from "../WrapperBackgroundModal";
 type ModalWindow = {
     text: string;
     onCancel: () => void;
-    onGetBack?: () => void;
+    onGetBack?: (data?: any) => void;
     onOk?: () => void;
 }
 

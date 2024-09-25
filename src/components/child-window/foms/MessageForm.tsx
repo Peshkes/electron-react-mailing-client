@@ -1,218 +1,161 @@
-import React, {useState, useContext} from 'react';
-import FormField from '../form-entries/FormField';
-import DeleteBlock from '../form-entries/DeleteBlock';
-import {
-    addMessage,
-    addSampleMessage,
-    deleteMessageById,
-    deleteSampleMessageById,
-    getMessageById,
-    getSampleMessageById,
-    updateMessage,
-    updateSampleMessage
-} from "../../../api/fake";
-import {dateToTimestamp, timestampToDate} from "../../../api/parser";
-import {MessageData, SampleMessageData} from "../../../api/types";
+import React, {useContext, useState} from "react";
+import FormField from "../form-entries/FormField";
+import {addMessage, addSampleMessage, deleteMessageById, deleteSampleMessageById, getMessageById, getSampleMessageById, sendMessageNow, updateMessage, updateSampleMessage} from "../../../api/fake";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
+import {dateToTimestamp, timestampToDate} from "../../../api/parser";
+import {TypesContext} from "../../context-providers/TypesProvider";
+import FormSelectField from "../form-entries/FormSelectField";
+import DeleteBlock from "../form-entries/DeleteBlock";
+import Loader from "../../Loader";
+import {Message, SampleMessage, SampleMessageData} from "../../../api/types";
 
+type CombineMessage = Message | SampleMessage;
 
-type  MessageFormEntrailsProps = {
-    id: number;
-    type: 'message' | 'sample';
-};
-
-const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
+const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample = false}) => {
     const [theme, setTheme] = useState('');
     const [messageText, setMessageText] = useState('');
     const [mediaPath, setMediaPath] = useState('');
     const [sendingDate, setSendingDate] = useState('');
-    const [sampleName, setSampleName] = useState('');
     const [recipientTypeId, setRecipientTypeId] = useState<number | ''>('');
+    const [sampleName, setSampleName] = useState('');
+    const [isImmediateSend, setIsImmediateSend] = useState(false);
 
     const {handleOpenModal, ModalComponent} = useModal();
     const childWindow = useContext(ChildWindowContext);
     const closeAllWindows = () => childWindow?.closeChildWindow();
-    const queryClient = useQueryClient();
+
+    const {clientTypes} = useContext(TypesContext);
     const isItUpdate = id > 0;
 
-    const {data: messageData, isLoading: isMessageLoading} = useQuery(
-        ['message', 'sample', id],
-        type === 'message' ? () => getMessageById(id) : () => getSampleMessageById(id),
-        {
-            enabled: id > 0,
-            onSuccess:
-                type === 'message' ?
-                    (data: MessageData) => {
-                        setTheme(data.theme);
-                        setMessageText(data.message_text);
-                        if (data.recipient_type_id) setRecipientTypeId(data.recipient_type_id);
-                        if (data.media_path) setMediaPath(data.media_path);
-                        if (data.sending_date) setSendingDate(timestampToDate(data.sending_date));
-                        if (data.media_path) setMediaPath(data.media_path);
-                    } :
-                    (data: SampleMessageData) => {
-                        setTheme(data.theme);
-                        setMessageText(data.message_text);
-                        if (data.recipient_type_id) setRecipientTypeId(data.recipient_type_id);
-                        if (data.media_path) setMediaPath(data.media_path);
-                        if (data.sending_date) setSendingDate(timestampToDate(data.sending_date));
-                        setSampleName(data.sample_name);
-                    },
-            onError: (error: Error) => handleOpenModal('Получение клиента не удалось: ' + error.message, undefined, closeAllWindows)
-        }
-    );
-
-    const useAddMessageMutation = () => {
-        if (type === 'message') {
-            return useMutation(
-                async (messageData: MessageData | SampleMessageData) => {
-                    const id = await addMessage(messageData);
-                    // Опционально: получить полный объект клиента после добавления
-                    return await getMessageById(id);
-                },
-                {
-                    onSuccess: () => {
-                        handleOpenModal('Рассылка добавлена успешно', closeAllWindows);
-                        queryClient.invalidateQueries('messages');
-                        resetForm(type);
-                    },
-                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
-                }
-            );
-        } else {
-            return useMutation(
-                async (messageData: MessageData | SampleMessageData) => {
-                    const id = await addSampleMessage(messageData as SampleMessageData);
-                    // Опционально: получить полный объект клиента после добавления
-                    return await getSampleMessageById(id);
-                },
-                {
-                    onSuccess: () => {
-                        handleOpenModal('Шаблон рассылки добавлен успешно', closeAllWindows);
-                        queryClient.invalidateQueries('samples');
-                        resetForm(type);
-                    },
-                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
-                }
-            );
-        }
-
-    };
-
-    const useUpdateMessageMutation = (id: number) => {
-        if (type === 'message') {
-            return useMutation(
-                async (messageData: MessageData | SampleMessageData) => {
-                    return await updateMessage(id, messageData);
-                },
-                {
-                    onSuccess: () => {
-                        handleOpenModal('Рассылка обновлена успешно', closeAllWindows);
-                        queryClient.invalidateQueries('messages');
-                        resetForm(type);
-                    },
-                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
-                }
-            );
-        } else {
-            return useMutation(
-                async (messageData: MessageData | SampleMessageData) => {
-                    return await updateSampleMessage(id, messageData as SampleMessageData);
-                },
-                {
-                    onSuccess: () => {
-                        handleOpenModal('Шаблон рассылки обновлен успешно', closeAllWindows);
-                        queryClient.invalidateQueries('samples');
-                        resetForm(type);
-                    },
-                    onError: (error: Error) => handleOpenModal('Ошибка: ' + error.message, closeAllWindows),
-                }
-            );
-        }
-
-    };
-
-
-    const addMessageMutation = useAddMessageMutation();
-    const updateMessageMutation = useUpdateMessageMutation(id);
-
-
-    const handleDeleteSampleMessageById = (id: number) => {
-        deleteSampleMessageById(id)
-            .then(data => {
-                handleOpenModal('Шаблон' + data.theme + ' ,было удален успешно',
-                    () => addSampleMessage(data as SampleMessageData)
-                        .then(_ => handleOpenModal('Шаблон не был удален'))
-                        .catch(error => handleOpenModal('Шаблон не добавлен: ' + error, undefined, closeAllWindows)), closeAllWindows);
-            })
-            .catch(error => handleOpenModal('Шаблон не удалось удалить: ' + error, undefined, closeAllWindows)
-            )
-    }
-
-    const handleDeleteMessageById = (id: number) => {
-        deleteMessageById(id).then(data => {
-            handleOpenModal('Сообщение' + data.theme + ' ,было удален успешно',
-                () => addMessage(data as MessageData)
-                    .then(_ => handleOpenModal('Сообщение не было удалено'))
-                    .catch(error => handleOpenModal('Сообщение не добавлено: ' + error, undefined, closeAllWindows)), closeAllWindows);
-        })
-            .catch(error => handleOpenModal('Сообщение не удалось удалить: ' + error, undefined, closeAllWindows)
-            );
-    }
-
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        let data: MessageData | SampleMessageData;
-        if (type === 'message') {
-            data = {
-                theme: theme,
-                message_text: messageText,
-                recipient_type_id: recipientTypeId ? recipientTypeId : null,
-                media_path: mediaPath ? mediaPath : null,
-                sending_date: dateToTimestamp(sendingDate)
-            } as MessageData;
-        } else {
-            data = {
-                theme: theme,
-                message_text: messageText,
-                recipient_type_id: recipientTypeId ? recipientTypeId : null,
-                media_path: mediaPath ? mediaPath : null,
-                sending_date: dateToTimestamp(sendingDate),
-                sample_name: sampleName,
-            } as SampleMessageData;
-        }
-
-        if (id > 0) {
-            updateMessageMutation.mutate(data);
-        } else {
-            addMessageMutation.mutate(data);
-        }
-
-    }
-
-    const handleDelete = () => {
-        type === 'sample' ?
-            handleDeleteSampleMessageById(id as number) :
-            handleDeleteMessageById(id as number);
-    };
-    const resetForm = (type: string) => {
+    const resetForm = () => {
         setTheme('');
         setMessageText('');
-        if (type === 'sample') setSampleName('');
         setMediaPath('');
         setSendingDate('');
         setRecipientTypeId('');
+        if (isSample) setSampleName('');
     };
 
-    if (isMessageLoading) return <div>Загрузка...</div>;
+    const queryClient = useQueryClient();
+    const {isLoading: isLoadingData} = useQuery(
+        [isSample ? 'samples' : 'message', id],
+        isSample ? () => getSampleMessageById(id) : () => getMessageById(id),
+        {
+            enabled: id > 0,
+            onSuccess: (data: CombineMessage) => {
+                setTheme(data.theme);
+                setMessageText(data.message_text);
+                if (data.recipient_type_id) setRecipientTypeId(data.recipient_type_id);
+                if (data.media_path) setMediaPath(data.media_path);
+                if (data.sending_date) setSendingDate(timestampToDate(data.sending_date));
+                if (isSample && 'sample_name' in data) setSampleName(data.sample_name);
+            },
+            onError: (error: Error) => handleOpenModal(`Ошибка: ${error.message}`, undefined, closeAllWindows)
+        });
+
+    const createMessageMutation = (mutationFn: (data: any) => Promise<any>, onSuccessMessage: string, getBack?: (data: any) => void) => {
+        return useMutation(mutationFn, {
+            onSuccess: (data) => {
+                handleOpenModal(onSuccessMessage, getBack ? () => getBack(data) : undefined, closeAllWindows);
+                queryClient.invalidateQueries(isSample ? 'samples' : 'messages');
+                resetForm();
+            },
+            onError: (error: Error) => handleOpenModal(`Ошибка: ${error.message}`, closeAllWindows),
+        });
+    };
+
+    const useAddMessageMutation = createMessageMutation(
+        async (messageData) => {
+            return isSample ? await addSampleMessage(messageData) : await addMessage(messageData);
+        },
+        isSample ? 'Шаблон добавлен успешно' : 'Сообщение добавлено успешно',
+        (data: any) => isSample ? addSampleMessage(data) : addMessage(data)
+            .then(_ => handleOpenModal(isSample ? 'Шаблон не был удален' : 'Сообщение не было удалено'))
+            .catch(error => handleOpenModal('Ошибка добавления: ' + error, undefined, closeAllWindows))
+    );
+
+    const useUpdateMessageMutation = createMessageMutation(
+        async (messageData) => {
+            return isSample ? await updateSampleMessage(id, messageData) : await updateMessage(id, messageData);
+        },
+        isSample ? 'Шаблон обновлен успешно' : 'Сообщение обновлено успешно',
+        (data: any) => isSample ? updateSampleMessage(id, data) : updateMessage(id, data)
+            .then(_ => handleOpenModal(isSample ? 'Вернуть шаблон не удалось' : 'Вернуть сообщение не удалось'))
+            .catch(error => handleOpenModal('Ошибка обновления: ' + error, undefined, closeAllWindows))
+    );
+
+    const useDeleteMessageMutation = createMessageMutation(
+        async (id: number) => {
+            return isSample ? await deleteSampleMessageById(id) : await deleteMessageById(id);
+        },
+        isSample ? 'Шаблон удален успешно' : 'Сообщение удалено успешно',
+        (data: any) => isSample ? addSampleMessage(data) : addMessage(data)
+            .then(_ => handleOpenModal(isSample ? 'Шаблон не был удален' : 'Сообщение не было удалено'))
+            .catch(error => handleOpenModal('Ошибка удаления: ' + error, undefined, closeAllWindows))
+    );
+
+    const useSendMessageMutation = createMessageMutation(
+        async (messageData) => {
+            await sendMessageNow(messageData);
+        },
+        'Сообщение отправлено успешно'
+    );
+
+    const handleSendMessage = () => {
+        const data = {
+            theme,
+            message_text: messageText,
+            recipient_type_id: recipientTypeId || null,
+            media_path: mediaPath || null,
+            sending_date: dateToTimestamp(sendingDate),
+        };
+        if (isImmediateSend) {
+            useSendMessageMutation.mutate(data);
+        } else
+            useAddMessageMutation.mutate(data);
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const data = {
+            theme,
+            message_text: messageText,
+            recipient_type_id: recipientTypeId || null,
+            media_path: mediaPath || null,
+            sending_date: dateToTimestamp(sendingDate),
+            ...(isSample && {sample_name: sampleName})
+        };
+        if (isImmediateSend) {
+            useSendMessageMutation.mutate(data);
+        } else {
+            id > 0 ? useUpdateMessageMutation.mutate(data) : useAddMessageMutation.mutate(data);
+        }
+    };
+
+    const handleSetNow = () => {
+        setIsImmediateSend(prevState => !prevState);
+        const now = new Date();
+        setSendingDate(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16));
+    }
+
+    const handleFileSelect = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const result = await window.electron.openFile();
+        if (result.length > 0) {
+            setMediaPath(result[0]);
+        }
+    }
+
+    const handleDelete = () => useDeleteMessageMutation.mutate(id);
+
+    const isLoading = isLoadingData || useSendMessageMutation.isLoading || useAddMessageMutation.isLoading || useUpdateMessageMutation.isLoading || useDeleteMessageMutation.isLoading;
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="p-6 bg-white border border-cyan-800/20 rounded-lg">
-                {type === 'sample' && (
+            <form onSubmit={handleSubmit} className={`p-6 bg-white border border-cyan-800/20 rounded-lg relative`}>
+                {isSample && (
                     <FormField
                         id="sample_name"
                         label="Название образца"
@@ -230,13 +173,13 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     onChange={(e) => setTheme(e.target.value)}
                     required
                 />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center mb-4">
-                    <label htmlFor="message_text" className="text-cyan-800 font-semibold">Текст сообщения</label>
+                <div className="flex items-center mb-4">
+                    <label htmlFor="message_text" className="text-cyan-800 font-semibold mr-10">Текст сообщения</label>
                     <textarea
                         id="message_text"
                         value={messageText}
                         onChange={(e) => setMessageText(e.target.value)}
-                        className="w-full border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
+                        className="flex-grow border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
                         rows={4}
                         required
                     />
@@ -247,32 +190,47 @@ const MessageForm: React.FC<MessageFormEntrailsProps> = ({id, type}) => {
                     type="text"
                     value={mediaPath}
                     onChange={(e) => setMediaPath(e.target.value)}
-                />
+                >
+                    <button
+                        className="bg-cyan-600 text-white w-full px-2 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                        onClick={handleFileSelect}
+                    >Файл
+                    </button>
+                </FormField>
                 <FormField
                     id="sending_date"
                     label="Дата отправки"
                     type="datetime-local"
+                    disabled={isImmediateSend}
                     value={sendingDate}
                     onChange={(e) => setSendingDate(e.target.value)}
+                >
+                    <button
+                        type="button" onClick={handleSetNow}
+                        className="bg-cyan-600 text-white w-full px-2 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        {isImmediateSend ? 'Потом' : 'Сразу'}
+                    </button>
+                </FormField>
+                <FormSelectField id="recipient_type_id" label="Тип получателя" value={recipientTypeId || ''}
+                                 onChange={(e) => setRecipientTypeId(parseInt(e.target.value))}
+                                 options={clientTypes.map(type => ({value: type.id, label: type.type_name}))}
                 />
-                <FormField
-                    id="recipient_type_id"
-                    label="Тип получателя"
-                    type="number"
-                    value={recipientTypeId || ''}
-                    onChange={(e) => setRecipientTypeId(parseInt(e.target.value, 10) || '')}
-                    required
-                />
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 gap-4">
                     <button
                         type="submit"
                         className="bg-cyan-600 text-white w-full max-w-xs py-3 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     >
-                        {id > 0 ? 'Обновить' : 'Добавить'} {type === 'message' ? 'сообщение' : 'образец'}
+                        {id > 0 ? 'Обновить' : 'Добавить'} {isSample ? 'образец' : 'сообщение'}
                     </button>
+                    {isSample && id > 0 && handleSendMessage &&
+                        <button
+                            className="bg-cyan-600 text-white w-full max-w-xs py-3 rounded-md border border-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            onClick={handleSendMessage}>
+                            Добавить рассылку
+                        </button>}
                 </div>
-
                 {isItUpdate && <DeleteBlock onDelete={handleDelete}/>}
+                {isLoading && <Loader withBackground={true}/>}
             </form>
             {ModalComponent}
         </>
