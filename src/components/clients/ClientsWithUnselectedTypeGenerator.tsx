@@ -2,6 +2,7 @@ import React from 'react';
 import {useQuery} from "react-query";
 import {getClientsWithUnselectedType} from "../../api/fake";
 import ClientWIthUnselectedType from "./ClientWIthUnselectedType";
+import Loader from "../Loader";
 
 const ClientsWithUnselectedTypeGenerator = () => {
 
@@ -13,7 +14,7 @@ const ClientsWithUnselectedTypeGenerator = () => {
         }
     );
 
-    if (isLoading) return <div className="flex justify-center items-center w-full h-full">Загрузка...</div>;
+    if (isLoading) return <Loader spinnerColor={'border-t-white'}/>;
     if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
     if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
 
