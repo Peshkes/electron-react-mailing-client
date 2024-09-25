@@ -1,14 +1,8 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import AllMailingsTable from "./AllMailingsTable";
 import Plus from "../../icons/Plus";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
-
-import {TypesContext} from "../context-providers/TypesProvider";
-import {getAllFilteredMessages} from "../../api/fake";
-import {MessagesComplexObjectRequest} from "../../api/types";
-import {dateToTimestamp} from "../../api/parser";
-import RadioButton from "../../common-components/RadioButton";
-import MailingsFilterBlock from "./MailingsFilterBlock";
+import MailingFilterBlock from "./MailingFilterBlock";
 
 const MailingsComponent = () => {
     const childWindow = useContext(ChildWindowContext);
@@ -27,7 +21,7 @@ const MailingsComponent = () => {
                     <Plus color={"#155e75"} onClickFunction={handleOpenChildWindow}/>
                 </div>
             </div>
-            <MailingsFilterBlock/>
+            <MailingFilterBlock/>
             <AllMailingsTable/>
         </div>
     );

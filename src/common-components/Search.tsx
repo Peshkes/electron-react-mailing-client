@@ -1,14 +1,18 @@
-import React, {useRef, useState} from 'react';
-import {useMailingsFilter} from "../../stores/useMailingsFilter";
+import React, {useState} from 'react';
+import {useMailingsFilter} from "../stores/useMailingsFilter";
+import {useClientFilter} from "../stores/useClientFilter";
 
-const SearchMailing = () => {
-    const {search_string, setSearchString} = useMailingsFilter();
+type Props = {
+    type: string
+}
+const Search = ({type}: Props) => {
+    const {search_string, setSearchString} = type === "messages"?useMailingsFilter():useClientFilter();
     const [searchValue, setSearchValue] = useState(search_string);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (value: string) => {
         timeoutId && clearTimeout(timeoutId);
-        setSearchValue(e.target.value);
+        setSearchValue(value);
         const timeout = setTimeout(() => {
             setSearchString(searchValue);
         }, 1000);
@@ -23,10 +27,10 @@ const SearchMailing = () => {
                 placeholder="Поиск"
                 className="w-full"
                 value={search_string}
-                onChange={handleSearchChange}
+                onChange={(e) => handleSearchChange(e.target.value)}
             />
         </div>
     );
 };
 
-export default SearchMailing;
+export default Search;

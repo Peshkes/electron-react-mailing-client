@@ -40,12 +40,12 @@ export const useMailingsFilter = create<MailingStore>((set, getState) => ({
             ...(type_id !== undefined && {type_id}),
             ...(date_from !== undefined && {date_from}),
             ...(date_to !== undefined && {date_to}),
-            ...(search_string !== undefined && {search_string}),
+            ...(search_string !== undefined && search_string !== '' && {search_string}),
             page,
             limit
         }
         return getAllFilteredMessages(payload);
     },
 
-    clearFilter: () => set({type_id: undefined, date_from: undefined, date_to: undefined, search_string: undefined})
+    clearFilter: () => set({type_id: undefined, date_from: undefined, date_to: undefined, search_string: ''})
 }));

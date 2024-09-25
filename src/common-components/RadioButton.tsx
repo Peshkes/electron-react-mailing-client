@@ -21,7 +21,6 @@ const RadioButton = ({value, onChange, checked, name}: Props) => {
                 <span
                     className="absolute bg-cyan-800 w-3 h-3 opacity-0 peer-checked:opacity-100 transition-opacity left-[2px] top-[6px] duration-200"/>
                 {value}
-                {/*<label className="px-7 cursor-pointer" htmlFor="child">Семья с детьми</label>*/}
             </label>
         </div>
     );

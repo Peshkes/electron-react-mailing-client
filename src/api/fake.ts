@@ -100,7 +100,7 @@ const fakeClients: Client[] = [
         check_in_date: now,
         check_out_date: now + 86400000,
         messanger_id: 2,
-        chat_id: 1241221241
+        chat_id: null
     },
     {
         id: 11,
@@ -130,7 +130,7 @@ const fakeClients: Client[] = [
         check_in_date: now,
         check_out_date: now + 86400000,
         messanger_id: 2,
-        chat_id: 1241221241
+        chat_id: null
     },
     {
         id: 8,
@@ -1557,7 +1557,7 @@ const fakeMessengers: MessengerType[] = [
 
 const fakeClientTypes: ClientType[] = [
     {id: 1, type_name: 'Взрослые'},
-    {id: 2, type_name: 'Семья с детьми'}
+    {id: 2, type_name: 'С детьми'}
 ];
 
 // CLIENTS
@@ -1693,23 +1693,20 @@ export async function getLastClients(count: number): Promise<Client[]> {
     });
 }
 
-export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<Client[]> {
-    return new Promise((resolve) => {
+export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<ClientPaginationResponse> {
+     return new Promise((resolve) => {
         setTimeout(() => {
             let filteredClients = [...fakeClients];
 
-            if (complexObject.type_id) filteredClients = filteredClients.filter(client => client.type_id === complexObject.type_id);
-            if (complexObject.tg_error !== undefined && complexObject.tg_error !== null) filteredClients = filteredClients.filter(client => client.messanger_id === 2 && client.chat_id === null);
+            if (complexObject.type_id !== undefined) filteredClients = filteredClients.filter(client => client.type_id === complexObject.type_id);
+            if (complexObject.tg_error) filteredClients = filteredClients.filter(client => client.messanger_id === 2 && client.chat_id === null);
             if (complexObject.search_type && complexObject.search_string) {
                 filteredClients = filteredClients.filter(client =>
                     String(client[complexObject.search_type as keyof Client]).toLowerCase().includes(complexObject.search_string!.toLowerCase())
                 );
             }
 
-            const start = (complexObject.page - 1) * complexObject.limit;
-            const paginatedClients = filteredClients.slice(start, start + complexObject.limit);
-
-            resolve(paginatedClients);
+            resolve(fakePaginationResponse(filteredClients, complexObject.page || 1, complexObject.limit || 10));
         }, 1000);
     });
 }

@@ -4,8 +4,8 @@ import MailingFilter from "./MailingFilter";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";
 
-const TypeMailingFilter = () => {
-    const clientTypes = useContext(TypesContext).clientTypes;
+const TypeFilterBlock = () => {
+    const {clientTypes} = useContext(TypesContext);
     const {type_id, setTypeId} = useMailingsFilter();
 
     const handleSetTypeId = (type_id: number) => {
@@ -21,4 +21,4 @@ const TypeMailingFilter = () => {
     );
 };
 
-export default TypeMailingFilter;
+export default TypeFilterBlock;

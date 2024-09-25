@@ -105,3 +105,4 @@ export type ClientType = {
     id: number;
     type_name: string;
 }
+
