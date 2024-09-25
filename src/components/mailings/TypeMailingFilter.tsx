@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import RadioButton from "../../common-components/RadioButton";
+import RadioButton from "../common-components/RadioButton";
 import MailingFilter from "./MailingFilter";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";

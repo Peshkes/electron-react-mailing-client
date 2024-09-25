@@ -12,7 +12,7 @@ const ChildWindow = ({type, id}: ChildWindowFunctionProps) => {
         <div className="bg-white border-4 border-solid border-cyan-800/20 rounded-2xl p-4 max-w-lg w-full relative">
             {type === 'client' ?
                 <ClientForm id={id}/> :
-                <MessageForm id={id} type={type}/>}
+                <MessageForm id={id} isSample={type === 'sample'}/>}
         </div>
     );
 };

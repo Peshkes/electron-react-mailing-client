@@ -7,7 +7,7 @@ import {TypesContext} from "../context-providers/TypesProvider";
 import {getAllFilteredMessages} from "../../api/fake";
 import {MessagesComplexObjectRequest} from "../../api/types";
 import {dateToTimestamp} from "../../api/parser";
-import RadioButton from "../../common-components/RadioButton";
+import RadioButton from "../common-components/RadioButton";
 import MailingsFilterBlock from "./MailingsFilterBlock";
 
 const MailingsComponent = () => {
@@ -28,7 +28,10 @@ const MailingsComponent = () => {
                 </div>
             </div>
             <MailingsFilterBlock/>
-            <AllMailingsTable/>
+            <div
+                className="w-full h-full flex flex-col justify-between bg-white border-4 border-solid border-cyan-800/20 rounded-2xl overflow-hidden relative">
+                <AllMailingsTable/>
+            </div>
         </div>
     );
 };

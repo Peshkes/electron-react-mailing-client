@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
+import Loader from "../Loader";
 
 
 type Props = {
@@ -20,7 +21,7 @@ const Clients = (props: Props) => {
     const childWindow = useContext(ChildWindowContext);
     const handleOpenClient = (id:number) => childWindow?.openChildWindow({type: 'client', id: id});
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
     if (isError) return <div>Error</div>;
     if (!data) return <div>No data</div>;
 
