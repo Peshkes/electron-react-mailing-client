@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 
 import Pagination from "../pagination/Pagination";
 import {useQuery} from "react-query";
-import {sendDelayedMessage} from "../../api/fake";
+import {sendDelayedMessage} from "../../api/server";
 import {timestampToDateFormatted} from "../../api/parser";
 import Sending_plane from "../../icons/Sending_plane";
 

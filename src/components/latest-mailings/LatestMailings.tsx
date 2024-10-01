@@ -1,10 +1,6 @@
 import React, {useContext} from 'react';
 import Plus from "../../icons/Plus";
-import {getNearestMessages} from "../../api/fake";
-
-import MailingMessage from "./MailingMessage";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
-import {useQuery} from "react-query";
 import LatestMailingsGenerator from "./LatestMailingsGenerator";
 
 const LatestMailings = () => {

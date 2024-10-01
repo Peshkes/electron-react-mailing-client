@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {getAllSampleMessages} from "../../api/fake";
+import {getAllSampleMessages} from "../../api/server";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
 import Loader from "../Loader";

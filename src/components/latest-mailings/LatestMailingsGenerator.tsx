@@ -1,6 +1,6 @@
 import React from 'react';
 import {useQuery} from "react-query";
-import {getNearestMessages} from "../../api/fake";
+import {getNearestMessages} from "../../api/server";
 
 import MailingMessage from "./MailingMessage";
 import Loader from "../Loader";

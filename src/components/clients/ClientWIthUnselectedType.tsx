@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {updateClientType} from "../../api/fake";
+import {updateClientType} from "../../api/server";
 import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";

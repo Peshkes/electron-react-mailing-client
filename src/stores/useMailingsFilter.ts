@@ -1,6 +1,6 @@
 import {create} from "zustand/react";
 import {MessagePaginationResponse, MessagesComplexObjectRequest} from "../api/types";
-import {getAllFilteredMessages} from "../api/fake";
+import {getAllFilteredMessages} from "../api/server";
 
 export type MailingStore = {
     type_id?: number;

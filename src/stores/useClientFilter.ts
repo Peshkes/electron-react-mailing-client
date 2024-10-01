@@ -1,6 +1,6 @@
 import {create} from "zustand/react";
 import {ClientPaginationResponse, ClientsComplexObjectRequest} from "../api/types";
-import {getAllFilteredClients} from "../api/fake";
+import {getAllFilteredClients} from "../api/server";
 
 export type ClientStore = {
     type_id?: number;

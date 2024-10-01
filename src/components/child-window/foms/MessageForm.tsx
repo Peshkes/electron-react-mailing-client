@@ -10,7 +10,7 @@ import {
     sendMessageNow,
     updateMessage,
     updateSampleMessage
-} from "../../../api/fake";
+} from "../../../api/server";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";

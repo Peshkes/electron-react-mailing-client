@@ -33,7 +33,12 @@ export async function updateClient(clientId: number, clientData: ClientData): Pr
 
 // Обновить мессенджер клиента
 export async function updateClientMessenger(clientId: number, messangerId: number): Promise<StatusResponse> {
-    return request(`/client/${clientId}/${messangerId}`, 'PUT');
+    return request(`/client/${clientId}/messanger/${messangerId}`, 'PUT');
+}
+
+// Обновить тип клиента
+export async function updateClientType(clientId: number, typeId: number): Promise<StatusResponse> {
+    return request(`/client/${clientId}/type/${typeId}`, 'PUT');
 }
 
 // Получить всех клиентов с пагинацией
@@ -66,7 +71,7 @@ export async function getLastClients(count: number): Promise<Client[]> {
 }
 
 // Получить клиентов по всем фильтрам
-export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<Client[]> {
+export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<ClientPaginationResponse> {
     return request('/client/all/full_filtered', 'GET', complexObject);
 }
 
@@ -114,7 +119,7 @@ export async function getAllMessagesWithPagination(params: PaginationRequestPara
 }
 
 // Получить все сообщения со всеми фильтрациями
-export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<Message[]> {
+export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<MessagePaginationResponse> {
     return request(`/message/all/full_filtered`, 'GET', complexObject);
 }
 
@@ -151,7 +156,7 @@ export async function getSampleMessageById(messageId: number): Promise<SampleMes
 }
 
 // Получить все шаблоны
-export async function getAllSampleMessages(): Promise<ApiResponse<SampleMessage[]>> {
+export async function getAllSampleMessages(): Promise<SampleMessage[]> {
     return request(`/message/sample/all`);
 }
 

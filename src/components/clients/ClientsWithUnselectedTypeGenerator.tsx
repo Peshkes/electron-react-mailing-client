@@ -1,6 +1,6 @@
 import React from 'react';
 import {useQuery} from "react-query";
-import {getClientsWithUnselectedType} from "../../api/fake";
+import {getClientsWithUnselectedType} from "../../api/server";
 import ClientWIthUnselectedType from "./ClientWIthUnselectedType";
 import Loader from "../Loader";
 
@@ -20,7 +20,7 @@ const ClientsWithUnselectedTypeGenerator = () => {
 
     return (
         <>
-            {data ? data.map((item, index) => (
+            {data ? data.map((item) => (
                 <ClientWIthUnselectedType key={item.id} item={item}/>
             )) : isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : <div>No data</div>}
         </>

@@ -1,6 +1,6 @@
 import { ClientType, MessengerType } from "../../api/types";
 import React, {useEffect, useMemo, useState} from "react";
-import { getMessengerTypes, getRecipientTypes } from "../../api/fake";
+import { getMessengerTypes, getRecipientTypes } from "../../api/server";
 import useModal from "../modal-window/useModal";
 
 type TypesContextProps = {

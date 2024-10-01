@@ -5,7 +5,7 @@ import {
     deleteClientById,
     getClientById,
     updateClient
-} from "../../../api/fake";
+} from "../../../api/server";
 import {dateToTimestamp, timestampToDate} from "../../../api/parser";
 import FormField from "../form-entries/FormField";
 import DeleteBlock from "../form-entries/DeleteBlock";
