@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import {addClient, deleteClientById, getClientById, updateClient} from "../../../api/server";
 import {dateToTimestamp, timestampToDate} from "../../../api/parser";
@@ -10,19 +10,36 @@ import {TypesContext} from "../../context-providers/TypesProvider";
 import FormSelectField from "../form-entries/FormSelectField";
 import SubmitBlock from "../form-entries/SubmitBlock";
 import Loader from "../../Loader";
+import ErrorBlock from "../form-entries/ErrorBlock";
 
 type ClientFormEntrailsProps = {
     id: number;
 }
 
+type Errors = {
+    phoneNumber: string,
+    name: string,
+    typeId: string,
+    date: string,
+}
+
+const defaultErrors = {
+    phoneNumber: '',
+    name: '',
+    typeId: '',
+    date: ''
+}
+
 const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
-    const [phoneNumber, setPhoneNumber] = React.useState('');
-    const [name, setName] = React.useState('');
-    const [typeId, setTypeId] = React.useState<number | null>(null);
-    const [messangerId, setMessangerId] = React.useState<number | null>(null);
-    const [checkInDate, setCheckInDate] = React.useState<string>('');
-    const [checkOutDate, setCheckOutDate] = React.useState<string>('');
-    const [chatId, setChatId] = React.useState<number | null>(null);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [name, setName] = useState('');
+    const [typeId, setTypeId] = useState<number | null>(null);
+    const [messangerId, setMessangerId] = useState<number | null>(null);
+    const [checkInDate, setCheckInDate] = useState<string>('');
+    const [checkOutDate, setCheckOutDate] = useState<string>('');
+    const [chatId, setChatId] = useState<number | null>(null);
+
+    const [errors, setErrors] = useState<Errors>(defaultErrors);
 
     const {handleOpenModal, ModalComponent} = useModal();
     const childWindow = useContext(ChildWindowContext);
@@ -32,7 +49,7 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
 
     const isItUpdate = id > 0;
 
-    const { isLoading: isClientLoading} = useQuery(
+    const {isLoading: isClientLoading} = useQuery(
         ['client', id],
         () => getClientById(id),
         {
@@ -50,12 +67,52 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
         }
     );
 
+    const validate = () => {
+        let isValid = true;
+        let newErrors: Errors = {phoneNumber: '', name: '', typeId: '', date: ''};
+
+        if (!phoneNumber.match(/^\+?[0-9]{7,14}$/)) {
+            newErrors.phoneNumber = 'Введите корректный номер телефона';
+            isValid = false;
+        }
+
+        if (name.trim() === '') {
+            newErrors.name = 'Имя не должно быть пустым';
+            isValid = false;
+        }
+
+        if (typeId === null) {
+            newErrors.typeId = 'Выберите тип клиента';
+            isValid = false;
+        }
+
+        const now = new Date().getTime();
+        const checkInTimestamp = dateToTimestamp(checkInDate);
+        const checkOutTimestamp = dateToTimestamp(checkOutDate);
+
+        if (checkOutTimestamp <= checkInTimestamp) {
+            newErrors.date = 'Дата заезда должна быть позже даты выезда';
+            isValid = false;
+        }
+
+        if (checkInTimestamp < now || checkOutTimestamp < now) {
+            newErrors.date = 'Дата заезда и дата выезда должны быть в будущем';
+            isValid = false;
+        }
+
+        if (!isValid)
+            setErrors(newErrors);
+
+        return isValid;
+    };
+
     const createClientMutation = (mutationFn: (data: any) => Promise<any>, onSuccessMessage: string, getBack?: (data: any) => void) => {
         return useMutation(mutationFn, {
             onSuccess: (data) => {
                 handleOpenModal(onSuccessMessage, getBack ? () => getBack(data) : undefined, closeAllWindows);
                 queryClient.invalidateQueries('clients');
                 resetForm();
+                setErrors(defaultErrors);
             },
             onError: (error: Error) => handleOpenModal(`Ошибка: ${error.message}`, closeAllWindows),
         });
@@ -70,15 +127,15 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
     )
 
     const useUpdateClientMutation = createClientMutation(
-        async (clientData) => await updateClient(id,clientData),
+        async (clientData) => await updateClient(id, clientData),
         'Клиент обновлен успешно',
-        (data: any) => updateClient(id,data)
+        (data: any) => updateClient(id, data)
             .then(_ => handleOpenModal('Клиент не был обновлен'))
             .catch(error => handleOpenModal('Ошибка обновления: ' + error, undefined, closeAllWindows))
     )
 
     const useDeleteClientMutation = createClientMutation(
-        async (id: number) =>await deleteClientById(id),
+        async (id: number) => await deleteClientById(id),
         'Клиент удален успешно',
         (data: any) => addClient(data)
             .then(_ => handleOpenModal('Клиент не был удален'))
@@ -97,21 +154,26 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const clientData = {
-            phone_number: phoneNumber,
-            name: name,
-            type_id: typeId,
-            messanger_id: messangerId,
-            check_in_date: dateToTimestamp(checkInDate),
-            check_out_date: dateToTimestamp(checkOutDate),
-            chat_id: chatId,
-        };
 
-        if (isItUpdate) {
-            useUpdateClientMutation.mutate(clientData);
-        } else {
-            useAddClientMutation.mutate(clientData);
-        }
+        if (validate()) {
+            const clientData = {
+                phone_number: phoneNumber,
+                name: name,
+                type_id: typeId,
+                messanger_id: messangerId,
+                check_in_date: dateToTimestamp(checkInDate),
+                check_out_date: dateToTimestamp(checkOutDate),
+                chat_id: chatId,
+            };
+
+            if (isItUpdate) {
+                useUpdateClientMutation.mutate(clientData);
+            } else {
+                useAddClientMutation.mutate(clientData);
+            }
+        } else
+            return;
+
     };
 
 
@@ -121,12 +183,16 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
             <form onSubmit={handleSubmit} className="relative p-6 bg-white border border-cyan-800/20 rounded-lg">
                 <FormField id="phone_number" label="Номер телефона" type="text" value={phoneNumber}
                            onChange={(e) => setPhoneNumber(e.target.value)} required/>
+                {errors.phoneNumber && <ErrorBlock>{errors.phoneNumber}</ErrorBlock>}
                 <FormField id="name" label="Имя" type="text" value={name}
                            onChange={(e) => setName(e.target.value)} required/>
+                {errors.name && <ErrorBlock>{errors.name}</ErrorBlock>}
                 <FormSelectField id="type_id" label="Тип" value={typeId || ''}
                                  onChange={(e) => setTypeId(parseInt(e.target.value, 10) || null)}
                                  options={types.clientTypes.map(type => ({value: type.id, label: type.type_name}))}/>
+                {errors.typeId && <ErrorBlock>{errors.typeId}</ErrorBlock>}
                 <FormSelectField id="messanger_id" label="Мессенджер" value={messangerId || ''}
+                                 required={true}
                                  onChange={(e) => setMessangerId(parseInt(e.target.value, 10) || null)}
                                  options={types.messengerTypes.map(messanger => ({
                                      value: messanger.id,
@@ -136,8 +202,9 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
                            onChange={(e) => setCheckInDate(e.target.value)}/>
                 <FormField id="check_out_date" label="Дата выезда" type="datetime-local" value={checkOutDate}
                            onChange={(e) => setCheckOutDate(e.target.value)}/>
+                {errors.date && <ErrorBlock>{errors.date}</ErrorBlock>}
                 <SubmitBlock id={id} stringEnd={'клиента'}/>
-                {id > 0 && <DeleteBlock onDelete={()=> useDeleteClientMutation.mutate(id)}/>}
+                {id > 0 && <DeleteBlock onDelete={() => useDeleteClientMutation.mutate(id)}/>}
                 {isLoading && <Loader withBackground={true}/>}
             </form>
             {ModalComponent}

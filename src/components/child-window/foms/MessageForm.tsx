@@ -1,16 +1,6 @@
 import React, {useContext, useState} from "react";
 import FormField from "../form-entries/FormField";
-import {
-    addMessage,
-    addSampleMessage,
-    deleteMessageById,
-    deleteSampleMessageById,
-    getMessageById,
-    getSampleMessageById,
-    sendMessageNow,
-    updateMessage,
-    updateSampleMessage
-} from "../../../api/server";
+import {addMessage, addSampleMessage, deleteMessageById, deleteSampleMessageById, getMessageById, getSampleMessageById, sendMessageNow, updateMessage, updateSampleMessage} from "../../../api/server";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -53,7 +43,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
         [isSample ? 'samples' : 'message', id],
         isSample ? () => getSampleMessageById(id) : () => getMessageById(id),
         {
-            enabled: id > 0,
+            enabled: isItUpdate,
             onSuccess: (data: CombineMessage) => {
                 setTheme(data.theme);
                 setMessageText(data.message_text);
@@ -137,10 +127,10 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             sending_date: dateToTimestamp(sendingDate),
             ...(isSample && {sample_name: sampleName})
         };
-        if (isImmediateSend) {
+        if (isImmediateSend && !isItUpdate && !isSample) {
             useSendMessageMutation.mutate(data);
         } else {
-            id > 0 ? useUpdateMessageMutation.mutate(data) : useAddMessageMutation.mutate(data);
+            isItUpdate ? useUpdateMessageMutation.mutate(data) : useAddMessageMutation.mutate(data);
         }
     };
 
