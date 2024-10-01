@@ -9,7 +9,7 @@ export type ChildWindowFunctionProps = {
 
 const ChildWindow = ({type, id}: ChildWindowFunctionProps) => {
     return (
-        <div className="bg-white border-4 border-solid border-cyan-800/20 rounded-2xl p-4 max-w-lg w-full relative">
+        <div className="bg-white border-4 border-solid border-cyan-800/20 rounded-2xl p-4 max-w-[600px] w-full relative">
             {type === 'client' ?
                 <ClientForm id={id}/> :
                 <MessageForm id={id} isSample={type === 'sample'}/>}

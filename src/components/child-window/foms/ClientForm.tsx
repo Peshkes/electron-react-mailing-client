@@ -1,11 +1,6 @@
 import React, {useContext} from 'react';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
-import {
-    addClient,
-    deleteClientById,
-    getClientById,
-    updateClient
-} from "../../../api/server";
+import {addClient, deleteClientById, getClientById, updateClient} from "../../../api/server";
 import {dateToTimestamp, timestampToDate} from "../../../api/parser";
 import FormField from "../form-entries/FormField";
 import DeleteBlock from "../form-entries/DeleteBlock";
@@ -35,11 +30,13 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
     const types = useContext(TypesContext);
     const queryClient = useQueryClient();
 
+    const isItUpdate = id > 0;
+
     const { isLoading: isClientLoading} = useQuery(
         ['client', id],
         () => getClientById(id),
         {
-            enabled: id > 0,
+            enabled: isItUpdate,
             onSuccess: data => {
                 setPhoneNumber(data.phone_number);
                 setName(data.name);
@@ -110,10 +107,10 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
             chat_id: chatId,
         };
 
-        if (id > 0) {
-            useAddClientMutation.mutate(clientData);
-        } else {
+        if (isItUpdate) {
             useUpdateClientMutation.mutate(clientData);
+        } else {
+            useAddClientMutation.mutate(clientData);
         }
     };
 

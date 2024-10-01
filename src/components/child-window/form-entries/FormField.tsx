@@ -11,10 +11,12 @@ type FormFieldProps = {
     children?: React.ReactNode;
 }
 
-const FormField = ({ id, label, type, value, onChange, children, disabled = false, required = false }: FormFieldProps) => (
-    <div className={`flex items-center mb-4`}>
-        <label htmlFor={id} className={"text-cyan-800 font-semibold mr-10"}>{label}</label>
-        <div className={`flex items-center flex-grow ${children ? 'space-x-2' : ''}`}>
+const FormField = ({id, label, type, value, onChange, children, disabled = false, required = false,}: FormFieldProps) => (
+    <div className="grid grid-cols-3 gap-4 mb-4 items-center">
+        <label htmlFor={id} className="text-cyan-800 font-semibold col-span-1">
+            {label}
+        </label>
+        <div className={`flex items-center col-span-2 ${children ? 'space-x-2' : ''}`}>
             <input
                 id={id}
                 type={type}

@@ -17,19 +17,26 @@ type FormSelectFieldProps = {
     required?: boolean;
 }
 
-const FormSelectField = ({ id, label, value, onChange, options, startOption, disabled = false, required = false }: FormSelectFieldProps) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center mb-4">
-        <label htmlFor={id} className={"text-cyan-800 font-semibold"}>{label}</label>
+const FormSelectField = ({id, label, value, onChange, options, startOption, disabled = false, required = false}: FormSelectFieldProps) => (
+    <div className="grid grid-cols-3 gap-4 items-center mb-4">
+        <label htmlFor={id} className="text-cyan-800 font-semibold col-span-1">
+            {label}
+        </label>
         <select
             id={id}
             value={value}
             onChange={onChange}
-            className={'w-full border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500'}
+            className="col-span-2 w-full border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
             disabled={disabled}
             required={required}
         >
-            {startOption ? <option value={startOption.value}>{startOption.label}</option> :
-                <option value="" disabled={required && !value}>Выбери вариант</option>}
+            {startOption ? (
+                <option value={startOption.value}>{startOption.label}</option>
+            ) : (
+                <option value="" disabled={required && !value}>
+                    Выбери вариант
+                </option>
+            )}
             {options.map(option => (
                 <option key={option.value} value={option.value} disabled={option.isDisabled}>
                     {option.label}

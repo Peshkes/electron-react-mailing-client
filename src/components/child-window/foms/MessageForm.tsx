@@ -187,7 +187,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                         id="message_text"
                         value={messageText}
                         onChange={(e) => setMessageText(e.target.value)}
-                        className="flex-grow border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
+                        className="flex-grow resize-none border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500"
                         rows={4}
                         required
                     />

@@ -16,6 +16,7 @@ const ClientsRadioTypeFilter = ({header}:Props) => {
     const handleSetTypeId = (type_id: number) => {
         setTypeId(type_id);
     }
+
     return (
         <RadioTypeFilter  header={header}>
             {clientTypes.length > 0 && clientTypes.map(item  => (
