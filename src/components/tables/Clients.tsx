@@ -3,6 +3,7 @@ import {Client} from "../../api/types";
 import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {useQuery} from "react-query";
 import Loader from "../Loader";
+import PageStatusDiv from "../common-components/PageStatusDiv";
 
 
 type Props = {
@@ -22,8 +23,8 @@ const Clients = (props: Props) => {
     const handleOpenClient = (id:number) => childWindow?.openChildWindow({type: 'client', id: id});
 
     if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
-    if (isError) return <div>Error</div>;
-    if (!data) return <div>No data</div>;
+    if (isError) return <PageStatusDiv>Ошибка</PageStatusDiv>;
+    if (!data) return <PageStatusDiv>Нет данных</PageStatusDiv>;
 
     return (
         data.map((item, index) => (

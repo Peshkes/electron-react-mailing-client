@@ -72,7 +72,30 @@ export async function getLastClients(count: number): Promise<Client[]> {
 
 // Получить клиентов по всем фильтрам
 export async function getAllFilteredClients(complexObject: ClientsComplexObjectRequest): Promise<ClientPaginationResponse> {
-    return request('/client/all/full_filtered', 'GET', complexObject);
+   const params = new URLSearchParams();
+
+    // Добавляем параметры, если они определены
+    if (complexObject.page) {
+        params.append('page', complexObject.page.toString());
+    }
+    if (complexObject.limit) {
+        params.append('limit', complexObject.limit.toString());
+    }
+    if (complexObject.type_id !== undefined) {
+        params.append('type_id', complexObject.type_id.toString());
+    }
+    if (complexObject.search_string) {
+        params.append('search_string', complexObject.search_string);
+    }
+    if (complexObject.search_type !== undefined) {
+        params.append('search_type', complexObject.search_type.toString());
+    }
+    if (complexObject.tg_error !== undefined) {
+        params.append('tg_error', complexObject.tg_error.toString());
+    }
+
+    // Используем собранные параметры для запроса
+    return request(`/client/all/full_filtered?${params.toString()}`, 'GET');
 }
 
 //MESSAGES
@@ -120,7 +143,30 @@ export async function getAllMessagesWithPagination(params: PaginationRequestPara
 
 // Получить все сообщения со всеми фильтрациями
 export async function getAllFilteredMessages(complexObject: MessagesComplexObjectRequest): Promise<MessagePaginationResponse> {
-    return request(`/message/all/full_filtered`, 'GET', complexObject);
+    const params = new URLSearchParams();
+
+    // Добавляем параметры, если они определены
+    if (complexObject.page) {
+        params.append('page', complexObject.page.toString());
+    }
+    if (complexObject.limit) {
+        params.append('limit', complexObject.limit.toString());
+    }
+    if (complexObject.type_id !== undefined) {
+        params.append('type_id', complexObject.type_id.toString());
+    }
+    if (complexObject.search_string) {
+        params.append('search_string', complexObject.search_string);
+    }
+    if (complexObject.date_from !== undefined) {
+        params.append('date_from', complexObject.date_from.toString());
+    }
+    if (complexObject.date_to !== undefined) {
+        params.append('date_to', complexObject.date_to.toString());
+    }
+
+    // Используем собранные параметры для запроса
+    return request(`/message/all/full_filtered?${params.toString()}`, 'GET');
 }
 
 // Получить ближайшие сообщения
@@ -183,6 +229,7 @@ export async function getRecipientTypes(): Promise<ClientType[]> {
 }
 
 async function request<T>(endpoint: string, method: string = 'GET', body?: any): Promise<T> {
+
     const response = await fetch(`${server}${endpoint}`, {
         method,
         headers: {
@@ -192,6 +239,7 @@ async function request<T>(endpoint: string, method: string = 'GET', body?: any):
     });
 
     const result: ApiResponse<T> = await response.json();
+
     if (!response.ok) {
         throw new Error((result as StatusResponse).status || 'Network response was not ok.');
     }

@@ -3,10 +3,11 @@ import {useQuery} from "react-query";
 import {getClientsWithUnselectedType} from "../../api/server";
 import ClientWIthUnselectedType from "./ClientWIthUnselectedType";
 import Loader from "../Loader";
+import PageStatusDiv from "../common-components/PageStatusDiv";
 
 const ClientsWithUnselectedTypeGenerator = () => {
 
-    const { data, isLoading, isError } = useQuery(
+    const {data, isLoading, isError} = useQuery(
         ['getClientsWithUnselectedType'],
         () => getClientsWithUnselectedType(),
         {
@@ -15,14 +16,14 @@ const ClientsWithUnselectedTypeGenerator = () => {
     );
 
     if (isLoading) return <Loader spinnerColor={'border-t-white'}/>;
-    if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
-    if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
+    if (isError) return <PageStatusDiv>Ошибка</PageStatusDiv>;
+    if (!data) return <PageStatusDiv>Нет данных</PageStatusDiv>;
 
     return (
         <>
-            {data ? data.map((item) => (
+            {data && data.map((item) => (
                 <ClientWIthUnselectedType key={item.id} item={item}/>
-            )) : isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : <div>No data</div>}
+            ))}
         </>
     );
 };

@@ -10,6 +10,7 @@ import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useMailingsFilter} from "../../stores/useMailingsFilter";
 import Loader from "../Loader";
+import PageStatusDiv from "../common-components/PageStatusDiv";
 
 const AllMailingsTable = () => {
     const {page, setPage, fetchMailings, type_id, date_to, date_from, search_string} = useMailingsFilter();
@@ -20,13 +21,13 @@ const AllMailingsTable = () => {
             keepPreviousData: false,
         }
     );
-
+    console.log(data);
     const childWindow = useContext(ChildWindowContext);
     const {clientTypes} = useContext(TypesContext);
 
     if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
-    if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
-    if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
+    if (isError) return <PageStatusDiv>Ошибка</PageStatusDiv>;
+    if (!data || !data.data ) return <PageStatusDiv>Нет данных</PageStatusDiv>;
 
     const handleSendRightNow = (e: number) => {
         return sendDelayedMessage(e);

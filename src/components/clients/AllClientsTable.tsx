@@ -7,6 +7,7 @@ import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import {TypesContext} from "../context-providers/TypesProvider";
 import {useClientFilter} from "../../stores/useClientFilter";
 import Loader from "../Loader";
+import PageStatusDiv from "../common-components/PageStatusDiv";
 
 
 const AllClientsTable = () => {
@@ -24,8 +25,8 @@ const AllClientsTable = () => {
     const {clientTypes} = useContext(TypesContext);
 
     if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
-    if (isError) return <div className="flex justify-center items-center w-full h-full">Произошла ошибка</div>;
-    if (!data) return <div className="flex justify-center items-center w-full h-full">Нет данных</div>;
+    if (isError) return <PageStatusDiv>Ошибка</PageStatusDiv>;
+    if (!data || !data.data ) return <PageStatusDiv>Нет данных</PageStatusDiv>;
 
     const handleOpenMessage = (id: number) => childWindow?.openChildWindow({type: 'client', id: id});
     return (

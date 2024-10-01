@@ -15,7 +15,7 @@ const DashBoardComponent = () => {
     return (
         <div className="w-[75%] h-full mx-auto flex flex-col justify-start text-cyan-800 p-4">
             <h2 className="w-full text-3xl pt-2 pb-6">Панель</h2>
-            <div className="w-full h-full flex flex-col justify-start pb-4">
+            <div className="w-full h-full flex flex-col justify-start">
                 <div className="w-full h-[38%] flex mb-4">
                     <div className="w-[55%] mr-4">
                         <TableWrapper title="Клиенты без типа">
@@ -28,7 +28,7 @@ const DashBoardComponent = () => {
                         </TableWrapper>
                     </div>
                 </div>
-                <div className="w-full h-[52.5%] flex">
+                <div className="w-full h-[62%] flex">
                     <div className="w-[55%] mr-4">
                         <TableWrapper title="Последние клиенты" plusFunction={handleOpenClient}>
                             <Clients functionToCall={() => getLastClients(numberOfShownClients)}/>
