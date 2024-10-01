@@ -3,7 +3,7 @@ import {ChildWindowContext} from "../context-providers/ChildWindowProvider";
 import TableWrapper from "./TableWrapper";
 import TemplateMessages from "../tables/TemplateMessages";
 import Clients from "../tables/Clients";
-import {getClientsWithTelegramError, getClientsWithUnselectedType, getLastClients} from "../../api/fake";
+import {getClientsWithTelegramError, getClientsWithUnselectedType, getLastClients} from "../../api/server";
 
 const DashBoardComponent = () => {
     const childWindow = useContext(ChildWindowContext);
