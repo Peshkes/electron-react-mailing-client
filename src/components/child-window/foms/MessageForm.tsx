@@ -304,6 +304,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                 <FormSelectField id="recipient_type_id" label="Тип получателя" value={recipientTypeId || ''}
                                  onChange={(e) => setRecipientTypeId(parseInt(e.target.value))}
                                  options={clientTypes.map(type => ({value: type.id, label: type.type_name}))}
+                                 startOption={{value: '', label: 'Все', isDisabled: false}}
                 />
                 {errors.recipient_type_id && <ErrorBlock>{errors.recipient_type_id}</ErrorBlock>}
                 <div className="flex justify-center mt-6 gap-4">
