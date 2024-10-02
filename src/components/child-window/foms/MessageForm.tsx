@@ -202,6 +202,8 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                     disabled={isImmediateSend}
                     value={sendingDate}
                     onChange={(e) => setSendingDate(e.target.value)}
+                    onKeyDown={(e) => e.preventDefault()}
+                    onPaste={(e) => e.preventDefault()}
                 >
                     <button
                         type="button" onClick={handleSetNow}

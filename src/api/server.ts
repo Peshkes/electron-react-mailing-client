@@ -127,7 +127,7 @@ export async function sendDelayedMessage(messageId: number): Promise<StatusRespo
 
 // Немедленно отправить сообщение
 export async function sendMessageNow(messageData: MessageData): Promise<StatusResponse> {
-    return request(`/message/send-now}`, 'POST', messageData);
+    return request(`/message/send-now`, 'POST', messageData);
 }
 
 // Получить все сообщения
