@@ -9,7 +9,7 @@ import {TypesContext} from "../../context-providers/TypesProvider";
 import FormSelectField from "../form-entries/FormSelectField";
 import DeleteBlock from "../form-entries/DeleteBlock";
 import Loader from "../../Loader";
-import {Message, SampleMessage} from "../../../api/types";
+import {Message, MessageData, SampleMessage, SampleMessageData} from "../../../api/types";
 
 type CombineMessage = Message | SampleMessage;
 
@@ -67,8 +67,8 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
     };
 
     const useAddMessageMutation = createMessageMutation(
-        async (messageData) => {
-            return isSample ? await addSampleMessage(messageData) : await addMessage(messageData);
+        async (messageData: MessageData | SampleMessageData) => {
+            return isSample ? await addSampleMessage(messageData as SampleMessageData) : await addMessage(messageData as MessageData);
         },
         isSample ? 'Шаблон добавлен успешно' : 'Сообщение добавлено успешно',
         (data: any) => isSample ? deleteSampleMessageById(data) : deleteMessageById(data)
@@ -77,8 +77,8 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
     );
 
     const useUpdateMessageMutation = createMessageMutation(
-        async (messageData) => {
-            return isSample ? await updateSampleMessage(id, messageData) : await updateMessage(id, messageData);
+        async (messageData: MessageData | SampleMessageData) => {
+            return isSample ? await updateSampleMessage(id, messageData as SampleMessageData) : await updateMessage(id, messageData as MessageData);
         },
         isSample ? 'Шаблон обновлен успешно' : 'Сообщение обновлено успешно',
         (data: any) => isSample ? updateSampleMessage(id, data) : updateMessage(id, data)
@@ -91,13 +91,13 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             return isSample ? await deleteSampleMessageById(id) : await deleteMessageById(id);
         },
         isSample ? 'Шаблон удален успешно' : 'Сообщение удалено успешно',
-        (data: any) => isSample ? addSampleMessage(data) : addMessage(data)
+        (data: MessageData | SampleMessageData) => isSample ? addSampleMessage(data as SampleMessageData) : addMessage(data as MessageData)
             .then(_ => handleOpenModal(isSample ? 'Шаблон не был удален' : 'Сообщение не было удалено'))
             .catch(error => handleOpenModal('Ошибка удаления: ' + error, undefined, closeAllWindows))
     );
 
     const useSendMessageMutation = createMessageMutation(
-        async (messageData) => {
+        async (messageData: MessageData | SampleMessageData) => {
             await sendMessageNow(messageData);
         },
         'Сообщение отправлено успешно'

@@ -111,7 +111,7 @@ export async function getMessageById(messageId: number): Promise<Message> {
 }
 
 // Обновить сообщение по ID
-export async function updateMessage(messageId: number, messageData: Message): Promise<Message> {
+export async function updateMessage(messageId: number, messageData: MessageData): Promise<Message> {
     return request(`/message/${messageId}`, 'PUT', messageData);
 }
 
@@ -229,7 +229,7 @@ export async function getRecipientTypes(): Promise<ClientType[]> {
 }
 
 async function request<T>(endpoint: string, method: string = 'GET', body?: any): Promise<T> {
-
+    console.log(server + endpoint)
     const response = await fetch(`${server}${endpoint}`, {
         method,
         headers: {
