@@ -2,7 +2,7 @@ import {ApiResponse, Client, ClientData, ClientPaginationResponse, ClientsComple
     ClientSearchParams, ClientType, Message, MessageData, MessagePaginationResponse, MessagesComplexObjectRequest,
     MessageSearchObject, MessengerType, PaginationRequestParams, SampleMessage, SampleMessageData, StatusResponse} from './types';
 
-const server = 'http://localhost:49152';
+export const server = 'http://localhost:49152';
 
 // CLIENTS
 
