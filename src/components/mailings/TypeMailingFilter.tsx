@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext} from 'react';
 import RadioButton from "../common-components/RadioButton";
 import MailingFilter from "./MailingFilter";
 import {TypesContext} from "../context-providers/TypesProvider";
@@ -12,10 +12,12 @@ const TypeFilterBlock = () => {
         setTypeId(type_id);
     }
 
+   
     return (
-        <MailingFilter>
+        <MailingFilter header={"Фильтр по типу"}>
             {clientTypes.length > 0 && clientTypes.map(item => (
-                <RadioButton name={'mailing_filter'} onChange={() => handleSetTypeId(item.id)} value={item.type_name} checked={type_id === item.id} key={item.id}/>
+                <RadioButton name={'mailing_filter'} onChange={() => handleSetTypeId(item.id)} value={item.type_name}
+                             checked={type_id === item.id} key={item.id}/>
             ))}
         </MailingFilter>
     );

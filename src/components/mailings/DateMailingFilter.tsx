@@ -6,7 +6,7 @@ import {dateToTimestamp, timestampToDate} from "../../api/parser";
 const DateMailingFilter = () => {
     const {date_from, date_to, setFromDate, setToDate} = useMailingsFilter();
     return (
-        <MailingFilter>
+        <MailingFilter header={"Фильтр по дате"}>
             {
                 <>
                     <input id="date-from" type="datetime-local" name="date-from" value={date_from && timestampToDate(date_from)}

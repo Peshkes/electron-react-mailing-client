@@ -36,6 +36,7 @@ const TypesProvider: React.FC<TypesProviderProps> = ({ children }) => {
                 getMessengerTypes(),
                 getRecipientTypes()
             ]);
+            console.log(clientRes)
             setMessengerTypes(messengerRes);
             setClientTypes(clientRes);
         } catch (err) {

@@ -21,7 +21,7 @@ const AllMailingsTable = () => {
             keepPreviousData: false,
         }
     );
-    console.log(data);
+
     const childWindow = useContext(ChildWindowContext);
     const {clientTypes} = useContext(TypesContext);
 
@@ -45,18 +45,18 @@ const AllMailingsTable = () => {
                 </div>
                 <div className="overflow-auto relative">
                     {isLoading ? <Loader spinnerColor={'border-t-cyan-800'}/> :
-                        data.data.map((item, index) => (
-                            <div className="w-full flex" key={index + item.id}>
+                        data.data.map(item => (
+                            <div className="w-full flex" key={item.id}>
                                 <div
-                                    key={index}
+                                    key={item.id}
                                     tabIndex={item.id}
                                     className="w-[75%] px-7 grid grid-cols-3 pt-1 cursor-pointer hover:border-0 hover:border-solid hover:border-cyan-800 hover:rounded-md hover:bg-cyan-800/80 hover:text-white"
                                     onClick={(e) => handleOpenMessage(e.currentTarget.tabIndex)}>
                                     <div>{item.theme}</div>
                                     <div>
-                                        {clientTypes.map((client, index) => (
-                                            client.id == item.recipient_type_id ?
-                                                <p key={index}>{client.type_name}</p> : <></>
+                                        {clientTypes.map(client => (
+                                            client.id == item.recipient_type_id &&
+                                                <p key={item.id}>{client.type_name}</p>
                                         ))}
                                     </div>
                                     <div>{timestampToDateFormatted(item.sending_date)}</div>
