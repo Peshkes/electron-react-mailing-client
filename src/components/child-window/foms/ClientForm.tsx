@@ -165,7 +165,7 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
                 check_out_date: dateToTimestamp(checkOutDate),
                 chat_id: chatId,
             };
-
+            console.log(clientData);
             if (isItUpdate) {
                 useUpdateClientMutation.mutate(clientData);
             } else {
@@ -199,9 +199,11 @@ const ClientForm: React.FC<ClientFormEntrailsProps> = ({id}) => {
                                      label: messanger.messanger_name
                                  }))}/>
                 <FormField id="check_in_date" label="Дата заезда" type="datetime-local" value={checkInDate}
-                           onChange={(e) => setCheckInDate(e.target.value)}/>
+                           onChange={(e) => setCheckInDate(e.target.value)}
+                           onPaste={(e) => e.preventDefault()}  onKeyDown={(e) => e.preventDefault()}/>
                 <FormField id="check_out_date" label="Дата выезда" type="datetime-local" value={checkOutDate}
-                           onChange={(e) => setCheckOutDate(e.target.value)}/>
+                           onChange={(e) => setCheckOutDate(e.target.value)}
+                           onPaste={(e) => e.preventDefault()}  onKeyDown={(e) => e.preventDefault()}/>
                 {errors.date && <ErrorBlock>{errors.date}</ErrorBlock>}
                 <SubmitBlock id={id} stringEnd={'клиента'}/>
                 {id > 0 && <DeleteBlock onDelete={() => useDeleteClientMutation.mutate(id)}/>}

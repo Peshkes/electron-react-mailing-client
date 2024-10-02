@@ -8,10 +8,13 @@ type FormFieldProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     required?: boolean;
+    readonly?: boolean;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void;
     children?: React.ReactNode;
 }
 
-const FormField = ({id, label, type, value, onChange, children, disabled = false, required = false,}: FormFieldProps) => (
+const FormField = ({id, label, type, value, onChange, children, disabled = false, required = false, readonly = false, onPaste, onKeyDown}: FormFieldProps) => (
     <div className="grid grid-cols-3 gap-4 mb-4 items-center">
         <label htmlFor={id} className="text-cyan-800 font-semibold col-span-1">
             {label}
@@ -25,6 +28,9 @@ const FormField = ({id, label, type, value, onChange, children, disabled = false
                 className={`flex-grow border border-cyan-800/40 rounded-md focus:ring-cyan-500 focus:border-cyan-500`}
                 disabled={disabled}
                 required={required}
+                readOnly={readonly}
+                onPaste={onPaste}
+                onKeyDown={onKeyDown}
             />
             {children && (
                 <div className="min-w-[80px] flex items-center">

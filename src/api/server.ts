@@ -238,6 +238,8 @@ async function request<T>(endpoint: string, method: string = 'GET', body?: any):
         body: body ? JSON.stringify(body) : undefined,
     });
 
+    console.log(server + endpoint)
+
     const result: ApiResponse<T> = await response.json();
 
     if (!response.ok) {
