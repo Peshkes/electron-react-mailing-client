@@ -12,6 +12,7 @@ import SubmitBlock from "../form-entries/SubmitBlock";
 import Loader from "../../Loader";
 import ErrorBlock from "../form-entries/ErrorBlock";
 
+
 type ClientFormEntrailsProps = {
     id: number;
 }
@@ -22,6 +23,8 @@ type Errors = {
     typeId: string,
     date: string,
 }
+
+
 
 const defaultErrors = {
     phoneNumber: '',

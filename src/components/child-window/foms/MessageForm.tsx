@@ -1,6 +1,16 @@
 import React, {useContext, useState} from "react";
 import FormField from "../form-entries/FormField";
-import {addMessage, addSampleMessage, deleteMessageById, deleteSampleMessageById, getMessageById, getSampleMessageById, sendMessageNow, updateMessage, updateSampleMessage} from "../../../api/server";
+import {
+    addMessage,
+    addSampleMessage,
+    deleteMessageById,
+    deleteSampleMessageById,
+    getMessageById,
+    getSampleMessageById,
+    sendMessageNow,
+    updateMessage,
+    updateSampleMessage
+} from "../../../api/server";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -10,8 +20,27 @@ import FormSelectField from "../form-entries/FormSelectField";
 import DeleteBlock from "../form-entries/DeleteBlock";
 import Loader from "../../Loader";
 import {Message, MessageData, SampleMessage, SampleMessageData} from "../../../api/types";
+import ErrorBlock from "../form-entries/ErrorBlock";
 
 type CombineMessage = Message | SampleMessage;
+
+type Errors = {
+    sampleName: string,
+    theme: string,
+    message_text: string,
+    recipient_type_id: string | null,
+    media_path: string | null,
+    sending_date: string
+}
+
+const defaultErrors = {
+    sampleName: '',
+    theme: '',
+    message_text: '',
+    recipient_type_id: null,
+    media_path: null,
+    sending_date: ''
+}
 
 const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample = false}) => {
     const [theme, setTheme] = useState('');
@@ -21,10 +50,12 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
     const [recipientTypeId, setRecipientTypeId] = useState<number | ''>('');
     const [sampleName, setSampleName] = useState('');
     const [isImmediateSend, setIsImmediateSend] = useState(false);
+    const [errors, setErrors] = useState<Errors>(defaultErrors);
 
     const {handleOpenModal, ModalComponent} = useModal();
     const childWindow = useContext(ChildWindowContext);
     const closeAllWindows = () => childWindow?.closeChildWindow();
+
 
     const {clientTypes} = useContext(TypesContext);
     const isItUpdate = id > 0;
@@ -54,6 +85,56 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             },
             onError: (error: Error) => handleOpenModal(`Ошибка: ${error.message}`, undefined, closeAllWindows)
         });
+
+    const validate = () => {
+        let isValid = true;
+        let newErrors: Errors = {
+            sampleName: '',
+            theme: '',
+            message_text: '',
+            recipient_type_id: null,
+            media_path: null,
+            sending_date: ''
+        };
+
+        if (isSample && sampleName.trim() === '') {
+            newErrors.sampleName = 'Заполните тему рассылки';
+            isValid = false;
+        }
+
+        if (theme.trim() === '') {
+            newErrors.theme = 'Заполните тему рассылки';
+            isValid = false;
+        }
+
+        if (messageText.trim().length > 4096) {
+            newErrors.message_text = 'Превышена допустимая длина сообщения';
+            isValid = false;
+        }
+
+        if (recipientTypeId === null) {
+            newErrors.recipient_type_id = 'Выберите тип клиента';
+            isValid = false;
+        }
+
+        const now = new Date().getTime();
+        const sendingDateTimestamp = dateToTimestamp(sendingDate);
+
+        if (sendingDateTimestamp === null) {
+            newErrors.sending_date = 'Заполните дату отправки рассылки';
+            isValid = false;
+        }
+
+        if (sendingDateTimestamp < now) {
+            newErrors.sending_date = 'Дата отправки должна быть в будущем';
+            isValid = false;
+        }
+
+        if (!isValid)
+            setErrors(newErrors);
+
+        return isValid;
+    };
 
     const createMessageMutation = (mutationFn: (data: any) => Promise<any>, onSuccessMessage: string, getBack?: (data: any) => void) => {
         return useMutation(mutationFn, {
@@ -119,19 +200,24 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const data = {
-            theme,
-            message_text: messageText,
-            recipient_type_id: recipientTypeId || null,
-            media_path: mediaPath || null,
-            sending_date: dateToTimestamp(sendingDate),
-            ...(isSample && {sample_name: sampleName})
-        };
-        if (isImmediateSend && !isItUpdate && !isSample) {
-            useSendMessageMutation.mutate(data);
-        } else {
-            isItUpdate ? useUpdateMessageMutation.mutate(data) : useAddMessageMutation.mutate(data);
-        }
+
+        if (validate()) {
+            const data = {
+                theme,
+                message_text: messageText,
+                recipient_type_id: recipientTypeId || null,
+                media_path: mediaPath || null,
+                sending_date: dateToTimestamp(sendingDate),
+                ...(isSample && {sample_name: sampleName})
+            };
+            if (isImmediateSend && !isItUpdate && !isSample) {
+                useSendMessageMutation.mutate(data);
+            } else {
+                isItUpdate ? useUpdateMessageMutation.mutate(data) : useAddMessageMutation.mutate(data);
+            }
+        } else
+            return;
+
     };
 
     const handleSetNow = () => {
@@ -163,6 +249,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                         required
                     />
                 )}
+                {isSample && errors.sampleName && <ErrorBlock>{errors.sampleName}</ErrorBlock>}
                 <FormField
                     id="theme"
                     label="Тема"
@@ -171,6 +258,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                     onChange={(e) => setTheme(e.target.value)}
                     required
                 />
+                {errors.theme && <ErrorBlock>{errors.theme}</ErrorBlock>}
                 <div className="flex items-center mb-4">
                     <label htmlFor="message_text" className="text-cyan-800 font-semibold mr-10">Текст сообщения</label>
                     <textarea
@@ -182,6 +270,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                         required
                     />
                 </div>
+                {errors.message_text && <ErrorBlock>{errors.message_text}</ErrorBlock>}
                 <FormField
                     id="media_path"
                     label="Путь к медиа"
@@ -211,10 +300,12 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
                         {isImmediateSend ? 'Потом' : 'Сразу'}
                     </button>
                 </FormField>
+                {errors.sending_date && <ErrorBlock>{errors.sending_date}</ErrorBlock>}
                 <FormSelectField id="recipient_type_id" label="Тип получателя" value={recipientTypeId || ''}
                                  onChange={(e) => setRecipientTypeId(parseInt(e.target.value))}
                                  options={clientTypes.map(type => ({value: type.id, label: type.type_name}))}
                 />
+                {errors.recipient_type_id && <ErrorBlock>{errors.recipient_type_id}</ErrorBlock>}
                 <div className="flex justify-center mt-6 gap-4">
                     <button
                         type="submit"
