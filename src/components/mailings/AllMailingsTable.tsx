@@ -23,7 +23,7 @@ const AllMailingsTable = () => {
     );
 
     const childWindow = useContext(ChildWindowContext);
-    const {clientTypes} = useContext(TypesContext);
+    const {clientTypes, getClientTypeById} = useContext(TypesContext);
 
     if (isLoading) return <Loader spinnerColor={'border-t-cyan-800'}/>;
     if (isError) return <PageStatusDiv>Ошибка</PageStatusDiv>;
@@ -54,10 +54,7 @@ const AllMailingsTable = () => {
                                     onClick={(e) => handleOpenMessage(e.currentTarget.tabIndex)}>
                                     <div>{item.theme}</div>
                                     <div>
-                                        {clientTypes.map(client => (
-                                            client.id == item.recipient_type_id &&
-                                                <p key={item.id}>{client.type_name}</p>
-                                        ))}
+                                        <p key={item.id}>{ item.recipient_type_id ? getClientTypeById(item.recipient_type_id)?.type_name : "Все"}</p>
                                     </div>
                                     <div>{timestampToDateFormatted(item.sending_date)}</div>
                                 </div>
