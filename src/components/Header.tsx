@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
 import {Link, NavLink} from "react-router-dom";
 
+// @ts-ignore
+import img from '../assets/vp.webp';
+
 const links = [
     {name: 'Главная', href: '/'},
     {name: 'Рассылки', href: '/messages'},
     {name: 'Клиенты', href: '/clients'},
 ];
 
+
 const Header: React.FC = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -19,18 +24,18 @@ const Header: React.FC = () => {
             <nav className="mx-auto px-4 py-3 flex justify-between">
                 <div className="text-2xl font-bold">
                     <Link to={'/'} className="text-white">
-                        <img src={'../assets/vp.webp'} alt="logo"/>
+                        <img src={img} width={40} height={40} alt="logo"/>
                     </Link>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden sm:flex space-x-4">
-                   {links.map((link, index) => (
+                    {links.map((link, index) => (
                         <NavLink key={index}
-                            to={link.href}
-                            className={({isActive}) =>
-                                isActive ? "bg-white/20 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
-                            }
+                                 to={link.href}
+                                 className={({isActive}) =>
+                                     isActive ? "bg-white/20 px-3 py-2 rounded" : "hover:bg-white/20 px-3 py-2 rounded"
+                                 }
                         >
                             {link.name}
                         </NavLink>
@@ -59,10 +64,10 @@ const Header: React.FC = () => {
                 <div className="md:hidden flex flex-col h-full justify-center items-center">
                     {links.map((link, index) => (
                         <NavLink key={index}
-                            to={link.href}
-                            className={({isActive}) =>
-                                isActive ? "block px-4 py-2 bg-blue-800 m-1" : "block px-4 py-2 hover:bg-blue-800 m-1"
-                            }
+                                 to={link.href}
+                                 className={({isActive}) =>
+                                     isActive ? "block px-4 py-2 bg-blue-800 m-1" : "block px-4 py-2 hover:bg-blue-800 m-1"
+                                 }
                         >
                             {link.name}
                         </NavLink>
