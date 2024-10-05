@@ -1,16 +1,6 @@
 import React, {useContext, useState} from "react";
 import FormField from "../form-entries/FormField";
-import {
-    addMessage,
-    addSampleMessage,
-    deleteMessageById,
-    deleteSampleMessageById,
-    getMessageById,
-    getSampleMessageById,
-    sendMessageNow,
-    updateMessage,
-    updateSampleMessage
-} from "../../../api/server";
+import {addMessage, addSampleMessage, deleteMessageById, deleteSampleMessageById, getMessageById, getSampleMessageById, sendMessageNow, updateMessage, updateSampleMessage} from "../../../api/server";
 import useModal from "../../modal-window/useModal";
 import {ChildWindowContext} from "../../context-providers/ChildWindowProvider";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -23,6 +13,7 @@ import {Message, MessageData, SampleMessage, SampleMessageData} from "../../../a
 import ErrorBlock from "../form-entries/ErrorBlock";
 
 type CombineMessage = Message | SampleMessage;
+type CombineMessageData = MessageData | SampleMessageData;
 
 type Errors = {
     sampleName: string,
@@ -136,10 +127,14 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
         return isValid;
     };
 
-    const createMessageMutation = (mutationFn: (data: any) => Promise<any>, onSuccessMessage: string, getBack?: (data: any) => void) => {
+    const createMessageMutation = <TData, TResult>(mutationFn: (data: TData) => Promise<TResult>, onSuccessMessage: string, getBack?: (data: TResult) => void) => {
         return useMutation(mutationFn, {
-            onSuccess: (data) => {
-                handleOpenModal(onSuccessMessage, getBack ? () => getBack(data) : undefined, closeAllWindows);
+            onSuccess: (data: TResult) => {
+                handleOpenModal(
+                    onSuccessMessage,
+                    getBack ? () => getBack(data) : undefined,
+                    closeAllWindows
+                );
                 queryClient.invalidateQueries(isSample ? 'samples' : 'messages');
                 resetForm();
             },
@@ -148,7 +143,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
     };
 
     const useAddMessageMutation = createMessageMutation(
-        async (messageData: MessageData | SampleMessageData) => {
+        async (messageData: CombineMessageData) => {
             return isSample ? await addSampleMessage(messageData as SampleMessageData) : await addMessage(messageData as MessageData);
         },
         isSample ? 'Шаблон добавлен успешно' : 'Сообщение добавлено успешно',
@@ -158,7 +153,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
     );
 
     const useUpdateMessageMutation = createMessageMutation(
-        async (messageData: MessageData | SampleMessageData) => {
+        async (messageData: CombineMessageData) => {
             return isSample ? await updateSampleMessage(id, messageData as SampleMessageData) : await updateMessage(id, messageData as MessageData);
         },
         isSample ? 'Шаблон обновлен успешно' : 'Сообщение обновлено успешно',
@@ -172,13 +167,13 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             return isSample ? await deleteSampleMessageById(id) : await deleteMessageById(id);
         },
         isSample ? 'Шаблон удален успешно' : 'Сообщение удалено успешно',
-        (data: MessageData | SampleMessageData) => isSample ? addSampleMessage(data as SampleMessageData) : addMessage(data as MessageData)
+        (data: CombineMessageData) => isSample ? addSampleMessage(data as SampleMessageData) : addMessage(data as MessageData)
             .then(_ => handleOpenModal(isSample ? 'Шаблон не был удален' : 'Сообщение не было удалено'))
             .catch(error => handleOpenModal('Ошибка удаления: ' + error, undefined, closeAllWindows))
     );
 
     const useSendMessageMutation = createMessageMutation(
-        async (messageData: MessageData | SampleMessageData) => {
+        async (messageData: CombineMessageData) => {
             await sendMessageNow(messageData);
         },
         'Сообщение отправлено успешно'
