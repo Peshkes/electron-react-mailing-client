@@ -147,7 +147,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             return isSample ? await addSampleMessage(messageData as SampleMessageData) : await addMessage(messageData as MessageData);
         },
         isSample ? 'Шаблон добавлен успешно' : 'Сообщение добавлено успешно',
-        (data: any) => isSample ? deleteSampleMessageById(data) : deleteMessageById(data)
+        (data) => isSample ? deleteSampleMessageById(data) : deleteMessageById(data)
             .then(_ => handleOpenModal(isSample ? 'Шаблон не был добавлен' : 'Сообщение не было добавлено'))
             .catch(error => handleOpenModal('Ошибка удаления: ' + error, undefined, closeAllWindows))
     );
@@ -157,7 +157,7 @@ const MessageForm: React.FC<{ id: number; isSample?: boolean }> = ({id, isSample
             return isSample ? await updateSampleMessage(id, messageData as SampleMessageData) : await updateMessage(id, messageData as MessageData);
         },
         isSample ? 'Шаблон обновлен успешно' : 'Сообщение обновлено успешно',
-        (data: any) => isSample ? updateSampleMessage(id, data) : updateMessage(id, data)
+        (data:CombineMessageData) => isSample ? updateSampleMessage(id, data as SampleMessageData) : updateMessage(id, data as MessageData)
             .then(_ => handleOpenModal(isSample ? 'Вернуть шаблон не удалось' : 'Вернуть сообщение не удалось'))
             .catch(error => handleOpenModal('Ошибка обновления: ' + error, undefined, closeAllWindows))
     );
